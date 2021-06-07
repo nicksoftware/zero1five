@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using Volo.Abp.Application.Dtos;
 using Zero1Five.Categories;
 using Zero1Five.Products;
