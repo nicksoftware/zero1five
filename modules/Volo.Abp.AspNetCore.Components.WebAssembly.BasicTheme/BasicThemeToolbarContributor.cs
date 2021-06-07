@@ -20,10 +20,10 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
                 var authenticationStateProvider = context.ServiceProvider
                     .GetService<AuthenticationStateProvider>();
 
-                // if (authenticationStateProvider != null)
-                // {
-                context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginDisplay)));
-                // }
+                if (authenticationStateProvider != null)
+                {
+                    context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginDisplay)));
+                }
             }
 
             return Task.CompletedTask;

@@ -1,16 +1,52 @@
 ﻿@page "/"
 @using Volo.Abp.MultiTenancy
+@using Zero1Five.Categories
 @inherits Zero1FiveComponentBase
 @inject ICurrentTenant CurrentTenant
 @inject AuthenticationStateProvider AuthenticationStateProvider
-<MudContainer>
-    <MudCard>
-        <MudCardContent>
-            <MudText>Story of the day</MudText>
-            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="MudBlazor.Color.Primary">Learn More</MudButton>
-        </MudCardActions>
-    </MudCard>
+<MudContainer Class="mt-16">
+    <MudCarousel Style="height:360px;" ShowArrows="@arrows" ShowDelimiters="@delimiters" AutoCycle="@autocycle"
+        TData="object">
+        @for (int i = 0; i < carouselPosts.Length; i++)
+        {
+            <MudCarouselItem CustomTransitionEnter="bounceIn" Transition="transition" Color="@Color.Primary">
+                <div class="d-flex" style="height:100%">
+                    <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                </div>
+            </MudCarouselItem>
+        }
+    </MudCarousel>
+    <MudGrid Class="my-4" Justify="Justify.Center">
+        <MudItem xs="12" sm="6" md="4">
+            <MudSelect T="CategoryDto" Label="Category">
+                @foreach (var category in categories)
+                {
+                    <MudSelectItem Value="@category">@category.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+        <MudItem sm="12" md="8">
+            <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="mt-8">
+        @for (int i = 0; i < 6; i++)
+        {
+            <MudItem sm="12" xs="12" md="4">
+                <MudCard>
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
+                    <MudCardContent>
+                        <MudSkeleton Width="30%" Height="42px;" />
+                        <MudSkeleton Width="80%" />
+                        <MudSkeleton Width="100%" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+                        <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
 </MudContainer>

@@ -13,7 +13,7 @@ namespace Zero1Five.Categories
         {
             this.categoryRepository = categoryRepository;
         }
-        public async Task<Category> CreateCategoryAsync(string name, string descrption)
+        public async Task<Category> CreateAsync(string name, string descrption)
         {
             var category = Category.Create(GuidGenerator.Create(), name, descrption);
 
