@@ -1,5 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using Volo.Abp.Application.Dtos;
 using Zero1Five.Categories;
+using Zero1Five.Products;
 
 namespace Zero1Five
 {
@@ -12,6 +15,11 @@ namespace Zero1Five
              * into multiple profile classes for a better organization. */
             CreateMap<Category, CategoryDto>();
             CreateMap<CreateUpdateCategoryDto, Category>();
+
+            CreateMap<Product, ProductDto>();
+            CreateMap<CreateProductDto, Product>();
+            CreateMap<UpdateProductDto, Product>();
+            CreateMap<PublishProductDto, Product>();
         }
     }
 }

@@ -5,17 +5,6 @@
 @inject ICurrentTenant CurrentTenant
 @inject AuthenticationStateProvider AuthenticationStateProvider
 <MudContainer Class="mt-16">
-    <MudCarousel Style="height:360px;" ShowArrows="@arrows" ShowDelimiters="@delimiters" AutoCycle="@autocycle"
-        TData="object">
-        @for (int i = 0; i < carouselPosts.Length; i++)
-        {
-            <MudCarouselItem CustomTransitionEnter="bounceIn" Transition="transition" Color="@Color.Primary">
-                <div class="d-flex" style="height:100%">
-                    <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-                </div>
-            </MudCarouselItem>
-        }
-    </MudCarousel>
     <MudGrid Class="my-4" Justify="Justify.Center">
         <MudItem xs="12" sm="6" md="4">
             <MudSelect T="CategoryDto" Label="Category">

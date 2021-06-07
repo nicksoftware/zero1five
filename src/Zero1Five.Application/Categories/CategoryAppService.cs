@@ -17,8 +17,6 @@ namespace Zero1Five.Categories
             ICategoryManager categoryManager) :
             base(repository)
         {
-            GetPolicyName = Zero1FivePermissions.Categories.Default;
-            GetListPolicyName = Zero1FivePermissions.Categories.Default;
             CreatePolicyName = Zero1FivePermissions.Categories.Create;
             UpdatePolicyName = Zero1FivePermissions.Categories.Edit;
             DeletePolicyName = Zero1FivePermissions.Categories.Delete;

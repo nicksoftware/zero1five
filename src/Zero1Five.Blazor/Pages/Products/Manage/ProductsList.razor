@@ -1,0 +1,148 @@
+@page "/manage/products"
+@using Volo.Abp.Application.Dtos
+@using Zero1Five.Blazor
+@using Zero1Five.Categories
+@using Zero1Five.Localization
+@using Zero1Five.Products
+@using Volo.Abp.AspNetCore.Components.Web
+@inherits Zero1FiveComponentBase
+@using Blazorise
+@inject AbpBlazorMessageLocalizerHelper<Zero1FiveResource> LH
+@inject ICategoryAppService CategoryAppService
+<MudContainer>
+    <MudGrid>
+        <MudItem sm="6">
+            <MudText Typo="Typo.h6">@L["Products"]</MudText>
+        </MudItem>
+        <MudItem sm="6">
+            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="(e)=>OpenCreateProductModal()">
+                @L["NewProduct"]
+            </MudButton>
+        </MudItem>
+        <MudItem sm="12" xl="12" xs="12" md="12">
+            <DataGrid TItem="ProductDto" Data="ProductList" ReadData="OnDataGridReadAsync" TotalItems="TotalCount"
+                ShowPager="true" PageSize="PageSize">
+                <DataGridColumns>
+                    <DataGridColumn Width="150px" TItem="ProductDto" Field="@nameof(ProductDto.Id)" Sortable="false"
+                        Caption="@L["Actions"]">
+                        <DisplayTemplate>
+                            <Dropdown>
+                                <DropdownToggle Color="Blazorise.Color.Primary">
+                                    @L["Actions"]
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    @if (CanEditProduct)
+                                    {
+                                        <DropdownItem Clicked="() => OpenEditProductModal(context)">
+                                            @L["Edit"]
+                                        </DropdownItem>
+                                    }
+                                    @if (CanDeleteProduct)
+                                    {
+                                        <DropdownItem Clicked="() => DeleteProductAsync(context)">
+                                            @L["Delete"]
+                                        </DropdownItem>
+                                    }
+                                </DropdownMenu>
+                            </Dropdown>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Name)" Caption="@L["Title"]">
+                    </DataGridColumn>
+
+                </DataGridColumns>
+            </DataGrid>
+        </MudItem>
+
+    </MudGrid>
+</MudContainer>
+<Modal @ref="CreateProductModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewProduct"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateProductModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewProduct" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewProduct.Name">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@NewProduct.Description">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <MudButton Class="mx-3" Color="MudBlazor.Color.Secondary" Variant="Variant.Filled"
+                    OnClick="((e)=>CloseCreateProductModal())">
+                    @L["Cancel"]
+                </MudButton>
+                <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" PreventDefaultOnSubmit="true"
+                    OnClick="((e)=>CreateProductAsync())">
+                    @L["Save"]
+                </MudButton>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditProductModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingProduct.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditProductModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditingProduct" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingProduct.Name">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@EditingProduct.Description">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <MudButton Color="MudBlazor.Color.Secondary" OnClick="(e=>CloseEditProductModal())">
+                    @L["Cancel"]
+                </MudButton>
+                <MudButton Color="MudBlazor.Color.Primary" PreventDefaultOnSubmit="true"
+                    OnClick="((e)=>UpdateProductAsync())">
+                    @L["Save"]
+                </MudButton>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

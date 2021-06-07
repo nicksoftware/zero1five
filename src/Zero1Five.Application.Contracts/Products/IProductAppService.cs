@@ -1,6 +1,8 @@
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Zero1Five.Categories;
 
 namespace Zero1Five.Products
 {
@@ -11,6 +13,6 @@ namespace Zero1Five.Products
             CreateProductDto,
             UpdateProductDto>
     {
-
+        Task<ListResultDto<CategoryDto>> GetLookUpCategories();
     }
 }

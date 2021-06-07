@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Zero1Five.Categories;
+using Zero1Five.Products;
 
 namespace Zero1Five.Blazor
 {
@@ -9,6 +10,7 @@ namespace Zero1Five.Blazor
         {
             //Define your AutoMapper configuration here for the Blazor project.
             CreateMap<CategoryDto, CreateUpdateCategoryDto>().ReverseMap();
+            CreateMap<ProductDto, UpdateProductDto>();
         }
     }
 }

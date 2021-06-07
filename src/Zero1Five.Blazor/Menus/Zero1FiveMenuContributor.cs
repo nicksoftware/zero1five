@@ -51,7 +51,7 @@ namespace Zero1Five.Blazor.Menus
                 admin.Items.Add(categories);
             }
         }
-        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var l = context.GetLocalizer<Zero1FiveResource>();
 
@@ -61,11 +61,36 @@ namespace Zero1Five.Blazor.Menus
                     Zero1FiveMenus.Home,
                     l["Menu:Home"],
                     "/",
-                    icon: "fas fa-home"
+                    icon: ""
                 )
             );
+            var productsMenu = new ApplicationMenuItem(
+                    Zero1FiveMenus.Product.Name,
+                    l["Menu:Products"],
+                    "",
+                    icon: ""
+                );
 
-            return Task.CompletedTask;
+            productsMenu.AddItem(
+                new ApplicationMenuItem(
+                Zero1FiveMenus.Product.List,
+                l["Menu:Products"],
+                Zero1FiveMenus.Product.ListUrl,
+                icon: "fas fa-list"
+            ));
+
+            if (await context.IsGrantedAsync(Zero1FivePermissions.Products.Default))
+            {
+                productsMenu.AddItem(
+                    new ApplicationMenuItem(
+                    Zero1FiveMenus.Product.Manage,
+                    l["Menu:ManageProduct"],
+                    Zero1FiveMenus.Product.ManageUrl,
+                    icon: "fas fa-list",
+                    requiredPermissionName: Zero1FivePermissions.Products.Default
+                ));
+            }
+            context.Menu.Items.Insert(1, productsMenu);
         }
 
         private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
