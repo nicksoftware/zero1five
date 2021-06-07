@@ -17,6 +17,7 @@ using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
 using Volo.Abp.Identity.Blazor.WebAssembly;
 using Volo.Abp.SettingManagement.Blazor.WebAssembly;
 using Volo.Abp.TenantManagement.Blazor.WebAssembly;
+using MudBlazor.Services;
 
 namespace Zero1Five.Blazor
 {
@@ -65,6 +66,7 @@ namespace Zero1Five.Blazor
             context.Services
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
+            context.Services.AddMudServices();
         }
 
         private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)

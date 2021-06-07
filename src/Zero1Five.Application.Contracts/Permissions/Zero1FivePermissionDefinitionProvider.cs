@@ -10,8 +10,11 @@ namespace Zero1Five.Permissions
         {
             var myGroup = context.AddGroup(Zero1FivePermissions.GroupName);
 
-            //Define your own permissions here. Example:
-            //myGroup.AddPermission(Zero1FivePermissions.MyPermission1, L("Permission:MyPermission1"));
+            var CategoryGroup = context.AddGroup(Zero1FivePermissions.CategoryGroup, L("Menu:ManageCategory"));
+            var messagePermissions = CategoryGroup.AddPermission(Zero1FivePermissions.Category.Default, L("Permission:Category"));
+            messagePermissions.AddChild(Zero1FivePermissions.Category.Create, L("Permission:Create"));
+            messagePermissions.AddChild(Zero1FivePermissions.Category.Update, L("Permission:Update"));
+            messagePermissions.AddChild(Zero1FivePermissions.Category.Delete, L("Permission:Delete"));
         }
 
         private static LocalizableString L(string name)

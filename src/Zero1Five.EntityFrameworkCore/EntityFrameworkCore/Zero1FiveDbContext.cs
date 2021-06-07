@@ -5,6 +5,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Identity;
 using Volo.Abp.Users.EntityFrameworkCore;
+using Zero1Five.Categories;
 
 namespace Zero1Five.EntityFrameworkCore
 {
@@ -21,11 +22,7 @@ namespace Zero1Five.EntityFrameworkCore
     public class Zero1FiveDbContext : AbpDbContext<Zero1FiveDbContext>
     {
         public DbSet<AppUser> Users { get; set; }
-
-        /* Add DbSet properties for your Aggregate Roots / Entities here.
-         * Also map them inside Zero1FiveDbContextModelCreatingExtensions.ConfigureZero1Five
-         */
-
+        public DbSet<Category> Categories { get; set; }
         public Zero1FiveDbContext(DbContextOptions<Zero1FiveDbContext> options)
             : base(options)
         {
@@ -41,7 +38,7 @@ namespace Zero1Five.EntityFrameworkCore
             builder.Entity<AppUser>(b =>
             {
                 b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); //Sharing the same table "AbpUsers" with the IdentityUser
-                
+
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
 

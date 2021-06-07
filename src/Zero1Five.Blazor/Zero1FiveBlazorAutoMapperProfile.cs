@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Zero1Five.Categories;
 
 namespace Zero1Five.Blazor
 {
@@ -7,6 +8,7 @@ namespace Zero1Five.Blazor
         public Zero1FiveBlazorAutoMapperProfile()
         {
             //Define your AutoMapper configuration here for the Blazor project.
+            CreateMap<CategoryDto, CreateUpdateCategoryDto>().ReverseMap();
         }
     }
 }

@@ -3,6 +3,15 @@
   "texts": {
     "Menu:Home": "Home",
     "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
+    "Permission:Create":"Create",
+    "Permission:Update":"Update",
+    "Permission:Delete":"Delete",
+    "Category":"Category",
+    "Menu:Category":"Category",
+    "Permission:Category":"Default",
+    "Menu:ManageCategory":"Category Management",
+    "CategoryDeletionConfirmationMessage": "Are you sure to delete the Category '{0}'?",
+    "Description": "Description",
+    "NewCategory": "New Category"
   }
 }

@@ -10,6 +10,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Zero1Five.Categories;
 
 namespace Zero1Five.EntityFrameworkCore
 {
@@ -39,6 +40,7 @@ namespace Zero1Five.EntityFrameworkCore
                 /* Remove "includeAllEntities: true" to create
                  * default repositories only for aggregate roots */
                 options.AddDefaultRepositories(includeAllEntities: true);
+                options.AddRepository<Category, CategoryRepository>();
             });
 
             Configure<AbpDbContextOptions>(options =>

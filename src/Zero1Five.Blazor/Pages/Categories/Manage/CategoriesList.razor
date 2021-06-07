@@ -1,0 +1,145 @@
+@page "/manage/categories"
+@using Volo.Abp.Application.Dtos
+@using Zero1Five.Categories
+@using Zero1Five.Localization
+@using Volo.Abp.AspNetCore.Components.Web
+@inherits Zero1FiveComponentBase
+@inject AbpBlazorMessageLocalizerHelper<Zero1FiveResource> LH
+@inject ICategoryAppService CategoryAppService
+<MudContainer>
+    <MudGrid>
+        <MudItem sm="6">
+            <MudText Typo="Typo.h6">@L["Categories"]</MudText>
+        </MudItem>
+        <MudItem sm="6">
+            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary"
+                OnClick="(e)=>OpenCreateCategoryModal()">@L["NewCategory"]
+            </MudButton>
+        </MudItem>
+        <MudItem sm="12" xl="12" xs="12" md="12">
+            <DataGrid TItem="CategoryDto" Data="CategoryList" ReadData="OnDataGridReadAsync" TotalItems="TotalCount"
+                ShowPager="true" PageSize="PageSize">
+                <DataGridColumns>
+                    <DataGridColumn Width="150px" TItem="CategoryDto" Field="@nameof(CategoryDto.Id)" Sortable="false"
+                        Caption="@L["Actions"]">
+                        <DisplayTemplate>
+                            <Dropdown>
+                                <DropdownToggle Color="Blazorise.Color.Primary">
+                                    @L["Actions"]
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    @if (CanEditCategory)
+                                        {
+                                    <DropdownItem Clicked="() => OpenEditCategoryModal(context)">
+                                        @L["Edit"]
+                                    </DropdownItem>
+                                    }
+                                    @if (CanDeleteCategory)
+                                        {
+                                    <DropdownItem Clicked="() => DeleteCategoryAsync(context)">
+                                        @L["Delete"]
+                                    </DropdownItem>
+                                    }
+                                </DropdownMenu>
+                            </Dropdown>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CategoryDto" Field="@nameof(CategoryDto.Name)" Caption="@L["Name"]">
+                    </DataGridColumn>
+
+                </DataGridColumns>
+            </DataGrid>
+        </MudItem>
+
+    </MudGrid>
+</MudContainer>
+<Modal @ref="CreateCategoryModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewCategory"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateCategoryModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewCategory" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewCategory.Name">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@NewCategory.Description">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <MudButton Class="mx-3" Color="MudBlazor.Color.Secondary" Variant="Variant.Filled"
+                    OnClick="((e)=>CloseCreateCategoryModal())">
+                    @L["Cancel"]
+                </MudButton>
+                <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" PreventDefaultOnSubmit="true"
+                    OnClick="((e)=>CreateCategoryAsync())">
+                    @L["Save"]
+                </MudButton>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditCategoryModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingCategory.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditCategoryModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditingCategory" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingCategory.Name">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@EditingCategory.Description">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <MudButton Color="MudBlazor.Color.Secondary" OnClick="(e=>CloseEditCategoryModal())">
+                    @L["Cancel"]
+                </MudButton>
+                <MudButton Color="MudBlazor.Color.Primary" PreventDefaultOnSubmit="true"
+                    OnClick="((e)=>UpdateCategoryAsync())">
+                    @L["Save"]
+                </MudButton>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
