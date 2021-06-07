@@ -4,12 +4,20 @@
     {
         public const string GroupName = "Zero1Five";
         public const string CategoryGroup = GroupName + ".Category";
-
-        public static class Category
+        public const string ProductGroup = GroupName + ".Product";
+        public static class Categories
         {
             public const string Default = CategoryGroup + ".Category";
             public const string Create = Default + ".Create";
-            public const string Update = Default + ".Update";
+            public const string Edit = Default + ".Edit";
+            public const string Delete = Default + ".Delete";
+        }
+
+        public static class Products
+        {
+            public const string Default = ProductGroup + ".Product";
+            public const string Create = Default + ".Create";
+            public const string Edit = Default + ".Edit";
             public const string Delete = Default + ".Delete";
         }
     }

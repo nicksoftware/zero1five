@@ -14,7 +14,7 @@ namespace Zero1Five.EntityFrameworkCore.Categories
             }
 
             return queryable
-                // .Include(x => x.xxx) // TODO: AbpHelper generated
+                // .Include(x => x.xxx) // TODO: 
                 ;
         }
     }

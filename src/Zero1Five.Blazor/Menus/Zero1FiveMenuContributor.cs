@@ -38,7 +38,7 @@ namespace Zero1Five.Blazor.Menus
         {
             var l = context.GetLocalizer<Zero1FiveResource>();
 
-            if (await context.AuthorizationService.IsGrantedAsync(Zero1FivePermissions.Category.Default))
+            if (await context.AuthorizationService.IsGrantedAsync(Zero1FivePermissions.Categories.Default))
             {
                 var admin = context.Menu.GetAdministration();
                 var categories = new ApplicationMenuItem(

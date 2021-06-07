@@ -10,8 +10,11 @@
     "Menu:Category":"Category",
     "Permission:Category":"Default",
     "Menu:ManageCategory":"Category Management",
+    "Menu:ManageProduct":"Product Management",
+    "Permission:Product":"Product",
     "CategoryDeletionConfirmationMessage": "Are you sure to delete the Category '{0}'?",
     "Description": "Description",
-    "NewCategory": "New Category"
+    "NewCategory": "New Category",
+    "Zero1Five:ErrorCode:0001":"The Category Id {0} is Invalid"
   }
 }

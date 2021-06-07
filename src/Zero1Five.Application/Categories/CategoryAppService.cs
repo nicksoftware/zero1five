@@ -17,15 +17,15 @@ namespace Zero1Five.Categories
             ICategoryManager categoryManager) :
             base(repository)
         {
-            GetPolicyName = Zero1FivePermissions.Category.Default;
-            GetListPolicyName = Zero1FivePermissions.Category.Default;
-            CreatePolicyName = Zero1FivePermissions.Category.Create;
-            UpdatePolicyName = Zero1FivePermissions.Category.Update;
-            DeletePolicyName = Zero1FivePermissions.Category.Delete;
+            GetPolicyName = Zero1FivePermissions.Categories.Default;
+            GetListPolicyName = Zero1FivePermissions.Categories.Default;
+            CreatePolicyName = Zero1FivePermissions.Categories.Create;
+            UpdatePolicyName = Zero1FivePermissions.Categories.Edit;
+            DeletePolicyName = Zero1FivePermissions.Categories.Delete;
             this.categoryManager = categoryManager;
         }
 
-        [Authorize(Zero1FivePermissions.Category.Default)]
+        [Authorize(Zero1FivePermissions.Categories.Default)]
         public override async Task<CategoryDto> CreateAsync(CreateUpdateCategoryDto input)
         {
             return MapToGetOutputDto(await categoryManager.CreateAsync(input.Name, input.Description));

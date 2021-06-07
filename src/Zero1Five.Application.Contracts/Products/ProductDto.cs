@@ -1,9 +1,9 @@
 using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Application.Dtos;
 
-namespace Zero1FiveZero1Five.Application.Contracts.Products
+namespace Zero1Five.Products
 {
-    public class Product : FullAuditedAggregateRoot<Guid>
+    public class ProductDto : FullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
         public Guid CategoryId { get; set; }

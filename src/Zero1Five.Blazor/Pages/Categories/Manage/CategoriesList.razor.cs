@@ -50,13 +50,13 @@ namespace Zero1Five.Blazor.Pages.Categories.Manage
 
         private async Task SetPermissionsAsync()
         {
-            CanCreateCategory = await AuthorizationService.IsGrantedAsync(Zero1FivePermissions.Category.Create);
+            CanCreateCategory = await AuthorizationService.IsGrantedAsync(Zero1FivePermissions.Categories.Create);
 
             CanEditCategory = await AuthorizationService
-                .IsGrantedAsync(Zero1FivePermissions.Category.Update);
+                .IsGrantedAsync(Zero1FivePermissions.Categories.Edit);
 
             CanDeleteCategory = await AuthorizationService
-                .IsGrantedAsync(Zero1FivePermissions.Category.Delete);
+                .IsGrantedAsync(Zero1FivePermissions.Categories.Delete);
         }
 
         private async Task GetCategorysAsync()
