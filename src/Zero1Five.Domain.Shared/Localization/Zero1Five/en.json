@@ -6,6 +6,7 @@
     "Permission:Create":"Create",
     "Permission:Edit":"Edit",
     "Permission:Delete":"Delete",
+    "Permission:Publish":"Publish",
     "Category":"Category",
     "Menu:Category":"Category",
     "Permission:Category":"Default",
@@ -15,8 +16,12 @@
     "CategoryDeletionConfirmationMessage": "Are you sure to delete the Category '{0}'?",
     "Description": "Description",
     "NewCategory": "New Category",
-    "Zero1Five:ErrorCode:0001":"The Category Id {0} is Invalid",
-
     "Menu:Products":"Products",
+
+    
+    "Zero1Five:ErrorCode:0001":"The Category Id {0} is Invalid",
+    "Zero1Five:ErrorCode:0002":"Product \"{0}\" Already Unpublished! ",
+    "Zero1Five:ErrorCode:0003":"Product \"{0}\" Already Published!"
+
   }
 }

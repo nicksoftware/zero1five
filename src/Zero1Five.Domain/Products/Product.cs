@@ -10,6 +10,7 @@ namespace Zero1Five.Products
         public string Title { get; internal set; }
         public string Description { get; internal set; }
         public string CoverImage { get; private set; }
+        public bool IsPublished { get; set; }
         protected Product() { }
         private Product(Guid id, string title, Guid categoryId, string cover)
         : base(id)

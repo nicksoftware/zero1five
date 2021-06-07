@@ -30,13 +30,12 @@ namespace Zero1Five.Products
             string title = "New Product";
             string description = "New Product";
             string cover = "coverImage.jpg";
-            var productManger = new ProductManager();
+            var productManger = new ProductManager(_productRepository);
             Product result = null;
 
             await WithUnitOfWorkAsync(async () =>
             {
-                var newProduct = await _productManager.CreateAsync(title, category.Id, cover);
-                newProduct.Description = description;
+                var newProduct = await _productManager.CreateAsync(title, category.Id, cover, description);
                 result = await _productRepository.InsertAsync(newProduct, true);
             });
 

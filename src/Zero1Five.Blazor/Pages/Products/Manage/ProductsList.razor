@@ -1,4 +1,5 @@
 @page "/manage/products"
+@using Blazorise.Components
 @using Volo.Abp.Application.Dtos
 @using Zero1Five.Blazor
 @using Zero1Five.Categories
@@ -15,7 +16,8 @@
             <MudText Typo="Typo.h6">@L["Products"]</MudText>
         </MudItem>
         <MudItem sm="6">
-            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="(e)=>OpenCreateProductModal()">
+            <MudButton Class="ml-auto" Variant="Variant.Filled" Color="MudBlazor.Color.Primary"
+                OnClick="(e)=>OpenCreateProductModal()">
                 @L["NewProduct"]
             </MudButton>
         </MudItem>
@@ -23,6 +25,7 @@
             <DataGrid TItem="ProductDto" Data="ProductList" ReadData="OnDataGridReadAsync" TotalItems="TotalCount"
                 ShowPager="true" PageSize="PageSize">
                 <DataGridColumns>
+                    
                     <DataGridColumn Width="150px" TItem="ProductDto" Field="@nameof(ProductDto.Id)" Sortable="false"
                         Caption="@L["Actions"]">
                         <DisplayTemplate>
@@ -31,23 +34,39 @@
                                     @L["Actions"]
                                 </DropdownToggle>
                                 <DropdownMenu>
+
                                     @if (CanEditProduct)
+                                        {
+                                    <DropdownItem Clicked="() => OpenEditProductModal(context)">
+                                        @L["Edit"]
+                                    </DropdownItem>
+                                    }
+                                    @if( CanPublish)
                                     {
-                                        <DropdownItem Clicked="() => OpenEditProductModal(context)">
-                                            @L["Edit"]
+                                        @if (context.IsPublished)
+                                                {
+                                        <DropdownItem Clicked="()=> HandlePublish(context)">
+                                            @L["UnPublish"]
                                         </DropdownItem>
+                                        }
+                                        else
+                                            {
+                                        <DropdownItem Clicked="()=>HandlePublish(context)">
+                                            @L["Publish"]
+                                        </DropdownItem>
+                                        }
                                     }
                                     @if (CanDeleteProduct)
-                                    {
-                                        <DropdownItem Clicked="() => DeleteProductAsync(context)">
-                                            @L["Delete"]
-                                        </DropdownItem>
+                                        {
+                                    <DropdownItem Clicked="() => DeleteProductAsync(context)">
+                                        @L["Delete"]
+                                    </DropdownItem>
                                     }
                                 </DropdownMenu>
                             </Dropdown>
                         </DisplayTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Name)" Caption="@L["Title"]">
+                    <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Title)" Caption="@L["Title"]">
                     </DataGridColumn>
 
                 </DataGridColumns>
@@ -69,7 +88,21 @@
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewProduct.Name">
+                            <TextEdit @bind-Text="@NewProduct.Title">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <FieldLabel>@L["Category"]</FieldLabel>
+                    <SelectList TItem="CategoryDto" TValue="Guid" Data="@CategoryList" TextField="@((item)=>item.Name)"
+                        ValueField="@((item)=>item.Id)" SelectedValue="@SelectedCategory.Id"
+                        SelectedValueChanged="SelectedCategoryChangedHandler" />
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["CoverImage"]</FieldLabel>
+                            <TextEdit Rows="5" @bind-Text="@NewProduct.CoverImage">
                                 <Feedback>
                                     <ValidationError />
                                 </Feedback>
@@ -107,7 +140,7 @@
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
-                <ModalTitle>@EditingProduct.Name</ModalTitle>
+                <ModalTitle>@EditingProduct.Title</ModalTitle>
                 <CloseButton Clicked="CloseEditProductModal" />
             </ModalHeader>
             <ModalBody>
@@ -115,14 +148,28 @@
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@EditingProduct.Name">
+                            <TextEdit @bind-Text="@EditingProduct.Title">
                                 <Feedback>
                                     <ValidationError />
                                 </Feedback>
                             </TextEdit>
                         </Field>
                     </Validation>
-                    <Validation>
+                    <FieldLabel>@L["Category"]</FieldLabel>
+                    <SelectList TItem="CategoryDto" TValue="Guid" Data="@CategoryList" TextField="@((item)=>item.Name)"
+                        ValueField="@((item)=>item.Id)" SelectedValue="@SelectedCategory.Id"
+                        SelectedValueChanged="SelectedCategoryChangedHandler" />
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["CoverImage"]</FieldLabel>
+                            <TextEdit Rows="5" @bind-Text="@EditingProduct.CoverImage">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Description"]</FieldLabel>
                             <MemoEdit Rows="5" @bind-Text="@EditingProduct.Description">
@@ -135,7 +182,7 @@
                 </Validations>
             </ModalBody>
             <ModalFooter>
-                <MudButton Color="MudBlazor.Color.Secondary" OnClick="(e=>CloseEditProductModal())">
+                <MudButton Color="MudBlazor.Color.Secondary" OnClick="((e)=>CloseEditProductModal())">
                     @L["Cancel"]
                 </MudButton>
                 <MudButton Color="MudBlazor.Color.Primary" PreventDefaultOnSubmit="true"

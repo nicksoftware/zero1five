@@ -18,7 +18,6 @@ namespace Zero1Five
             CreateMap<Product, ProductDto>();
             CreateMap<CreateProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
-            CreateMap<PublishProductDto, Product>();
         }
     }
 }

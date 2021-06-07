@@ -21,6 +21,7 @@ namespace Zero1Five.Permissions
             productPermissions.AddChild(Zero1FivePermissions.Products.Create, L("Permission:Create"));
             productPermissions.AddChild(Zero1FivePermissions.Products.Edit, L("Permission:Edit"));
             productPermissions.AddChild(Zero1FivePermissions.Products.Delete, L("Permission:Delete"));
+            productPermissions.AddChild(Zero1FivePermissions.Products.Publish, L("Permission:Publish"));
         }
 
         private static LocalizableString L(string name)

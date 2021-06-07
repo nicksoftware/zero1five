@@ -5,7 +5,7 @@ namespace Zero1Five.Products
 {
     public class ProductDto : FullAuditedEntityDto<Guid>
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         public Guid CategoryId { get; set; }
         public string CoverImage { get; set; }
         public string Description { get; set; }

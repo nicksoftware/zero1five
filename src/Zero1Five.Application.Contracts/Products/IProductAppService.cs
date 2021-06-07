@@ -14,5 +14,7 @@ namespace Zero1Five.Products
             UpdateProductDto>
     {
         Task<ListResultDto<CategoryDto>> GetLookUpCategories();
+        Task<Guid> PublishAsync(Guid id);
+        Task<Guid> UnPublishAsync(Guid id);
     }
 }
