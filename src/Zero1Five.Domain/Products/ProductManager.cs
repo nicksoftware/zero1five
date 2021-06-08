@@ -13,12 +13,19 @@ namespace Zero1Five.Products
         {
             _productRepository = productRepository;
         }
-        public Task<Product> CreateAsync(string title, Guid categoryId, string cover, string description)
+
+        public Task<Product> CreateAsync(string title, Guid gigId, Guid categoryId, string cover, string description)
         {
-            var product = Product.Create(GuidGenerator.Create(), title, categoryId, cover);
+            var product = Product.Create(
+                GuidGenerator.Create(),
+                gigId: gigId,
+                categoryId: categoryId,
+                title, cover);
+            
             product.Description = description;
             return _productRepository.InsertAsync(product, true);
         }
+
         public async Task<Guid> PublishAsync(Product product)
         {
             if (product.IsPublished)

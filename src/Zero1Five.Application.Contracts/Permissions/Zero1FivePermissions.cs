@@ -4,7 +4,7 @@
     {
         public const string GroupName = "Zero1Five";
         public const string CategoryGroup = GroupName + ".Category";
-        public const string ProductGroup = GroupName + ".Product";
+        public const string GigsGroup = GroupName + ".Gigs";
         public static class Categories
         {
             public const string Default = CategoryGroup + ".Category";
@@ -15,7 +15,16 @@
 
         public static class Products
         {
-            public const string Default = ProductGroup + ".Product";
+            public const string Default = GigsGroup + ".Product";
+            public const string Create = Default + ".Create";
+            public const string Edit = Default + ".Edit";
+            public const string Delete = Default + ".Delete";
+            public const string Publish = Default + ".Publish";
+        }
+
+        public static class Gigs
+        {
+            public const string Default = GigsGroup + ".Gig";
             public const string Create = Default + ".Create";
             public const string Edit = Default + ".Edit";
             public const string Delete = Default + ".Delete";

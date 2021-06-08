@@ -13,6 +13,7 @@ namespace Zero1Five.Categories
         public CategoryAppServiceTests()
         {
             categoryAppService = GetRequiredService<ICategoryAppService>();
+
         }
 
         [Fact]
@@ -87,5 +88,7 @@ namespace Zero1Five.Categories
             //Then
             results.ShouldNotContain(category);
         }
+
+
     }
 }

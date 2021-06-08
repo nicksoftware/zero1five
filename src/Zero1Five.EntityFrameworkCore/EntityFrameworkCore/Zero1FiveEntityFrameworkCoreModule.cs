@@ -12,6 +12,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Zero1Five.Categories;
 using Zero1Five.Products;
+using Zero1Five.Gigs;
 
 namespace Zero1Five.EntityFrameworkCore
 {
@@ -43,6 +44,7 @@ namespace Zero1Five.EntityFrameworkCore
                 options.AddDefaultRepositories(includeAllEntities: true);
                 options.AddRepository<Category, CategoryRepository>();
                 options.AddRepository<Product, ProductRepository>();
+                options.AddRepository<Gig, GigRepository>();
             });
 
             Configure<AbpDbContextOptions>(options =>

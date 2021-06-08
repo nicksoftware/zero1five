@@ -6,6 +6,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Identity;
 using Volo.Abp.Users.EntityFrameworkCore;
 using Zero1Five.Categories;
+using Zero1Five.Gigs;
 
 namespace Zero1Five.EntityFrameworkCore
 {
@@ -22,6 +23,7 @@ namespace Zero1Five.EntityFrameworkCore
     public class Zero1FiveDbContext : AbpDbContext<Zero1FiveDbContext>
     {
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<Gig> Gigs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public Zero1FiveDbContext(DbContextOptions<Zero1FiveDbContext> options)
             : base(options)

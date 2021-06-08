@@ -43,6 +43,7 @@ namespace Zero1Five.Products
             var product = await _productManager
             .CreateAsync(
                 input.Title,
+                input.GigId,
                 input.CategoryId,
                 input.CoverImage,
                 input.Description);

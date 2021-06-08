@@ -17,6 +17,7 @@
     "Description": "Description",
     "NewCategory": "New Category",
     "Menu:Products":"Products",
+    "ManageGigs":"Manage Gigs",
 
     
     "Zero1Five:ErrorCode:0001":"The Category Id {0} is Invalid",

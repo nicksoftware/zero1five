@@ -16,12 +16,19 @@ namespace Zero1Five.Permissions
             messagePermissions.AddChild(Zero1FivePermissions.Categories.Edit, L("Permission:Edit"));
             messagePermissions.AddChild(Zero1FivePermissions.Categories.Delete, L("Permission:Delete"));
 
-            var productsGroup = context.AddGroup(Zero1FivePermissions.ProductGroup, L("Menu:ManageProduct"));
-            var productPermissions = productsGroup.AddPermission(Zero1FivePermissions.Products.Default, L("Permission:Product"));
+            var GigsGroup = context.AddGroup(Zero1FivePermissions.GigsGroup, L("ManageGigs"));
+            var GigPermissions = GigsGroup.AddPermission(Zero1FivePermissions.Gigs.Default, L("Permission:Gig"));
+            GigPermissions.AddChild(Zero1FivePermissions.Gigs.Create, L("Permission:Create"));
+            GigPermissions.AddChild(Zero1FivePermissions.Gigs.Edit, L("Permission:Edit"));
+            GigPermissions.AddChild(Zero1FivePermissions.Gigs.Delete, L("Permission:Delete"));
+            GigPermissions.AddChild(Zero1FivePermissions.Gigs.Publish, L("Permission:Publish"));
+
+            var productPermissions = GigsGroup.AddPermission(Zero1FivePermissions.Products.Default, L("Permission:Product"));
             productPermissions.AddChild(Zero1FivePermissions.Products.Create, L("Permission:Create"));
             productPermissions.AddChild(Zero1FivePermissions.Products.Edit, L("Permission:Edit"));
             productPermissions.AddChild(Zero1FivePermissions.Products.Delete, L("Permission:Delete"));
             productPermissions.AddChild(Zero1FivePermissions.Products.Publish, L("Permission:Publish"));
+
         }
 
         private static LocalizableString L(string name)

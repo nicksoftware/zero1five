@@ -11,6 +11,7 @@ namespace Zero1Five.Products
         public string Title { get; set; }
         [Required]
         public Guid CategoryId { get; set; }
+        public Guid GigId { get; set; }
         [Required]
         [MaxLength(ProductConsts.CoverMaxLength)]
         public string CoverImage { get; set; }

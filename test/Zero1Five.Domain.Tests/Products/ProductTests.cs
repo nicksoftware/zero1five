@@ -1,12 +1,12 @@
 using System;
 using Shouldly;
 using Xunit;
+using Zero1Five.TestBase;
 
 namespace Zero1Five.Products
 {
     public class ProductTests : Zero1FiveDomainTestBase
     {
-
         [Fact]
         public void Should_Create()
         {
@@ -18,7 +18,8 @@ namespace Zero1Five.Products
             string cover = "coverImage.jpg";
 
             //When
-            var newProduct = Product.Create(id, title, categoryId, cover);
+            var gigId = Guid.Parse(Zero1FiveTestData.GigId);
+            var newProduct = Product.Create(id, gigId, categoryId, title, cover);
             newProduct.Description = description;
             //Then
 

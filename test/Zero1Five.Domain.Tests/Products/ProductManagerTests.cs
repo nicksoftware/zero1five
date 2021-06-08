@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 using Zero1Five.Categories;
+using Zero1Five.TestBase;
 
 namespace Zero1Five.Products
 {
@@ -35,8 +36,8 @@ namespace Zero1Five.Products
 
             await WithUnitOfWorkAsync(async () =>
             {
-                var newProduct = await _productManager.CreateAsync(title, category.Id, cover, description);
-                result = await _productRepository.InsertAsync(newProduct, true);
+                var gigId = Guid.Parse(Zero1FiveTestData.GigId);
+                 result = await _productManager.CreateAsync(title, gigId, category.Id, cover, description);
             });
 
             result.ShouldNotBeNull();
