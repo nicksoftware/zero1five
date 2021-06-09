@@ -9,5 +9,6 @@ namespace Zero1Five.Gigs
         public string CategoryName { get; set; }
         public string CoverImage { get; set; }
         public string Description { get; set; }
+        public float Rating { get; set; }
     }
 }

@@ -1,10 +1,12 @@
 @page "/manage/categories"
+@attribute [Authorize(Zero1FivePermissions.Categories.Default)]
 @using Volo.Abp.Application.Dtos
 @using Zero1Five.Categories
 @using Zero1Five.Localization
 @using Volo.Abp.AspNetCore.Components.Web
 @inherits Zero1FiveComponentBase
 @using Blazorise
+@using Zero1Five.Permissions
 @inject AbpBlazorMessageLocalizerHelper<Zero1FiveResource> LH
 @inject ICategoryAppService CategoryAppService
 <MudContainer>
@@ -30,16 +32,16 @@
                                 </DropdownToggle>
                                 <DropdownMenu>
                                     @if (CanEditCategory)
-                                        {
-                                    <DropdownItem Clicked="() => OpenEditCategoryModal(context)">
-                                        @L["Edit"]
-                                    </DropdownItem>
+                                    {
+                                        <DropdownItem Clicked="() => OpenEditCategoryModal(context)">
+                                            @L["Edit"]
+                                        </DropdownItem>
                                     }
                                     @if (CanDeleteCategory)
-                                        {
-                                    <DropdownItem Clicked="() => DeleteCategoryAsync(context)">
-                                        @L["Delete"]
-                                    </DropdownItem>
+                                    {
+                                        <DropdownItem Clicked="() => DeleteCategoryAsync(context)">
+                                            @L["Delete"]
+                                        </DropdownItem>
                                     }
                                 </DropdownMenu>
                             </Dropdown>

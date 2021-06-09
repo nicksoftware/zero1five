@@ -7,7 +7,7 @@
 		</div><!--/.section-header-->
 		<div class="explore-content">
 			<div class="row">
-				@foreach (var gig in _gigs)
+				@foreach (var gig in GigList)
 				{
 				<div class="col-md-4 col-sm-6">
 					<div class="single-explore-item">
@@ -80,11 +80,3 @@
 </section><!--/.explore-->
 <!--explore end -->
 
-@code {
-
-	struct  GigStruct
-	{
-		public string Title { get; set; }
-		public string Type { get; set; }
-	}
-}

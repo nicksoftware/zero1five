@@ -11,8 +11,8 @@ namespace Zero1Five.Products
             ProductDto,
             Guid,
             PagedAndSortedResultRequestDto,
-            CreateProductDto,
-            UpdateProductDto>
+            CreateUpdateProductDto,
+            CreateUpdateProductDto>
     {
         Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync();
         Task<ListResultDto<GigLookUpDto>> GetGigLookUpAsync();

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Zero1Five.Categories;
+using Zero1Five.Gigs;
 
 namespace Zero1Five.Products
 {
@@ -19,6 +20,8 @@ namespace Zero1Five.Products
             builder.Property(a => a.CoverImage).IsRequired().HasMaxLength(ProductConsts.CoverMaxLength);
 
             builder.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId).IsRequired();
+            builder.HasOne<Gig>().WithMany().HasForeignKey(x => x.GigId).IsRequired();
+
         }
     }
 }

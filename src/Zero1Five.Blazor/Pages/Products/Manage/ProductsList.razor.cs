@@ -20,7 +20,7 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         [Inject]
         public IProductAppService ProductAppService { get; set; }
         private IReadOnlyList<ProductDto> ProductList { get; set; }
-
+    [Inject] public NavigationManager NavigationManager { get; set; }
         private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
         private int CurrentPage { get; set; }
         private string CurrentSorting { get; set; }
@@ -31,35 +31,10 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         private bool CanDeleteProduct { get; set; }
         private bool CanPublish { get; set; }
 
-        private CategoryDto SelectedCategory { get; set; } = new();
-        private GigLookUpDto SelectedGig { get; set; } = new();
-        private IReadOnlyList<CategoryDto> CategoryList { get; set; } = new List<CategoryDto>();
-        private IReadOnlyList<GigLookUpDto> GigList { get; set; } = new List<GigLookUpDto>();
-
-        private CreateProductDto NewProduct { get; set; }
-
-        private Guid EditingProductId { get; set; }
-        private UpdateProductDto EditingProduct { get; set; }
-
-        private Modal CreateProductModal { get; set; }
-        private Modal EditProductModal { get; set; }
-
-        private Validations CreateValidationsRef;
-
-        private Validations EditValidationsRef;
-
-        public ProductsList()
-        {
-            NewProduct = new();
-            EditingProduct = new();
-        }
-
         protected override async Task OnInitializedAsync()
         {
             await SetPermissionsAsync();
             await GetProductsAsync();
-            await LookUpCategoriesAsync();
-            await LookUpGigsAsync();
         }
 
         private async Task SetPermissionsAsync()
@@ -75,26 +50,9 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
                 .IsGrantedAsync(Zero1FivePermissions.Products.Delete);
         }
 
-        private async Task LookUpCategoriesAsync()
+        private void HandleProductSubmitted(CreateUpdateProductDto product)
         {
-            CategoryList = (await ProductAppService.GetLookUpCategoriesAsync()).Items;
-        }
-
-        private async Task LookUpGigsAsync()
-        {
-            GigList = (await ProductAppService.GetGigLookUpAsync()).Items;
-        }
-
-        private void SelectedGigChangedHandler(Guid id)
-        {
-            if (id == Guid.Empty) return;
-            SelectedGig = GigList.First(x => x.Id == id);
-        }
-        private void SelectedCategoryChangedHandler(Guid id)
-        {
-            if (id == Guid.Empty) return;
-
-            SelectedCategory = CategoryList.First(x => x.Id == id);
+            GetProductsAsync();
         }
         private async Task GetProductsAsync()
         {
@@ -120,7 +78,6 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             CurrentPage = e.Page - 1;
 
             await GetProductsAsync();
-
             await InvokeAsync(StateHasChanged);
         }
 
@@ -147,76 +104,19 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
 
         }
 
-        private void OpenCreateProductModal()
+        private void OpenProductForm(ProductDto product = null)
         {
-            CreateValidationsRef.ClearAll();
-            NewProduct = new();
-            CreateProductModal.Show();
-
+            var id = product?.Id ?? Guid.Empty;
+            NavigationManager.NavigateTo("manage/products/"+id);
         }
-
-        private void CloseCreateProductModal()
-        {
-            CreateProductModal.Hide();
-            SelectedCategory = new();
-        }
-
-        private void OpenEditProductModal(ProductDto Product)
-        {
-            EditValidationsRef.ClearAll();
-
-            EditingProductId = Product.Id;
-            SelectedCategory = CategoryList.First(x => x.Id == Product.CategoryId);
-
-            EditingProduct = ObjectMapper.Map<ProductDto, UpdateProductDto>(Product);
-            EditProductModal.Show();
-        }
-
         private async Task DeleteProductAsync(ProductDto Product)
         {
             var confirmMessage = L["ProductDeletionConfirmationMessage", Product.Title];
-            if (!await Message.Confirm(confirmMessage))
-            {
-                return;
-            }
+            
+            if (!await Message.Confirm(confirmMessage)) return;
 
             await ProductAppService.DeleteAsync(Product.Id);
             await GetProductsAsync();
-        }
-
-        private void CloseEditProductModal()
-        {
-            EditProductModal.Hide();
-            SelectedCategory = new();
-        }
-
-        private async Task CreateProductAsync()
-        {
-            if (CreateValidationsRef.ValidateAll())
-            {
-                NewProduct.CategoryId = SelectedCategory.Id;
-                NewProduct.GigId = SelectedGig.Id;
-                await ProductAppService.CreateAsync(NewProduct);
-                await GetProductsAsync();
-                CreateProductModal.Hide();
-            }
-        }
-
-        private async Task FetchLookUpCategoriesAsync()
-        {
-            CategoryList = (await ProductAppService.GetLookUpCategoriesAsync()).Items;
-        }
-
-        private async Task UpdateProductAsync()
-        {
-            if (EditValidationsRef.ValidateAll())
-            {
-                EditingProduct.CategoryId = SelectedCategory.Id;
-                EditingProduct.GigId = SelectedGig.Id;
-                await ProductAppService.UpdateAsync(EditingProductId, EditingProduct);
-                await GetProductsAsync();
-                EditProductModal.Hide();
-            }
         }
     }
 }

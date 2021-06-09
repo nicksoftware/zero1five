@@ -16,10 +16,13 @@
     "CategoryDeletionConfirmationMessage": "Are you sure to delete the Category '{0}'?",
     "Description": "Description",
     "NewCategory": "New Category",
+    "NewProduct":"New Product",
+    "NewGig":"New Gig",
+    "Gigs":"Gigs",
     "Menu:Products":"Products",
     "ManageGigs":"Manage Gigs",
-
-    
+    "Menu:ManageGigs":"Manage Gigs",
+    "Menu:Gigs":"Gigs",
     "Zero1Five:ErrorCode:0001":"The Category Id {0} is Invalid",
     "Zero1Five:ErrorCode:0002":"Product \"{0}\" Already Unpublished! ",
     "Zero1Five:ErrorCode:0003":"Product \"{0}\" Already Published!"

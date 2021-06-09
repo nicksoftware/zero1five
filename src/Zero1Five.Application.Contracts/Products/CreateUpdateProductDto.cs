@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Zero1Five.Products
 {
     [Serializable]
-    public class CreateProductDto
+    public class CreateUpdateProductDto
     {
+        public Guid Id { get; set; }
         [Required]
         [MaxLength(ProductConsts.TitleMaxLength)]
         public string Title { get; set; }

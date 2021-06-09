@@ -1,0 +1,66 @@
+@page "/manage/products/{Id:guid?}"
+@using Blazorise.Components
+@using Volo.Abp.Application.Dtos
+@using Zero1Five.Blazor
+@using Zero1Five.Categories
+@using Zero1Five.Localization
+@attribute [Authorize(Zero1FivePermissions.Products.Default)]
+@using Zero1Five.Products
+@using Zero1Five.Gigs
+@using Volo.Abp.AspNetCore.Components.Web
+@inherits Zero1FiveComponentBase
+@using Blazorise
+@using Zero1Five.Permissions
+@inject AbpBlazorMessageLocalizerHelper<Zero1FiveResource> LH
+<MudContainer Class="p-2">
+    <MudText Typo="Typo.h5" Class="mx-3">@L["NewProduct"]</MudText>
+    <Form>
+        <Validations @ref="@CreateValidationsRef" Model="@Product" ValidateOnLoad="false">
+            <Validation MessageLocalizer="@LH.Localize">
+                <Field>
+                    <FieldLabel>@L["Name"]</FieldLabel>
+                    <TextEdit @bind-Text="@Product.Title">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <FieldLabel>@L["Category"]</FieldLabel>
+            <SelectList TItem="CategoryDto" TValue="Guid" Data="@CategoryList" TextField="@((item) => item.Name)"
+                        ValueField="@((item) => item.Id)" SelectedValue="@SelectedCategory.Id"
+                        SelectedValueChanged="SelectedCategoryChangedHandler"/>
+            <FieldLabel>@L["Gig"]</FieldLabel>
+            <SelectList TItem="GigLookUpDto" TValue="Guid" Data="@GigList" TextField="@((item) => item.Title)"
+                        ValueField="@((item) => item.Id)" SelectedValue="@SelectedGig.Id"
+                        SelectedValueChanged="SelectedGigChangedHandler"/>
+            <Validation MessageLocalizer="@LH.Localize">
+                <Field>
+                    <FieldLabel>@L["CoverImage"]</FieldLabel>
+                    <TextEdit Rows="5" @bind-Text="@Product.CoverImage">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Validation MessageLocalizer="@LH.Localize">
+                <Field>
+                    <FieldLabel>@L["Description"]</FieldLabel>
+                    <MemoEdit Rows="5" @bind-Text="@Product.Description">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </MemoEdit>
+                </Field>
+            </Validation>
+        </Validations>
+        <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" PreventDefaultOnSubmit="true"
+                   OnClick="((e) => CreateUpdateProductAsync())">
+            @L["Save"]
+        </MudButton>
+    </Form>
+</MudContainer>
+@code {
+    
+}

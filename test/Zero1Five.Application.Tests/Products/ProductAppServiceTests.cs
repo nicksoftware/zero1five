@@ -42,7 +42,7 @@ namespace Zero1Five.Products
         {
             ProductDto result = null;
             //Given
-            var input = new CreateProductDto
+            var input = new CreateUpdateProductDto
             {
                 Title = "New Product",
                 Description = "New Product Description",

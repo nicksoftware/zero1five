@@ -1,5 +1,5 @@
-@page "/manage/products"
-@attribute [Authorize(Zero1FivePermissions.Products.Default)]
+@page "/manage/gigs"
+@attribute [Authorize(Zero1FivePermissions.Gigs.Default)]
 @using Blazorise.Components
 @using Volo.Abp.Application.Dtos
 @using Zero1Five.Blazor
@@ -16,20 +16,19 @@
 <MudContainer>
     <MudGrid>
         <MudItem sm="6">
-            <MudText Typo="Typo.h6">@L["Products"]</MudText>
+            <MudText Typo="Typo.h6">@L["Gigs"]</MudText>
         </MudItem>
         <MudItem sm="6">
             <MudButton Class="ml-auto" Variant="Variant.Filled" Color="MudBlazor.Color.Primary"
-                       OnClick="(e)=>OpenProductForm()">
-                @L["NewProduct"]
+                       OnClick="(e)=>OpenGigForm()">
+                @L["NewGig"]
             </MudButton>
         </MudItem>
         <MudItem sm="12" xl="12" xs="12" md="12">
-            <DataGrid TItem="ProductDto" Data="ProductList" ReadData="OnDataGridReadAsync" TotalItems="TotalCount"
+            <DataGrid TItem="GigDto" Data="GigList" ReadData="OnDataGridReadAsync" TotalItems="TotalCount"
                       ShowPager="true" PageSize="PageSize">
                 <DataGridColumns>
-
-                    <DataGridColumn Width="150px" TItem="ProductDto" Field="@nameof(ProductDto.Id)" Sortable="false"
+                    <DataGridColumn Width="150px" TItem="GigDto" Field="@nameof(GigDto.Id)" Sortable="false"
                                     Caption="@L["Actions"]">
                         <DisplayTemplate>
                             <Dropdown>
@@ -37,28 +36,28 @@
                                     @L["Actions"]
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    @if (CanEditProduct)
+                                    @if (CanEditGig)
                                     {
-                                        <DropdownItem Clicked="() => OpenProductForm(context)">
+                                        <DropdownItem Clicked="() => OpenGigForm(context)">
                                             @L["Edit"]
                                         </DropdownItem>
                                     }
-                                    @if (CanPublish)
-                                    {
-                                        @if (context.IsPublished)
-                                        {
-                                            <DropdownItem Clicked="()=> HandlePublish(context)">
-                                                @L["UnPublish"]
-                                            </DropdownItem>
-                                        }
-                                        else
-                                        {
-                                            <DropdownItem Clicked="()=>HandlePublish(context)">
-                                                @L["Publish"]
-                                            </DropdownItem>
-                                        }
-                                    }
-                                    @if (CanDeleteProduct)
+                                    @* @if (CanPublish) *@
+                                    @* { *@
+                                    @*     @if (context.IsPublished) *@
+                                    @*     { *@
+                                    @*         <DropdownItem Clicked="()=> HandlePublish(context)"> *@
+                                    @*             @L["UnPublish"] *@
+                                    @*         </DropdownItem> *@
+                                    @*     } *@
+                                    @*     else *@
+                                    @*     { *@
+                                    @*         <DropdownItem Clicked="()=>HandlePublish(context)"> *@
+                                    @*             @L["Publish"] *@
+                                    @*         </DropdownItem> *@
+                                    @*     } *@
+                                    @* } *@
+                                    @if (CanDeleteGig)
                                     {
                                         <DropdownItem Clicked="() => DeleteProductAsync(context)">
                                             @L["Delete"]
@@ -68,9 +67,8 @@
                             </Dropdown>
                         </DisplayTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Title)" Caption="@L["Title"]">
+                    <DataGridColumn TItem="GigDto" Field="@nameof(GigDto.Title)" Caption="@L["Title"]">
                     </DataGridColumn>
-
                 </DataGridColumns>
             </DataGrid>
         </MudItem>

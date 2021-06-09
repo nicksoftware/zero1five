@@ -16,8 +16,8 @@ namespace Zero1Five.Products
         CrudAppService<
             Product, ProductDto, Guid,
             PagedAndSortedResultRequestDto,
-            CreateProductDto,
-            UpdateProductDto>,
+            CreateUpdateProductDto,
+            CreateUpdateProductDto>,
             IProductAppService
     {
         private readonly IProductRepository _repository;
@@ -41,7 +41,7 @@ namespace Zero1Five.Products
             DeletePolicyName = Zero1FivePermissions.Products.Delete;
         }
 
-        public override async Task<ProductDto> CreateAsync(CreateProductDto input)
+        public override async Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
         {
 
             var product = await _productManager
