@@ -1,0 +1,19 @@
+<div class="single-how-works">
+	<div class="single-how-works-icon">
+		<i class="@Icon"></i>
+	</div>
+	<h2></h2>
+	<h2><a href="#">@Title</a></h2>
+	<p>
+		@Content
+	</p>
+	@CardBody
+	@CardActions
+</div>
+@code {
+	[Parameter] public string Icon { get; set; }
+	[Parameter] public string Title { get; set; }
+	[Parameter] public string Content { get; set; }
+	[Parameter] public RenderFragment CardBody { get; set; }
+	[Parameter] public  RenderFragment CardActions { get; set; }
+}

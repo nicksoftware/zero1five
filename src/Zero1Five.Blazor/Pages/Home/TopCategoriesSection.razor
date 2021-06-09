@@ -1,0 +1,38 @@
+<section id="list-topics" class="list-topics">
+	<div class="container-fluid justify-content-center">
+		<div class="list-category-content mx-auto">
+			<ul>
+				@foreach (var cat in _categories)
+				{
+					<li>
+						<div class="single-list-category-content">
+							<div class="single-list-topics-icon">
+								<i class="@cat.Icon"></i>
+							</div>
+							<h2><a href="#">@cat.Name</a></h2>
+							<p>@cat.ProductsCount Products</p>
+						</div>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+@code {
+
+	struct  Category
+	{
+		public string Name { get; set; }
+		public string Icon { get; set; }
+		public int ProductsCount { get; set; }
+	}
+
+	Category[] _categories = new[]
+	{
+		new Category() {Name = "Resturent", Icon = "flaticon-restaurant", ProductsCount = 123},
+		new Category() {Name = "Travelling", Icon = "flaticon-travel", ProductsCount = 433},
+		new Category() {Name = "Hotels", Icon = "flaticon-building", ProductsCount = 223},
+		new Category() {Name = "Health Care", Icon = "flaticon-pills", ProductsCount = 783},
+		new Category() {Name = "Automotion", Icon = "flaticon-transport", ProductsCount = 463},
+	};
+}

@@ -1,0 +1,46 @@
+@using Blazorise
+@using NUglify.JavaScript
+<!--works start -->
+<section id="works" class="works">
+	<div class="container">
+		<div class="section-header">
+			<h2>how it works</h2>
+			<p>Learn More about how our website works</p>
+		</div><!--/.section-header-->
+		<div class="works-content">
+			<div class="row">
+			@foreach (var c in _cards)
+			{
+				<div class="col-md-4 col-sm-6">
+					<IconCard Title="@c.Title" 
+					          Icon="@c.Icon"
+					          Content="@lorem">
+						<CardActions>
+							<button class="welcome-hero-btn how-work-btn" >
+								read more
+							</button>
+						</CardActions>
+					</IconCard>
+				</div>
+			}
+			</div>
+		</div>
+	</div>
+</section>
+@code {
+	
+	private string lorem = "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt ut laboremagna aliqua.";
+
+	private WorkCard[] _cards = new[]
+	{
+		new WorkCard() {Icon = "flaticon-lightbulb-idea",Title = "Choose what to Do", Content = "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt ut laboremagna aliqua."},
+		new WorkCard() {Icon = "flaticon-networking",Title = "Find what you want", Content = "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt ut laboremagna aliqua."},
+		new WorkCard() {Icon = "flaticon-location-on-road",Title = "Explore amazing Place", Content = "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt ut laboremagna aliqua."},
+	};
+	struct WorkCard
+	{
+		public  string Icon { get; set; }
+		public string Title { get; set; }
+		public string Content { get; set; }
+	}
+}

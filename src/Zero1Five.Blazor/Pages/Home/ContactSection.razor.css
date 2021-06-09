@@ -1,0 +1,88 @@
+
+/*-------------------------------------
+        11. Subscribe
+--------------------------------------*/
+.subscription{
+    background: #f8fafb;
+    padding:150px 0;
+}
+/*subscribe-title*/
+.subscribe-title {margin-bottom: 52px;}
+
+.subscribe-title h2{
+    font-size:24px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.subscribe-title p{
+    color:#7b8088;
+    font-size:16px;
+    font-weight: 500;
+    margin-top: 28px;
+}/*subscribe-title*/
+
+
+/*custom-input-group*/
+.subscription-input-group {
+    position: relative;
+    text-align: center;
+    max-width: 630px;
+    margin:0 auto;
+}
+
+.subscription-input-group .subscription-input-form{
+    display: inline-block;
+    width: 630px;
+    height: 60px;
+    padding-left:30px;
+    font-size: 16px;
+    color: #a5adb3;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+    border:1px solid #fff;
+    box-shadow: 0 0px 10px rgba(21,19,19,.1);
+    -webkit-transition:0.3s linear;
+    -moz-transition:0.3s linear;
+    -o-transition:0.3s linear;
+    transition:0.3s linear;
+}
+.subscription-input-group:hover .subscription-input-form{
+    box-shadow: 0 5px 20px rgba(21,19,19,.4);
+}
+/*custom-input-group*/
+
+/*appsLand-btn*/
+.appsLand-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #197379;
+    display: inline-block;
+    width: 180px;
+    height: 60px;
+    line-height: 60px;
+    text-decoration: none;
+    border-top-right-radius:3px;
+    border-bottom-right-radius:3px;
+    text-transform:capitalize;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    border: 0;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-transition:0.3s ease-in-out;
+    -moz-transition:0.3s ease-in-out;
+    -o-transition:0.3s ease-in-out;
+    transition:0.3s ease-in-out;
+}
+.appsLand-btn:hover, .appsLand-btn:focus, .appsLand-btn:active {
+    text-decoration: none;
+    outline: none;
+}
+.appsLand-btn:hover {
+    box-shadow:0 5px 10px rgba(71,71,71,.4);
+    background: #197379;
+}
+/*appsLand-btn*/

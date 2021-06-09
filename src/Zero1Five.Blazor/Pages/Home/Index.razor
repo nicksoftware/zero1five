@@ -1,0 +1,17 @@
+﻿@page "/"
+@using Volo.Abp.MultiTenancy
+@using Zero1Five.Categories
+@inherits Zero1FiveComponentBase
+@inject ICurrentTenant CurrentTenant
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<Hero Title="best place to find and explore   that all you need"
+      Subtitle="Find Best Place, Restaurant, Hotel, Real State and many more think in just One click"
+      Image="./images/banner.jpg">
+    <SearchBox/>
+</Hero>
+<TopCategoriesSection/>
+<WorkSection/>
+<TopGigSection/>
+<StatisticSection/>
+<ContactSection/>

@@ -1,0 +1,8 @@
+.search-box{margin-top: 78px;display: flex;}
+.searchbox-form {
+    display: flex;
+    background: #fff;
+    height: 60px;
+    border-radius: 3px;
+    width: 85%;
+}

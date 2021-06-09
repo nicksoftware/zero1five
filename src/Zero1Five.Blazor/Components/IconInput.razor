@@ -1,0 +1,18 @@
+<div class="icon-input-form">
+	<h3>@Label</h3>
+	<form action="index.html">
+		<input type="text" placeholder="@Placeholder" />
+	</form>
+	<div class="icon-input-form-icon">
+		<i class="@Icon"></i>
+	</div>
+</div>
+@code {
+	[Parameter]
+	public string Label { get; set; }
+	[Parameter]
+	public string Placeholder { get; set; }
+	[Parameter]
+	public string Icon { get; set; }
+    
+}
