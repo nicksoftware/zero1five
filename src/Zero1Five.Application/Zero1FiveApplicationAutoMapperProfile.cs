@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Volo.Abp.Application.Dtos;
 using Zero1Five.Categories;
+using Zero1Five.Gigs;
 using Zero1Five.Products;
 
 namespace Zero1Five
@@ -18,6 +19,9 @@ namespace Zero1Five
             CreateMap<Product, ProductDto>();
             CreateMap<CreateProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
+            CreateMap<Gig, GigDto>();
+            CreateMap<CreateGigDto, Gig>();
+            CreateMap<UpdateGigDto, Gig>();
         }
     }
 }

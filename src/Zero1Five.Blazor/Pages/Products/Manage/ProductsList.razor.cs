@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Volo.Abp.Application.Dtos;
 using Zero1Five.Categories;
+using Zero1Five.Gigs;
 using Zero1Five.Permissions;
 using Zero1Five.Products;
 
@@ -31,7 +32,10 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         private bool CanPublish { get; set; }
 
         private CategoryDto SelectedCategory { get; set; } = new();
+        private GigLookUpDto SelectedGig { get; set; } = new();
         private IReadOnlyList<CategoryDto> CategoryList { get; set; } = new List<CategoryDto>();
+        private IReadOnlyList<GigLookUpDto> GigList { get; set; } = new List<GigLookUpDto>();
+
         private CreateProductDto NewProduct { get; set; }
 
         private Guid EditingProductId { get; set; }
@@ -55,6 +59,7 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             await SetPermissionsAsync();
             await GetProductsAsync();
             await LookUpCategoriesAsync();
+            await LookUpGigsAsync();
         }
 
         private async Task SetPermissionsAsync()
@@ -72,7 +77,18 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
 
         private async Task LookUpCategoriesAsync()
         {
-            CategoryList = (await ProductAppService.GetLookUpCategories()).Items;
+            CategoryList = (await ProductAppService.GetLookUpCategoriesAsync()).Items;
+        }
+
+        private async Task LookUpGigsAsync()
+        {
+            GigList = (await ProductAppService.GetGigLookUpAsync()).Items;
+        }
+
+        private void SelectedGigChangedHandler(Guid id)
+        {
+            if (id == Guid.Empty) return;
+            SelectedGig = GigList.First(x => x.Id == id);
         }
         private void SelectedCategoryChangedHandler(Guid id)
         {
@@ -119,12 +135,12 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             if (id != Guid.Empty)
             {
                 var message = !product.IsPublished ? "Published " : "UnPublished";
-                Message.Success($"Product successfully {message}");
+                await Message.Success($"Product successfully {message}");
             }
             else
             {
                 var message = product.IsPublished ? "Published " : "UnPublished";
-                Message.Error("Failed to " + message);
+                await Message.Error("Failed to " + message);
             }
             await InvokeAsync(StateHasChanged);
             await GetProductsAsync();
@@ -179,6 +195,7 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             if (CreateValidationsRef.ValidateAll())
             {
                 NewProduct.CategoryId = SelectedCategory.Id;
+                NewProduct.GigId = SelectedGig.Id;
                 await ProductAppService.CreateAsync(NewProduct);
                 await GetProductsAsync();
                 CreateProductModal.Hide();
@@ -187,7 +204,7 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
 
         private async Task FetchLookUpCategoriesAsync()
         {
-            CategoryList = (await ProductAppService.GetLookUpCategories()).Items;
+            CategoryList = (await ProductAppService.GetLookUpCategoriesAsync()).Items;
         }
 
         private async Task UpdateProductAsync()
@@ -195,6 +212,7 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             if (EditValidationsRef.ValidateAll())
             {
                 EditingProduct.CategoryId = SelectedCategory.Id;
+                EditingProduct.GigId = SelectedGig.Id;
                 await ProductAppService.UpdateAsync(EditingProductId, EditingProduct);
                 await GetProductsAsync();
                 EditProductModal.Hide();

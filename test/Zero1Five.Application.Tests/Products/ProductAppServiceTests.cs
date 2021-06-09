@@ -24,10 +24,19 @@ namespace Zero1Five.Products
         [Fact]
         public async Task GetLookUpCategories_Should_GetCategories()
         {
-            var result = await _productAppService.GetLookUpCategories();
+            var result = await _productAppService.GetLookUpCategoriesAsync();
             result.Items.Count.ShouldBeGreaterThan(0);
         }
 
+        [Fact]
+        public void GetGigLookUpAsync_should_returnUserGigs()
+        {
+            //Given
+            var gigs = _productAppService.GetGigLookUpAsync();
+            //When
+
+            //Then
+        }
         [Fact]
         public async Task CreateAsync_Should_UnPublishedProduct()
         {

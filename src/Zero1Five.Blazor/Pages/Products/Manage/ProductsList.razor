@@ -5,6 +5,7 @@
 @using Zero1Five.Categories
 @using Zero1Five.Localization
 @using Zero1Five.Products
+@using Zero1Five.Gigs
 @using Volo.Abp.AspNetCore.Components.Web
 @inherits Zero1FiveComponentBase
 @using Blazorise
@@ -25,7 +26,7 @@
             <DataGrid TItem="ProductDto" Data="ProductList" ReadData="OnDataGridReadAsync" TotalItems="TotalCount"
                 ShowPager="true" PageSize="PageSize">
                 <DataGridColumns>
-                    
+
                     <DataGridColumn Width="150px" TItem="ProductDto" Field="@nameof(ProductDto.Id)" Sortable="false"
                         Caption="@L["Actions"]">
                         <DisplayTemplate>
@@ -34,27 +35,26 @@
                                     @L["Actions"]
                                 </DropdownToggle>
                                 <DropdownMenu>
-
                                     @if (CanEditProduct)
                                         {
                                     <DropdownItem Clicked="() => OpenEditProductModal(context)">
                                         @L["Edit"]
                                     </DropdownItem>
                                     }
-                                    @if( CanPublish)
-                                    {
-                                        @if (context.IsPublished)
-                                                {
-                                        <DropdownItem Clicked="()=> HandlePublish(context)">
-                                            @L["UnPublish"]
-                                        </DropdownItem>
-                                        }
-                                        else
+                                    @if (CanPublish)
+                                        {
+                                    @if (context.IsPublished)
                                             {
-                                        <DropdownItem Clicked="()=>HandlePublish(context)">
-                                            @L["Publish"]
-                                        </DropdownItem>
-                                        }
+                                    <DropdownItem Clicked="()=> HandlePublish(context)">
+                                        @L["UnPublish"]
+                                    </DropdownItem>
+                                    }
+                                            else
+                                            {
+                                    <DropdownItem Clicked="()=>HandlePublish(context)">
+                                        @L["Publish"]
+                                    </DropdownItem>
+                                    }
                                     }
                                     @if (CanDeleteProduct)
                                         {
@@ -99,6 +99,10 @@
                     <SelectList TItem="CategoryDto" TValue="Guid" Data="@CategoryList" TextField="@((item)=>item.Name)"
                         ValueField="@((item)=>item.Id)" SelectedValue="@SelectedCategory.Id"
                         SelectedValueChanged="SelectedCategoryChangedHandler" />
+                    <FieldLabel>@L["Gig"]</FieldLabel>
+                    <SelectList TItem="GigLookUpDto" TValue="Guid" Data="@GigList" TextField="@((item)=>item.Title)"
+                        ValueField="@((item)=>item.Id)" SelectedValue="@SelectedGig.Id"
+                        SelectedValueChanged="SelectedGigChangedHandler" />
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["CoverImage"]</FieldLabel>

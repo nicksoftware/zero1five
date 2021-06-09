@@ -8,6 +8,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Zero1Five.Categories;
+using Zero1Five.Gigs;
 using Zero1Five.Permissions;
 namespace Zero1Five.Products
 {
@@ -21,15 +22,18 @@ namespace Zero1Five.Products
     {
         private readonly IProductRepository _repository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IGigRepository _gigRepository;
         private readonly IProductManager _productManager;
 
         public ProductAppService(
             IProductRepository repository,
             ICategoryRepository categoryRepository,
+            IGigRepository gigRepository,
             IProductManager productManager) : base(repository)
         {
             _repository = repository;
             _categoryRepository = categoryRepository;
+            _gigRepository = gigRepository;
             _productManager = productManager;
 
             CreatePolicyName = Zero1FivePermissions.Products.Create;
@@ -55,8 +59,28 @@ namespace Zero1Five.Products
             return MapToGetOutputDto(product);
         }
 
+        public async Task<ListResultDto<GigLookUpDto>> GetGigLookUpAsync()
+        {
+            var gigs = _gigRepository.Where(x => x.CreatorId == CurrentUser.Id).ToList();
 
-        public async Task<ListResultDto<CategoryDto>> GetLookUpCategories()
+            var gigsDtoList = gigs.Select(g =>
+                {
+                    return new GigLookUpDto
+                    {
+                        Id = g.Id,
+                        Title = g.Title,
+                    };
+                }).ToList();
+
+            await Task.Yield();
+
+            return new ListResultDto<GigLookUpDto>
+            {
+                Items = gigsDtoList,
+            };
+        }
+
+        public async Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync()
         {
             var categories = await _categoryRepository.GetListAsync();
 

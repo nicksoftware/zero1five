@@ -28,7 +28,7 @@ namespace Zero1Five
         public async Task SeedAsync(DataSeedContext context)
         {
             /* Seed additional test data... */
-           
+
             await SeedCategoriesAsync(context);
         }
 
@@ -45,7 +45,7 @@ namespace Zero1Five
                 .ToList();
 
             await categoryRepository.InsertManyAsync(categories, true);
-            
+
             List<Gig> gigs = new();
             for (var i = 1; i < 10; i++)
             {
@@ -55,30 +55,32 @@ namespace Zero1Five
                 var description = $"Gig {i} Description";
                 if (i == 2) id = Guid.Parse(Zero1FiveTestData.GigId);
                 var gig = Gig.Create(id, title, cover, description);
+                gig.CreatorId = Guid.Parse(Zero1FiveTestData.UserId);
+                gig.CreationTime = DateTime.Now;
                 gigs.Add(gig);
             }
-            
+
             await gigRepository.InsertManyAsync(gigs, true);
-            
+
             List<Product> products = new();
-            
+
             for (var x = 0; x < 10; x++)
             {
                 var name = $"Product {x}";
                 var categoryId = categories[rollDice.Next(0, categories.Count)].Id;
-                
+
                 var gigId = Guid.Parse(Zero1FiveTestData.GigId);
                 var product = Product.Create(Guid.NewGuid(), gigId, categoryId, name, $"image");
-            
+
                 product.Description = $"{name} Description";
 
                 if (x == 1) product.IsPublished = true;
-                
+
                 products.Add(product);
             }
             await productRepository.InsertManyAsync(products, true);           // List<Product> products = new();
-            
-           
+
+
         }
 
     }

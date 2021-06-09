@@ -11,6 +11,5 @@ namespace Zero1Five.Categories
             CreateUpdateCategoryDto,
             CreateUpdateCategoryDto>
     {
-
     }
 }
