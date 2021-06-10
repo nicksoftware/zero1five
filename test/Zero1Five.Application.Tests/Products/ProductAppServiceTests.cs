@@ -35,6 +35,19 @@ namespace Zero1Five.Products
         }
 
         [Fact]
+        public async Task GetListAsync_WhenFiltered_ShouldReturnFilteredList()
+        {
+            var input = new PagedSortableAndFilterableRequestDto
+            {
+                Filter = "1"
+            };
+
+            var result =await _productAppService.GetListAsync(input);
+            
+            result.Items.Count.ShouldBe(1);
+            result.Items.ShouldContain(x=>x.Title.Contains(input.Filter));
+        }
+
         public async Task GetAsync_ShouldGetProductWithDetail()
         {
             var productId =(await _productRepository.GetListAsync()).First().Id;

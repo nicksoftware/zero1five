@@ -9,6 +9,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Zero1Five.Categories;
+using Zero1Five.Common;
 using Zero1Five.Gigs;
 using Zero1Five.Permissions;
 
@@ -17,7 +18,7 @@ namespace Zero1Five.Products
     public class ProductAppService :
         CrudAppService<
             Product, ProductDto, Guid,
-            PagedAndSortedResultRequestDto,
+            PagedSortableAndFilterableRequestDto,
             CreateUpdateProductDto,
             CreateUpdateProductDto>,
         IProductAppService
@@ -102,16 +103,18 @@ namespace Zero1Five.Products
             return dto;
         }
 
-        public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedSortableAndFilterableRequestDto input)
         {
             var queryable = await Repository.GetQueryableAsync();
-
+            queryable = queryable.WhereIf(!string.IsNullOrEmpty(input.Filter),
+                x => x.Title.Contains(input.Filter));
+           
             var query =
                 from product in queryable
                 join category in _categoryRepository on product.CategoryId equals category.Id
                 join gig in _gigRepository on product.GigId equals gig.Id
                 select new {product, category, gig};
-
+            
             query = query
                 .OrderBy(NormalizeSorting(input.Sorting))
                 .Skip(input.SkipCount)

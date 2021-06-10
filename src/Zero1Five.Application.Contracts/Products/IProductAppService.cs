@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Zero1Five.Categories;
+using Zero1Five.Common;
 using Zero1Five.Gigs;
 
 namespace Zero1Five.Products
@@ -10,7 +11,7 @@ namespace Zero1Five.Products
     public interface IProductAppService : ICrudAppService<
             ProductDto,
             Guid,
-            PagedAndSortedResultRequestDto,
+            PagedSortableAndFilterableRequestDto,
             CreateUpdateProductDto,
             CreateUpdateProductDto>
     {
