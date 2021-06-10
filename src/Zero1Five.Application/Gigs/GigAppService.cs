@@ -31,7 +31,6 @@ namespace Zero1Five.Gigs
         {
             var createdGIg = await _gigManager.CreateAsync(input.Title, input.CoverImage, input.Description);
             return await MapToGetOutputDtoAsync(createdGIg);
-            // return base.CreateAsync(input);
         }
     }
 }
