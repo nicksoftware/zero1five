@@ -28,10 +28,5 @@ namespace Zero1Five.Categories
         {
             return await MapToGetOutputDtoAsync(await categoryManager.CreateAsync(input.Name, input.Description));
         }
-
-        public override Task<CategoryDto> UpdateAsync(Guid id, CreateUpdateCategoryDto input)
-        {
-            return base.UpdateAsync(id, input);
-        }
     }
 }
