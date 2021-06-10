@@ -5,6 +5,7 @@ using Xunit;
 using Zero1Five.Categories;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Zero1Five.Common;
 using Zero1Five.TestBase;
 
 namespace Zero1Five.Products
@@ -21,6 +22,31 @@ namespace Zero1Five.Products
             _categoryRepository = GetRequiredService<ICategoryRepository>();
             _productRepository = GetRequiredService<IProductRepository>();
         }
+
+        [Fact]
+        public async Task GetListAsync_Should_returnProductsList()
+        {
+            var input = new PagedSortableAndFilterableRequestDto();
+            var result =await _productAppService.GetListAsync(input);
+            
+            result.Items.Count.ShouldBeGreaterThanOrEqualTo(0);
+            result.Items.ShouldNotBeEmpty(nameof(ProductDto.CategoryName));
+            result.Items.ShouldNotBeEmpty(nameof(ProductDto.GigName));
+        }
+
+        [Fact]
+        public async Task GetAsync_ShouldGetProductWithDetail()
+        {
+            var productId =(await _productRepository.GetListAsync()).First().Id;
+
+            var result =await _productAppService.GetAsync(productId);
+            
+            result.CategoryName.ShouldNotBeEmpty();
+            result.CategoryId.ShouldNotBe(Guid.Empty);
+            result.GigId.ShouldNotBe(Guid.Empty);
+            result.GigName.ShouldNotBeEmpty();
+
+        }
         [Fact]
         public async Task GetLookUpCategories_Should_GetCategories()
         {
@@ -31,7 +57,6 @@ namespace Zero1Five.Products
         [Fact]
         public async Task GetGigLookUpAsync_should_returnUserGigs()
         {
-            
             var gigs = await _productAppService.GetGigLookUpAsync();
             gigs.Items.ShouldNotBeNull();
             gigs.Items.Count.ShouldBeGreaterThanOrEqualTo(0);

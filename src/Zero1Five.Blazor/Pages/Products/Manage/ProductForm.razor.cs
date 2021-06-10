@@ -80,15 +80,22 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         }
         private async Task CreateUpdateProductAsync()
         {
-            if (!CreateValidationsRef.ValidateAll()) return;
+            if (!CreateValidationsRef.ValidateAll())
+            {
+                return;
+            }
 
             Product.CategoryId = SelectedCategory.Id;
             Product.GigId = SelectedGig.Id;
 
-            if (Product.Id == Guid.Empty)
+            if (Id == Guid.Empty)
+            {
                 await ProductAppService.CreateAsync(Product);
+            }
             else
+            {
                 await ProductAppService.UpdateAsync(Product.Id,Product);
+            }
 
             NavigationManager.NavigateTo("/manage/products");
         }

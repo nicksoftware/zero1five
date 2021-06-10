@@ -20,7 +20,7 @@
         </MudItem>
         <MudItem sm="6">
             <MudButton Class="ml-auto" Variant="Variant.Filled" Color="MudBlazor.Color.Primary"
-                       OnClick="(e)=>OpenProductForm()">
+                       OnClick="(e) => OpenProductForm()">
                 @L["NewProduct"]
             </MudButton>
         </MudItem>
@@ -47,13 +47,13 @@
                                     {
                                         @if (context.IsPublished)
                                         {
-                                            <DropdownItem Clicked="()=> HandlePublish(context)">
+                                            <DropdownItem Clicked="() => HandlePublish(context)">
                                                 @L["UnPublish"]
                                             </DropdownItem>
                                         }
                                         else
                                         {
-                                            <DropdownItem Clicked="()=>HandlePublish(context)">
+                                            <DropdownItem Clicked="() => HandlePublish(context)">
                                                 @L["Publish"]
                                             </DropdownItem>
                                         }
@@ -70,7 +70,10 @@
                     </DataGridColumn>
                     <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Title)" Caption="@L["Title"]">
                     </DataGridColumn>
-
+                    <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.CategoryName)" Caption="@L["Category"]">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.GigName)" Caption="@L["Gig"]">
+                    </DataGridColumn>
                 </DataGridColumns>
             </DataGrid>
         </MudItem>

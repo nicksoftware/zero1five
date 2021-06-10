@@ -33,8 +33,7 @@ namespace Zero1Five.Products
         }
         internal void ChangeCategory(Guid categoryId)
         {
-            if (categoryId == Guid.Empty)
-                throw new InvalidCategoryIdException(categoryId);
+            if (categoryId == Guid.Empty) throw new InvalidCategoryIdException(categoryId);
 
             CategoryId = categoryId;
         }
