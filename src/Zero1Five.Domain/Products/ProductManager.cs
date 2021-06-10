@@ -42,7 +42,12 @@ namespace Zero1Five.Products
 
             product.IsPublished = false;
             return (await _productRepository.UpdateAsync(product)).Id;
+        }
 
+        public Task<Product> ChangeCoverImageAsync(Product product, string coverImage)
+        {
+            product.SetCover(coverImage);
+           return _productRepository.UpdateAsync(product);
         }
     }
 }

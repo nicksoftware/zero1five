@@ -29,13 +29,12 @@ namespace Zero1Five.Products
         }
 
         [Fact]
-        public void GetGigLookUpAsync_should_returnUserGigs()
+        public async Task GetGigLookUpAsync_should_returnUserGigs()
         {
-            //Given
-            var gigs = _productAppService.GetGigLookUpAsync();
-            //When
-
-            //Then
+            
+            var gigs = await _productAppService.GetGigLookUpAsync();
+            gigs.Items.ShouldNotBeNull();
+            gigs.Items.Count.ShouldBeGreaterThanOrEqualTo(0);
         }
         [Fact]
         public async Task CreateAsync_Should_UnPublishedProduct()
@@ -66,7 +65,6 @@ namespace Zero1Five.Products
             result.CoverImage.ShouldBe(input.CoverImage);
             result.IsPublished.ShouldBe(false);
         }
-
         [Fact]
         public async Task Publish_ShouldPublish()
         {
@@ -90,9 +88,7 @@ namespace Zero1Five.Products
             result.ShouldBe(uPublishedProduct.Id);
             publishedProduct.ShouldNotBeNull();
             publishedProduct.IsPublished.ShouldBe(true);
-
         }
-
         [Fact]
         public async Task UnPublish_ShouldUnPublish()
         {
@@ -117,6 +113,23 @@ namespace Zero1Five.Products
             publishedProduct.ShouldNotBeNull();
 
             publishedProduct.IsPublished.ShouldBe(false);
+
+        }
+
+        [Fact]
+        public async Task ChangeCoverASync()
+        {
+            var product = (await _productRepository.GetListAsync()).First();
+            var input = new ChangeProductCoverDto
+            {
+                CoverImage = "changeProductImage.jpg"
+            };
+
+            var result =await _productAppService.ChangeCoverASync(product.Id, input);
+            
+            result.ShouldNotBeNull();
+            
+            result.CoverImage.ShouldBe(input.CoverImage);
 
         }
     }

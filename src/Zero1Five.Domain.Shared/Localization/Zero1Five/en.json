@@ -25,7 +25,8 @@
     "Menu:Gigs":"Gigs",
     "Zero1Five:ErrorCode:0001":"The Category Id {0} is Invalid",
     "Zero1Five:ErrorCode:0002":"Product \"{0}\" Already Unpublished! ",
-    "Zero1Five:ErrorCode:0003":"Product \"{0}\" Already Published!"
+    "Zero1Five:ErrorCode:0003":"Product \"{0}\" Already Published!",
+    "Zero1Five:ErrorCode:0004":"Category {name} Already Exists, Create a Unique Category name"
 
   }
 }

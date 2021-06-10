@@ -27,12 +27,11 @@ namespace Zero1Five.Products
             return new Product(id, gigId, categoryId, title, cover);
         }
 
-        public void SetCover(string cover)
+        internal void SetCover(string cover)
         {
             CoverImage = Check.NotNullOrWhiteSpace(cover, nameof(cover));
         }
-
-        public void ChangeCategory(Guid categoryId)
+        internal void ChangeCategory(Guid categoryId)
         {
             if (categoryId == Guid.Empty)
                 throw new InvalidCategoryIdException(categoryId);

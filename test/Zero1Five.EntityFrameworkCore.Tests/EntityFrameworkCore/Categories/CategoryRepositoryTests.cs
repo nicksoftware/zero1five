@@ -20,15 +20,16 @@ namespace Zero1Five.Categories
         public async Task Should_Query_Category()
         {
 
-            await WithUnitOfWorkAsync(async () =>
+           var result =  await WithUnitOfWorkAsync<Category>(async () =>
             {
                 //Act
                 var cookingCategory = await (await categoryRepository.GetQueryableAsync())
                     .Where(u => u.Name == "Cooking")
                     .FirstOrDefaultAsync();
                 //Assert
-                cookingCategory.ShouldNotBeNull();
+                return cookingCategory;
             });
+            result.ShouldNotBeNull();
         }
     }
 }

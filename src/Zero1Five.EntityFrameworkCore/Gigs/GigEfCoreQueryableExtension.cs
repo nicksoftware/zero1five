@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Zero1Five.Gigs
 {
@@ -12,10 +13,8 @@ namespace Zero1Five.Gigs
             {
                 return queryable;
             }
-
             return queryable
-                // .Include(x => x.xxx) // TODO: 
-                ;
+                .Include(x=>x.Products);
         }
     }
 }

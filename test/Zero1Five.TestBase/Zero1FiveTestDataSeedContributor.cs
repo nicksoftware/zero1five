@@ -29,10 +29,10 @@ namespace Zero1Five
         {
             /* Seed additional test data... */
 
-            await SeedCategoriesAsync(context);
+            await SeedCatalogAsync(context);
         }
 
-        private async Task SeedCategoriesAsync(DataSeedContext context)
+        private async Task SeedCatalogAsync(DataSeedContext context)
         {
             var names = new[] { "Development", "Marketing", "Cooking" };
 

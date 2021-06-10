@@ -40,10 +40,10 @@ namespace Zero1Five.Products
             UpdatePolicyName = Zero1FivePermissions.Products.Edit;
             DeletePolicyName = Zero1FivePermissions.Products.Delete;
         }
-
+        
+        [Authorize(Zero1FivePermissions.Products.Create)]
         public override async Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
         {
-
             var product = await _productManager
             .CreateAsync(
                 input.Title,
@@ -58,11 +58,9 @@ namespace Zero1Five.Products
             }
             return MapToGetOutputDto(product);
         }
-
         public async Task<ListResultDto<GigLookUpDto>> GetGigLookUpAsync()
         {
             var gigs = _gigRepository.Where(x => x.CreatorId == CurrentUser.Id).ToList();
-
             var gigsDtoList = gigs.Select(g =>
                 {
                     return new GigLookUpDto
@@ -79,7 +77,20 @@ namespace Zero1Five.Products
                 Items = gigsDtoList,
             };
         }
-
+        
+        [Authorize(Zero1FivePermissions.Products.Edit)]
+        public async Task<ProductDto> ChangeCoverASync(Guid productId, ChangeProductCoverDto input)
+        {
+            var product = await _repository.FindAsync(productId);
+            
+            if (product == null) throw new EntityNotFoundException(typeof(Product), productId);
+            
+            var result = await _productManager.ChangeCoverImageAsync(product, input.CoverImage);
+          
+            return await MapToGetOutputDtoAsync(result);
+        }
+        
+        [Authorize(Zero1FivePermissions.Products.Edit)]
         public async Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync()
         {
             var categories = await _categoryRepository.GetListAsync();
@@ -104,12 +115,15 @@ namespace Zero1Five.Products
         public async Task<Guid> PublishAsync(Guid id)
         {
             var product = await Repository.FindAsync(id);
+            
             if (product is null)
                 throw new EntityNotFoundException(typeof(Product), id);
+            
             await _productManager.PublishAsync(product);
 
             return product.Id;
         }
+        
         [Authorize(Zero1FivePermissions.Products.Publish)]
         public async Task<Guid> UnPublishAsync(Guid id)
         {
@@ -121,6 +135,5 @@ namespace Zero1Five.Products
 
             return product.Id;
         }
-
     }
 }

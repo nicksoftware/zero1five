@@ -1,14 +1,23 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 
 namespace Zero1Five.Gigs
 {
-    public class GigManager : DomainService, IDomainService
+    public class GigManager : DomainService, IGigManager
     {
-        Task<Gig> CreateAsync(string title, string description)
+        private readonly IGigRepository _gigRepository;
+
+        public GigManager(IGigRepository gigRepository)
         {
-            throw new NotImplementedException();
+            _gigRepository = gigRepository;
+        }
+
+        public Task<Gig> CreateAsync(string title, string coverImage, string description)
+        {
+            var newGig = Gig.Create(GuidGenerator.Create(), title, coverImage, description);
+            return _gigRepository.InsertAsync(newGig, true);
         }
     }
 }

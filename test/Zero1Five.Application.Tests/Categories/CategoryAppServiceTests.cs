@@ -22,7 +22,7 @@ namespace Zero1Five.Categories
             //Given
             var input = new CreateUpdateCategoryDto
             {
-                Name = "Software Development",
+                Name = "Software2 Development",
                 Description = "Software Development Description"
             };
 

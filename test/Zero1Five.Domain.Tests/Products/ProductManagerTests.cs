@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Shouldly;
+using Volo.Abp.Json.SystemTextJson;
 using Xunit;
 using Zero1Five.Categories;
 using Zero1Five.TestBase;
@@ -25,12 +27,12 @@ namespace Zero1Five.Products
         public async Task Create_Should_Create_And_Return_NewProduct()
         {
             //Given
-            Guid id = Guid.NewGuid();
+            var id = Guid.NewGuid();
 
             var category = (await _categoryRepository.GetListAsync()).First();
-            string title = "New Product";
-            string description = "New Product";
-            string cover = "coverImage.jpg";
+            var title = "New Product";
+            var description = "New Product";
+            var cover = "coverImage.jpg";
             var productManger = new ProductManager(_productRepository);
             Product result = null;
 
@@ -47,6 +49,15 @@ namespace Zero1Five.Products
             result.CoverImage.ShouldBe(cover);
             result.Description.ShouldBe(description);
 
+        }
+
+        [Fact]
+        public async  Task ChangeCoverImageAsync_ShouldChangeImage()
+        {
+            var product = (await _productRepository.GetListAsync()).First();
+            var coverImage = "newImage.jpg";
+            var result = await _productManager.ChangeCoverImageAsync(product, coverImage);
+            result.CoverImage.ShouldBe(coverImage);
         }
     }
 }

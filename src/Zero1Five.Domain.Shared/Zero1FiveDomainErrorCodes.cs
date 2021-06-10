@@ -6,5 +6,6 @@
         public const string InvalidCategoryIdException = "Zero1Five:ErrorCode:0001";
         public const string ProductAlreadyUnpublishedException = "Zero1Five:ErrorCode:0002";
         public const string ProductAlreadyPublishedException = "Zero1Five:ErrorCode:0003";
+        public const string CategoryAlreadyExistException = "Zero1Five:ErrorCode:0004";
     }
 }

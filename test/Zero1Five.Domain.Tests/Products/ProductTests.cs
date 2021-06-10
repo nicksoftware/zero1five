@@ -35,20 +35,45 @@ namespace Zero1Five.Products
         public void Should_ChangeCategory()
         {
             //Given
-
+            var title = "first Title";
+            var cover = "image.jpg";
+            var description = "hell";
+            var firstCategory = Guid.NewGuid();
+            var product = Product.Create(
+                id: Guid.NewGuid(),
+                gigId:Guid.NewGuid(),
+                categoryId: firstCategory,
+                title: title,
+                cover: cover
+            );
             //When
-
+                product.ChangeCategory(Guid.NewGuid());
             //Then
+                product.CategoryId.ShouldNotBe(firstCategory);            
         }
-
         [Fact]
         public void Should_Change_Cover()
         {
             //Given
-
+            var title = "first Title";
+            var cover = "image.jpg";
+            var description = "hell";
+            
+            var firstCategory = Guid.NewGuid();
+            
+            var product = Product.Create(
+                id: Guid.NewGuid(),
+                gigId:Guid.NewGuid(),
+                categoryId: firstCategory,
+                title: title,
+                cover: cover
+            );
             //When
-
+            var newImage = "newImage.jpg";
+            product.SetCover(newImage);
             //Then
+            product.CoverImage.ShouldNotBe(cover);   
+            product.CoverImage.ShouldBe(newImage);
         }
     }
 }

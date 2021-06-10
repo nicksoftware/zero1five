@@ -9,5 +9,6 @@ namespace Zero1Five.Products
         Task<Product> CreateAsync(string title, Guid gigId, Guid categoryId, string cover, string description);
         Task<Guid> PublishAsync(Product product);
         Task<Guid> UnPublishAsync(Product product);
+        Task<Product> ChangeCoverImageAsync(Product product, string coverImage);
     }
 }

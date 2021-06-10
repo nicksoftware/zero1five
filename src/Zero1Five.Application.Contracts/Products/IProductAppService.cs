@@ -16,6 +16,7 @@ namespace Zero1Five.Products
     {
         Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync();
         Task<ListResultDto<GigLookUpDto>> GetGigLookUpAsync();
+        Task<ProductDto> ChangeCoverASync(Guid productId, ChangeProductCoverDto input);
         Task<Guid> PublishAsync(Guid id);
         Task<Guid> UnPublishAsync(Guid id);
     }
