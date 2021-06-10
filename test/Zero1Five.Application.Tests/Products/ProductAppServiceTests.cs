@@ -5,6 +5,8 @@ using Xunit;
 using Zero1Five.Categories;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.Replication;
+using Volo.Abp.Domain.Entities;
 using Zero1Five.Common;
 using Zero1Five.TestBase;
 
@@ -26,7 +28,7 @@ namespace Zero1Five.Products
         [Fact]
         public async Task GetListAsync_Should_returnProductsList()
         {
-            var input = new PagedSortableAndFilterableRequestDto();
+            var input = new PagedProductRequestDto();
             var result =await _productAppService.GetListAsync(input);
             
             result.Items.Count.ShouldBeGreaterThanOrEqualTo(0);
@@ -35,23 +37,37 @@ namespace Zero1Five.Products
         }
 
         [Fact]
-        public async Task GetListAsync_WhenFiltered_ShouldReturnFilteredList()
+        public async Task GetListAsync_WhenFilteredByKeyword_ShouldReturnFilteredList()
         {
-            var input = new PagedSortableAndFilterableRequestDto
+            var input = new PagedProductRequestDto
             {
                 Filter = "1"
             };
 
             var result =await _productAppService.GetListAsync(input);
             
-            result.Items.Count.ShouldBe(1);
+            result.Items.Count.ShouldBeGreaterThanOrEqualTo(1);
             result.Items.ShouldContain(x=>x.Title.Contains(input.Filter));
         }
 
+        [Fact]
+        public async Task GetListAsync_WhenFilteredByCategory_ShouldReturnFilteredList()
+        {
+            var input = new PagedProductRequestDto
+            {
+                CategoryId =Guid.Parse(  Zero1FiveTestData.CategoryId)
+            };
+
+            var result =await _productAppService.GetListAsync(input);
+            
+            result.Items.Count.ShouldBeGreaterThanOrEqualTo(1); 
+            result.Items.ShouldContain(x=>x.CategoryId == input.CategoryId);
+        }
+
+        [Fact]
         public async Task GetAsync_ShouldGetProductWithDetail()
         {
             var productId =(await _productRepository.GetListAsync()).First().Id;
-
             var result =await _productAppService.GetAsync(productId);
             
             result.CategoryName.ShouldNotBeEmpty();
@@ -74,6 +90,7 @@ namespace Zero1Five.Products
             gigs.Items.ShouldNotBeNull();
             gigs.Items.Count.ShouldBeGreaterThanOrEqualTo(0);
         }
+        
         [Fact]
         public async Task CreateAsync_Should_UnPublishedProduct()
         {
@@ -102,6 +119,46 @@ namespace Zero1Five.Products
             result.Description.ShouldBe(input.Description);
             result.CoverImage.ShouldBe(input.CoverImage);
             result.IsPublished.ShouldBe(false);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_Should_DeleteProduct()
+        {
+            var productId = (await _productRepository.GetListAsync()).First().Id;
+
+            await _productAppService.DeleteAsync(productId);
+
+            ProductDto product = null;
+            await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+            {
+               product =  await _productAppService.GetAsync(productId);
+            });
+            
+            product.ShouldBeNull();
+        }
+        
+        [Fact]
+        public async Task UpdateAsync_Should_UpdateProduct()
+        {
+            var productId = (await _productRepository.GetListAsync()).First().Id;
+            var product =await _productRepository.FindAsync(productId);
+            var input = new CreateUpdateProductDto()
+            {
+                Id =  productId,
+                CategoryId  = product.CategoryId,
+                GigId =  product.GigId,
+                Title =  "newTitle",
+                CoverImage = "someImage.jph",
+                Description = "new product Description ",
+                IsPublished = true
+            };
+            var result = await _productAppService.UpdateAsync(productId,input);
+            
+            result.Id.ShouldBe(productId);
+            result.Title.ShouldBe(input.Title);
+            result.Description.ShouldBe(input.Description);
+            result.CategoryId.ShouldBe(input.CategoryId);
+            result.GigId.ShouldBe(input.GigId);
         }
         [Fact]
         public async Task Publish_ShouldPublish()
@@ -136,7 +193,6 @@ namespace Zero1Five.Products
             {
                 uPublishedProduct = await _productRepository.FirstOrDefaultAsync(x => x.IsPublished);
             });
-
             //When
             var result = await _productAppService.UnPublishAsync(uPublishedProduct.Id);
 
@@ -149,11 +205,8 @@ namespace Zero1Five.Products
             result.ShouldNotBe(Guid.Empty);
             result.ShouldBe(uPublishedProduct.Id);
             publishedProduct.ShouldNotBeNull();
-
             publishedProduct.IsPublished.ShouldBe(false);
-
         }
-
         [Fact]
         public async Task ChangeCoverASync()
         {

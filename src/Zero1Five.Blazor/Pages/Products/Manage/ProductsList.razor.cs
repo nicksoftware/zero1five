@@ -57,7 +57,7 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         private async Task GetProductsAsync()
         {
             var result = await ProductAppService.GetListAsync(
-                new GetProductListDto
+                new PagedProductRequestDto
                 {
                     MaxResultCount = PageSize,
                     SkipCount = CurrentPage * PageSize,

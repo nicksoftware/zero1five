@@ -11,7 +11,7 @@ namespace Zero1Five.Products
     public interface IProductAppService : ICrudAppService<
             ProductDto,
             Guid,
-            PagedSortableAndFilterableRequestDto,
+            PagedProductRequestDto,
             CreateUpdateProductDto,
             CreateUpdateProductDto>
     {

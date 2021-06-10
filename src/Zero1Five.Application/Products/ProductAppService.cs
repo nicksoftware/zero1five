@@ -18,7 +18,7 @@ namespace Zero1Five.Products
     public class ProductAppService :
         CrudAppService<
             Product, ProductDto, Guid,
-            PagedSortableAndFilterableRequestDto,
+            PagedProductRequestDto,
             CreateUpdateProductDto,
             CreateUpdateProductDto>,
         IProductAppService
@@ -103,11 +103,15 @@ namespace Zero1Five.Products
             return dto;
         }
 
-        public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedSortableAndFilterableRequestDto input)
+        public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedProductRequestDto input)
         {
+            var filter = input.Filter;
+            var canFilterByKeyword = !string.IsNullOrEmpty(filter);
+            
             var queryable = await Repository.GetQueryableAsync();
-            queryable = queryable.WhereIf(!string.IsNullOrEmpty(input.Filter),
-                x => x.Title.Contains(input.Filter));
+            
+            queryable = queryable.WhereIf(canFilterByKeyword,
+                x => x.Title.Contains(filter)|| x.Description.Contains(filter));
            
             var query =
                 from product in queryable
@@ -115,11 +119,14 @@ namespace Zero1Five.Products
                 join gig in _gigRepository on product.GigId equals gig.Id
                 select new {product, category, gig};
             
+           //if input CategoryIdFilter is not null also Filter by Category  
+           query = query.WhereIf(input.CategoryId != null , x => x.product.CategoryId == input.CategoryId);
+            
             query = query
                 .OrderBy(NormalizeSorting(input.Sorting))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount);
-
+            
             var queryResult = await AsyncExecuter.ToListAsync(query);
 
             var productDtoList = queryResult.Select(x =>

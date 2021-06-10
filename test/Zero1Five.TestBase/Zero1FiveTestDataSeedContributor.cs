@@ -43,7 +43,8 @@ namespace Zero1Five
                 .Select(name => Category
                     .Create(Guid.NewGuid(), name, $"{name} description"))
                 .ToList();
-
+            var specialCategory = Category.Create(Guid.Parse( Zero1FiveTestData.CategoryId), "Special","Special Category");
+                categories.Add(specialCategory);
             await categoryRepository.InsertManyAsync(categories, true);
 
             List<Gig> gigs = new();
