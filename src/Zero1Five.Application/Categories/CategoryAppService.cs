@@ -26,7 +26,7 @@ namespace Zero1Five.Categories
         [Authorize(Zero1FivePermissions.Categories.Default)]
         public override async Task<CategoryDto> CreateAsync(CreateUpdateCategoryDto input)
         {
-            return MapToGetOutputDto(await categoryManager.CreateAsync(input.Name, input.Description));
+            return await MapToGetOutputDtoAsync(await categoryManager.CreateAsync(input.Name, input.Description));
         }
 
         public override Task<CategoryDto> UpdateAsync(Guid id, CreateUpdateCategoryDto input)
