@@ -14,5 +14,6 @@ namespace Zero1Five.Gigs
         public float Rating { get; set; }
         
         public  ICollection<ProductDto> Products { get; set; }
+        public bool IsPublished { get; set; }
     }
 }

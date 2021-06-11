@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Update.Internal;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
@@ -78,13 +79,36 @@ namespace Zero1Five.Gigs
             public async Task DeleteAsync_Should_DeleteGig_Async()
             {
                 //Given
-                var gigs = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items;
-                var gig = gigs[0];
+                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items[0];
                 //When
                 await _gigAppService.DeleteAsync(gig.Id);
                 var results = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items;
                 //Then
                 results.ShouldNotContain(gig);
+            }
+
+            [Fact]
+            public async Task PublishAsync_SHouldPublishGig()
+            {
+                //given 
+                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items.First();
+                //when publish
+               var result =  await _gigAppService.PublishAsync(gig.Id);
+               
+               result.Id.ShouldBe(gig.Id);
+               result.IsPublished.ShouldBe(true);
+            }
+            
+            [Fact]
+            public async Task UnpublishAsync_SHouldUnpublishGig()
+            {
+                //given 
+                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items.First();
+                //when Unpublish requested
+                var result =  await _gigAppService.UnpublishAsync(gig.Id);
+               //then
+                result.Id.ShouldBe(gig.Id);
+                result.IsPublished.ShouldBe(false);
             }
         }
 }

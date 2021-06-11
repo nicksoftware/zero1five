@@ -2,8 +2,10 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Zero1Five.Permissions;
+using Zero1Five.Products;
 
 namespace Zero1Five.Gigs
 {
@@ -13,7 +15,7 @@ namespace Zero1Five.Gigs
             PagedAndSortedResultRequestDto,
             CreateGigDto,
             UpdateGigDto>,
-            IGigAppService
+        IGigAppService
     {
         private readonly IGigManager _gigManager;
 
@@ -31,6 +33,31 @@ namespace Zero1Five.Gigs
         {
             var createdGIg = await _gigManager.CreateAsync(input.Title, input.CoverImage, input.Description);
             return await MapToGetOutputDtoAsync(createdGIg);
+        }
+
+        public async Task<GigDto> PublishAsync(Guid id)
+        {
+            var gig = await Repository.FindAsync(id);
+
+            if (gig != null)
+            {
+                gig.Publish();
+                var publishedGig = await Repository.UpdateAsync(gig);
+                return await MapToGetOutputDtoAsync(publishedGig);
+            }
+            throw new EntityNotFoundException(typeof(Gig), id);
+        }
+
+        public async Task<GigDto> UnpublishAsync(Guid id)
+        {
+            var gig = await Repository.FindAsync(id);
+            if (gig != null)
+            {
+                gig.UnPublish();
+                var publishedGig = await Repository.UpdateAsync(gig);
+                return await MapToGetOutputDtoAsync(publishedGig);
+            }
+            throw new EntityNotFoundException(typeof(Gig), id);
         }
     }
 }
