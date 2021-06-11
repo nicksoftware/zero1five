@@ -6,7 +6,6 @@ namespace Zero1Five.Gigs
     public class GigManager : DomainService, IGigManager
     {
         private readonly IGigRepository _gigRepository;
-
         public GigManager(IGigRepository gigRepository)
         {
             _gigRepository = gigRepository;

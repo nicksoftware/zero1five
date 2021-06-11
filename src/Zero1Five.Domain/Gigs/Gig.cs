@@ -29,14 +29,17 @@ namespace Zero1Five.Gigs
         public void Publish()
         {
            if(IsPublished) return;
-
+           
            IsPublished = true;
+           AddLocalEvent(new GigPublicationChangeEvent(this));
         }
 
         public void UnPublish()
         {
             if(!IsPublished) return;
+
             IsPublished = false;
+            AddLocalEvent(new GigPublicationChangeEvent(this));
         }
     }
 }

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Zero1Five.Categories
 {
-    public class CategoryManagerTests:Zero1FiveDomainTestBase
+    public sealed class CategoryManagerTests:Zero1FiveDomainTestBase
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICategoryManager _categoryManager;
