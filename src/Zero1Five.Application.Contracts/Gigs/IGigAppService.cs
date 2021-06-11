@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-
+using System.Threading.Tasks;
 namespace Zero1Five.Gigs
 {
 
@@ -12,6 +12,7 @@ namespace Zero1Five.Gigs
             CreateGigDto,
             UpdateGigDto>
     {
-
+        Task<GigDto> PublishAsync(Guid id);
+        Task<GigDto> UnpublishAsync(Guid id);
     }
 }

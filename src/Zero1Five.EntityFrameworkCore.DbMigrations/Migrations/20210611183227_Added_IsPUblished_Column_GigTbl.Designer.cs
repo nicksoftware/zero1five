@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -10,9 +11,10 @@ using Zero1Five.EntityFrameworkCore;
 namespace Zero1Five.Migrations
 {
     [DbContext(typeof(Zero1FiveMigrationsDbContext))]
-    partial class Zero1FiveMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210611183227_Added_IsPUblished_Column_GigTbl")]
+    partial class Added_IsPUblished_Column_GigTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

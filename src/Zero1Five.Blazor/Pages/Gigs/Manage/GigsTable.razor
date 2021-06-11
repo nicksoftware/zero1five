@@ -42,21 +42,21 @@
                                             @L["Edit"]
                                         </DropdownItem>
                                     }
-                                    @* @if (CanPublish) *@
-                                    @* { *@
-                                    @*     @if (context.IsPublished) *@
-                                    @*     { *@
-                                    @*         <DropdownItem Clicked="()=> HandlePublish(context)"> *@
-                                    @*             @L["UnPublish"] *@
-                                    @*         </DropdownItem> *@
-                                    @*     } *@
-                                    @*     else *@
-                                    @*     { *@
-                                    @*         <DropdownItem Clicked="()=>HandlePublish(context)"> *@
-                                    @*             @L["Publish"] *@
-                                    @*         </DropdownItem> *@
-                                    @*     } *@
-                                    @* } *@
+                                    @if (CanPublish)
+                                    {
+                                        @if (context.IsPublished)
+                                        {
+                                            <DropdownItem Clicked="()=> HandlePublish(context)">
+                                                @L["UnPublish"]
+                                            </DropdownItem>
+                                        }
+                                        else
+                                        {
+                                            <DropdownItem Clicked="()=>HandlePublish(context)">
+                                                @L["Publish"]
+                                            </DropdownItem>
+                                        }
+                                    }
                                     @if (CanDeleteGig)
                                     {
                                         <DropdownItem Clicked="() => DeleteProductAsync(context)">

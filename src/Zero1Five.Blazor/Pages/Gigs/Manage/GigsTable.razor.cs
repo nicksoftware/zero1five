@@ -18,7 +18,9 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
         [Inject]
         public IGigAppService GigAppService { get; set; }
         private IReadOnlyList<GigDto> GigList { get; set; }
-        [Inject] public NavigationManager NavigationManager { get; set; }
+        
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
         private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
         private int CurrentPage { get; set; }
         private string CurrentSorting { get; set; }
@@ -82,24 +84,15 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
 
         private async Task HandlePublish(GigDto gig)
         {
-            Guid id = Guid.Empty;
-            // if (gig.IsPublished)
-            //     id = await GigAppService.UnPublishAsync(gig.Id);
-            // else
-            //     id = await GigAppService.PublishAsync(gig.Id);
-            //
-            // if (id != Guid.Empty)
-            // {
-            //     var message = !gig.IsPublished ? "Published " : "UnPublished";
-            //     await Message.Success($"Product successfully {message}");
-            // }
-            // else
-            // {
-            //     var message = gig.IsPublished ? "Published " : "UnPublished";
-            //     await Message.Error("Failed to " + message);
-            // }
-            await GetProductsAsync();
+            GigDto resultGig = null;
+            if (gig.IsPublished)
+                resultGig = await GigAppService.UnpublishAsync(gig.Id);
+            else
+                resultGig = await GigAppService.PublishAsync(gig.Id);
 
+            var message = resultGig.IsPublished ? "Published " : "UnPublished";
+            await Message.Success($"Product successfully {message}");
+            await GetProductsAsync();
         }
 
         private void OpenGigForm(GigDto gig = null)

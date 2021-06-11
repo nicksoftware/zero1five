@@ -39,15 +39,15 @@ namespace Zero1Five.Products
             await WithUnitOfWorkAsync(async () =>
             {
                 var gigId = Guid.Parse(Zero1FiveTestData.GigId);
-                 result = await _productManager.CreateAsync(title, gigId, category.Id, cover, description);
+                
+                result = await _productManager.CreateAsync(title, gigId, category.Id, cover, description);
+                result.ShouldNotBeNull();
+                result.Id.ShouldNotBe(Guid.Empty);
+                result.CategoryId.ShouldBe(category.Id);
+                result.Title.ShouldBe(title);
+                result.CoverImage.ShouldBe(cover);
+                result.Description.ShouldBe(description);
             });
-
-            result.ShouldNotBeNull();
-            result.Id.ShouldNotBe(Guid.Empty);
-            result.CategoryId.ShouldBe(category.Id);
-            result.Title.ShouldBe(title);
-            result.CoverImage.ShouldBe(cover);
-            result.Description.ShouldBe(description);
 
         }
 
