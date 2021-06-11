@@ -35,12 +35,10 @@ namespace Zero1Five.Categories
             var name = "Marketing";
             var description = "some description";
             
-            Category category = null;
             await Assert.ThrowsAsync<CategoryAlreadyExistException>(async () =>
             {
                  await WithUnitOfWorkAsync(() => _categoryManager.CreateAsync(name, description));
             });
-            category.ShouldBeNull();
         }
     }
 }

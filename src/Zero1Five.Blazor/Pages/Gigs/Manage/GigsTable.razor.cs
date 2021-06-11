@@ -18,7 +18,9 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
         [Inject]
         public IGigAppService GigAppService { get; set; }
         private IReadOnlyList<GigDto> GigList { get; set; }
-        [Inject] public NavigationManager NavigationManager { get; set; }
+        
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
         private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
         private int CurrentPage { get; set; }
         private string CurrentSorting { get; set; }

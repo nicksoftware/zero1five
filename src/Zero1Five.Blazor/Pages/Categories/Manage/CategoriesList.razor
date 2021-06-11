@@ -16,15 +16,16 @@
         </MudItem>
         <MudItem sm="6">
             <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary"
-                OnClick="(e)=>OpenCreateCategoryModal()">@L["NewCategory"]
+                       OnClick="(e) => OpenCreateCategoryModal()">
+                @L["NewCategory"]
             </MudButton>
         </MudItem>
         <MudItem sm="12" xl="12" xs="12" md="12">
             <DataGrid TItem="CategoryDto" Data="CategoryList" ReadData="OnDataGridReadAsync" TotalItems="TotalCount"
-                ShowPager="true" PageSize="PageSize">
+                      ShowPager="true" PageSize="PageSize">
                 <DataGridColumns>
                     <DataGridColumn Width="150px" TItem="CategoryDto" Field="@nameof(CategoryDto.Id)" Sortable="false"
-                        Caption="@L["Actions"]">
+                                    Caption="@L["Actions"]">
                         <DisplayTemplate>
                             <Dropdown>
                                 <DropdownToggle Color="Blazorise.Color.Primary">
@@ -57,12 +58,12 @@
     </MudGrid>
 </MudContainer>
 <Modal @ref="CreateCategoryModal">
-    <ModalBackdrop />
+    <ModalBackdrop/>
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["NewCategory"]</ModalTitle>
-                <CloseButton Clicked="CloseCreateCategoryModal" />
+                <CloseButton Clicked="CloseCreateCategoryModal"/>
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Model="@NewCategory" ValidateOnLoad="false">
@@ -71,7 +72,7 @@
                             <FieldLabel>@L["Name"]</FieldLabel>
                             <TextEdit @bind-Text="@NewCategory.Name">
                                 <Feedback>
-                                    <ValidationError />
+                                    <ValidationError/>
                                 </Feedback>
                             </TextEdit>
                         </Field>
@@ -81,7 +82,7 @@
                             <FieldLabel>@L["Description"]</FieldLabel>
                             <MemoEdit Rows="5" @bind-Text="@NewCategory.Description">
                                 <Feedback>
-                                    <ValidationError />
+                                    <ValidationError/>
                                 </Feedback>
                             </MemoEdit>
                         </Field>
@@ -90,11 +91,11 @@
             </ModalBody>
             <ModalFooter>
                 <MudButton Class="mx-3" Color="MudBlazor.Color.Secondary" Variant="Variant.Filled"
-                    OnClick="((e)=>CloseCreateCategoryModal())">
+                           OnClick="((e) => CloseCreateCategoryModal())">
                     @L["Cancel"]
                 </MudButton>
                 <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" PreventDefaultOnSubmit="true"
-                    OnClick="((e)=>CreateCategoryAsync())">
+                           OnClick="((e) => CreateCategoryAsync())">
                     @L["Save"]
                 </MudButton>
             </ModalFooter>
@@ -103,12 +104,12 @@
 </Modal>
 
 <Modal @ref="EditCategoryModal">
-    <ModalBackdrop />
+    <ModalBackdrop/>
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
                 <ModalTitle>@EditingCategory.Name</ModalTitle>
-                <CloseButton Clicked="CloseEditCategoryModal" />
+                <CloseButton Clicked="CloseEditCategoryModal"/>
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@EditValidationsRef" Model="@EditingCategory" ValidateOnLoad="false">
@@ -117,7 +118,7 @@
                             <FieldLabel>@L["Name"]</FieldLabel>
                             <TextEdit @bind-Text="@EditingCategory.Name">
                                 <Feedback>
-                                    <ValidationError />
+                                    <ValidationError/>
                                 </Feedback>
                             </TextEdit>
                         </Field>
@@ -127,7 +128,7 @@
                             <FieldLabel>@L["Description"]</FieldLabel>
                             <MemoEdit Rows="5" @bind-Text="@EditingCategory.Description">
                                 <Feedback>
-                                    <ValidationError />
+                                    <ValidationError/>
                                 </Feedback>
                             </MemoEdit>
                         </Field>
@@ -135,11 +136,11 @@
                 </Validations>
             </ModalBody>
             <ModalFooter>
-                <MudButton Color="MudBlazor.Color.Secondary" OnClick="(e=>CloseEditCategoryModal())">
+                <MudButton Color="MudBlazor.Color.Secondary" OnClick="(e => CloseEditCategoryModal())">
                     @L["Cancel"]
                 </MudButton>
                 <MudButton Color="MudBlazor.Color.Primary" PreventDefaultOnSubmit="true"
-                    OnClick="((e)=>UpdateCategoryAsync())">
+                           OnClick="((e) => UpdateCategoryAsync())">
                     @L["Save"]
                 </MudButton>
             </ModalFooter>
