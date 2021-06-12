@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Zero1Five.Common;
 
 namespace Zero1Five.Gigs
 {
@@ -8,11 +9,13 @@ namespace Zero1Five.Gigs
         [Required]
         [MaxLength(GigConsts.TitleMaxLength)]
         public string Title { get; set; }
+
         [Required]
-        [MaxLength(GigConsts.CoverImageMaxLength)]
-        public string CoverImage { get; set; }
+        public SaveFileDto CoverImage { get; set; } = new();
+        
         [Required]
         [MaxLength(GigConsts.DescriptionMaxLength)]
+        
         public string Description { get; set; }
     }
 }
