@@ -12,7 +12,7 @@ namespace Zero1Five.Blazor
             //Define your AutoMapper configuration here for the Blazor project.
             CreateMap<CategoryDto, CreateUpdateCategoryDto>().ReverseMap();
             CreateMap<ProductDto, CreateUpdateProductDto>();
-            CreateMap<GigDto, CreateGigDto>();
+            CreateMap<GigDto, CreateUpdateGigDto>();
             CreateMap<GigDto, UpdateGigDto>();
         }
     }

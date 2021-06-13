@@ -37,7 +37,6 @@ namespace Zero1Five.Products
             //Given
             var title = "first Title";
             var cover = "image.jpg";
-            var description = "hell";
             var firstCategory = Guid.NewGuid();
             var product = Product.Create(
                 id: Guid.NewGuid(),
@@ -57,7 +56,6 @@ namespace Zero1Five.Products
             //Given
             var title = "first Title";
             var cover = "image.jpg";
-            var description = "hell";
             
             var firstCategory = Guid.NewGuid();
             

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Zero1Five.Common;
 
 namespace Zero1Five.Products
 {
@@ -14,8 +15,7 @@ namespace Zero1Five.Products
         public Guid CategoryId { get; set; }
         public Guid GigId { get; set; }
         [Required]
-        [MaxLength(ProductConsts.CoverMaxLength)]
-        public string CoverImage { get; set; }
+        public SaveFileDto Cover { get; set; }
         [Required]
         [MaxLength(ProductConsts.DescriptionMaxLength)]
         public string Description { get; set; }

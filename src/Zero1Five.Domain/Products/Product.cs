@@ -8,8 +8,8 @@ namespace Zero1Five.Products
     {
         public Guid CategoryId { get; private set; }
         public Guid GigId { get; private set; }
-        public string Title { get; internal set; }
-        public string Description { get; internal set; }
+        public string Title { get;  set; }
+        public string Description { get;  set; }
         public string CoverImage { get; private set; }
         public bool IsPublished { get; set; }
         protected Product() { }

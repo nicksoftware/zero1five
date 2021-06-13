@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Zero1Five.MultiTenancy;
 using Volo.Abp.AuditLogging;
@@ -13,6 +14,11 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.BlobStoring.Azure;
+using Zero1Five.AzureStorage;
+using Volo.Abp.BlobStoring;
+using Zero1Five.AzureStorage.Gig;
+using Zero1Five.AzureStorage.Products;
 
 namespace Zero1Five
 {
@@ -29,18 +35,56 @@ namespace Zero1Five
         typeof(AbpTenantManagementDomainModule),
         typeof(AbpEmailingModule)
     )]
+    [DependsOn(typeof(AbpBlobStoringAzureModule))]
     public class Zero1FiveDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
+            Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsEnabled; });
 
-#if DEBUG
+            var configuration = context.Services.GetConfiguration();
+            ConfigureAzureStorageAccountOptions(context, configuration);
+            ConfigureAbpBlobStoringOptions(configuration);
+// #if DEBUG
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
-#endif
+// #endif
+        }
+
+        private void ConfigureAzureStorageAccountOptions(ServiceConfigurationContext context,IConfiguration configuration)
+        {
+            Configure<AzureStorageAccountOptions>(options =>
+            {
+                var azureStorageConnectionString = configuration["AzureStorageAccountSettings:ConnectionString"];
+                var azureStorageAccountUrl = configuration["AzureStorageAccountSettings:AccountUrl"];
+
+                options.ConnectionString = azureStorageConnectionString;
+                options.AccountUrl = azureStorageAccountUrl;
+            });
+        }
+
+        private void ConfigureAbpBlobStoringOptions(IConfiguration configuration)
+        {
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                var azureStorageConnectionString = configuration["AzureStorageAccountSettings:ConnectionString"];
+               
+                options.Containers.Configure<GigPictureContainer>(container =>
+                {
+                    container.UseAzure(azure =>
+                    {
+                        azure.ConnectionString = azureStorageConnectionString;
+                        azure.CreateContainerIfNotExists = true;
+                    });
+                });
+                options.Containers.Configure<ProductContainer>(container =>
+                {
+                    container.UseAzure(azure =>
+                    {
+                        azure.ConnectionString = azureStorageConnectionString;
+                        azure.CreateContainerIfNotExists = true;
+                    });
+                });
+            });
         }
     }
 }

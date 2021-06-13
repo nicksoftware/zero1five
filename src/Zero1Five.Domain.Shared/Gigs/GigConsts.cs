@@ -6,7 +6,7 @@ namespace Zero1Five.Gigs
     {
         public const int TitleMaxLength = 50;
         public const int DescriptionMaxLength = 500;
-        public const int CoverImageMaxLength = 50;
+        public const int CoverImageMaxLength = 500;
 
     }
 }

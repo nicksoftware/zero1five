@@ -4,6 +4,8 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Zero1Five.AzureStorage.Gig;
+using Zero1Five.Common;
 using Zero1Five.Permissions;
 using Zero1Five.Products;
 
@@ -13,28 +15,64 @@ namespace Zero1Five.Gigs
         CrudAppService<
             Gig, GigDto, Guid,
             PagedAndSortedResultRequestDto,
-            CreateGigDto,
-            UpdateGigDto>,
+            CreateUpdateGigDto,
+            CreateUpdateGigDto>,
         IGigAppService
     {
         private readonly IGigManager _gigManager;
+        private readonly GigPictureContainerManager _gigPictureContainerManager;
 
         public GigAppService(
             IGigRepository repository,
-            IGigManager gigManager) : base(repository)
+            IGigManager gigManager,
+            GigPictureContainerManager gigPictureContainerManager) : base(repository)
         {
             _gigManager = gigManager;
+            _gigPictureContainerManager = gigPictureContainerManager;
             CreatePolicyName = Zero1FivePermissions.Gigs.Create;
             UpdatePolicyName = Zero1FivePermissions.Gigs.Edit;
             DeletePolicyName = Zero1FivePermissions.Gigs.Delete;
         }
 
-        public override async Task<GigDto> CreateAsync(CreateGigDto input)
+        public override async Task<GigDto> CreateAsync(CreateUpdateGigDto input)
         {
-            var createdGIg = await _gigManager.CreateAsync(input.Title, input.CoverImage, input.Description);
+            var storageFileName = await _gigPictureContainerManager.SaveAsync(input.Cover.FileName, input.Cover.Content);
+            var createdGIg = await _gigManager.CreateAsync(input.Title, storageFileName, input.Description);
             return await MapToGetOutputDtoAsync(createdGIg);
         }
 
+        public override async Task<GigDto> UpdateAsync(Guid id, CreateUpdateGigDto input)
+        {
+            var gig = await GetGigAsync(id);
+
+            if (input.Cover != null)
+            {
+                var storageFileName = await _gigPictureContainerManager
+                    .UpdateAsync(gig.CoverImage,input.Cover.FileName, input.Cover.Content, true);
+              
+                gig.CoverImage = storageFileName;
+            }
+            gig.Description = input.Description;
+            gig.Title = input.Title;
+
+            return await MapToGetOutputDtoAsync( await Repository.UpdateAsync(gig));
+        }
+        public override async Task DeleteAsync(Guid id)
+        {
+            var gig = await GetGigAsync(id);
+           await Repository.DeleteAsync(gig);
+           await _gigPictureContainerManager.DeleteAsync(gig.CoverImage);
+        }
+
+        private async Task<Gig> GetGigAsync(Guid id)
+        {
+            var gig =await Repository.FindAsync(id);
+            if (gig == null)
+            {
+                throw new EntityNotFoundException(typeof(Gig), id);
+            }
+            return gig;
+        }
         public async Task<GigDto> PublishAsync(Guid id)
         {
             var gig = await Repository.FindAsync(id);
@@ -47,10 +85,10 @@ namespace Zero1Five.Gigs
             }
             throw new EntityNotFoundException(typeof(Gig), id);
         }
-
         public async Task<GigDto> UnpublishAsync(Guid id)
         {
             var gig = await Repository.FindAsync(id);
+            
             if (gig != null)
             {
                 gig.UnPublish();

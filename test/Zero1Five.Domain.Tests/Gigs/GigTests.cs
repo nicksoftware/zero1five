@@ -13,10 +13,8 @@ namespace Zero1Five.Gigs
         string description = "new gig description";
         string coverImage = "someImage.com";
         [Fact]
-        public async Task CreateAsync_Should_CreateANewGig()
+        public  void CreateAsync_Should_CreateANewGig()
         {
-
-            
             var result = Gig.Create(id, title, coverImage, description);
             
             result.Id.ShouldBe(id);
@@ -26,7 +24,7 @@ namespace Zero1Five.Gigs
         }
 
         [Fact]
-        public async Task PublishGigAsync_Should_PublishGig()
+        public void PublishGigAsync_Should_PublishGig()
         {
             var gig = Gig.Create(id, title, coverImage, description);
             gig.Publish();
@@ -34,7 +32,7 @@ namespace Zero1Five.Gigs
         }
         
         [Fact]
-        public async Task UnPublishGigAsync_Should_UnPublishGig()
+        public void UnPublishGigAsync_Should_UnPublishGig()
         {
             var gig = Gig.Create(id, title, coverImage, description);
             gig.UnPublish();

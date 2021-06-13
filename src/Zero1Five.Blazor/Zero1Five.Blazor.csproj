@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.*" />
     <PackageReference Include="mudblazor" Version="5.0.10" />
+    <PackageReference Include="Blazored.Typeahead" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,23 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Zero1Five.HttpApi.Client\Zero1Five.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\modules\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\ajax-loader.gif" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\owl.carousel.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\owl.carousel.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\owl.theme.default.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\owl.theme.default.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\owl.theme.green.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\owl.theme.green.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\assets\owl.video.play.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\owl.carousel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\owl\owl.carousel.min.js" />
   </ItemGroup>
 
 </Project>

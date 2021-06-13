@@ -8,6 +8,6 @@ namespace Zero1Five
         )]
     public class Zero1FiveDomainTestModule : AbpModule
     {
-
+        
     }
 }

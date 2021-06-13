@@ -50,9 +50,9 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
                 .IsGrantedAsync(Zero1FivePermissions.Products.Delete);
         }
 
-        private void HandleProductSubmitted(CreateUpdateProductDto product)
+        private async Task HandleProductSubmitted(CreateUpdateProductDto product)
         {
-            GetProductsAsync();
+           await GetProductsAsync();
         }
         private async Task GetProductsAsync()
         {
@@ -106,16 +106,16 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
 
         private void OpenProductForm(ProductDto product = null)
         {
-            var id = product?.Id ?? Guid.Empty;
-            NavigationManager.NavigateTo("manage/products/"+id);
+            Guid? id = product?.Id;
+            NavigationManager.NavigateTo("/manage/products/editor/"+id);
         }
-        private async Task DeleteProductAsync(ProductDto Product)
+        private async Task DeleteProductAsync(ProductDto product)
         {
-            var confirmMessage = L["ProductDeletionConfirmationMessage", Product.Title];
+            var confirmMessage = L["ProductDeletionConfirmationMessage", product.Title];
             
             if (!await Message.Confirm(confirmMessage)) return;
 
-            await ProductAppService.DeleteAsync(Product.Id);
+            await ProductAppService.DeleteAsync(product.Id);
             await GetProductsAsync();
         }
     }

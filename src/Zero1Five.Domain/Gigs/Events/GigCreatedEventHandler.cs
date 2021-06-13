@@ -26,15 +26,14 @@ namespace Zero1Five.Gigs
         public async Task HandleEventAsync(EntityCreatedEventData<Gig> eventData)
         {
             try
-            {
-                    await SendGigNotificationAsync(eventData.Entity);
+            { 
+                await SendGigNotificationAsync(eventData.Entity);
             }
             catch(Exception exception)
             {
                 _logger.LogError("Failed to Notify user Reason :" +exception.Message);
             }
         }
-
 
         private async Task SendGigNotificationAsync(Gig gig)
         {
