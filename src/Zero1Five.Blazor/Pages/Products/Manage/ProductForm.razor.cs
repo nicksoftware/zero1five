@@ -34,7 +34,9 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         {
             if (Id != null)
             {
-                model  =ObjectMapper.Map<ProductDto,CreateUpdateProductDto>( await ProductAppService.GetAsync((Guid)Id));
+                var productDto = await ProductAppService.GetAsync((Guid) Id);
+                model  =ObjectMapper.Map<ProductDto,CreateUpdateProductDto>( productDto);
+                PreviewImage = productDto.CoverImage;
             }            
             await LookUpCategoriesAsync();
             await LookUpGigsAsync();
