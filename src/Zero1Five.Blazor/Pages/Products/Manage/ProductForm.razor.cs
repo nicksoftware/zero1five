@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Blazorise;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Routing;
 using Zero1Five.Categories;
+using Zero1Five.Common;
 using Zero1Five.Gigs;
 using Zero1Five.Products;
 
@@ -18,37 +20,24 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         [Inject]
         private IProductAppService ProductAppService { get; set; }
 
-        private CreateUpdateProductDto Product { get; set; } = new();
-        
+        private CreateUpdateProductDto model { get; set; } = new();
+        private string PreviewImage { get; set; } = Constants.DefaultCover;
         [Parameter]
         public  Guid? Id { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
-        private CategoryDto SelectedCategory { get; set; } = new();
-        private GigLookUpDto SelectedGig { get; set; } = new();
+        private CategoryDto SelectedCategory { get; set; } = new(){Name = ""};
+        private GigLookUpDto SelectedGig { get; set; } = new(){Title = ""};
         private IReadOnlyList<CategoryDto> CategoryList { get; set; } = new List<CategoryDto>();
         private IReadOnlyList<GigLookUpDto> GigList { get; set; } = new List<GigLookUpDto>();
-        
-        private Validations CreateValidationsRef;
-        private Validations EditValidationsRef;
-
-        protected override Task OnParametersSetAsync()
-        {
-
-            // if (Product.Id == Guid.Empty)
-            //     SelectedGig = GigList.First();
-            // else
-            //     SelectedCategory = CategoryList.First(x => x.Id == Product.CategoryId);
-            return base.OnParametersSetAsync();
-        }
 
         protected override async Task OnInitializedAsync()
         {
+            if (Id != null)
+            {
+                model  =ObjectMapper.Map<ProductDto,CreateUpdateProductDto>( await ProductAppService.GetAsync((Guid)Id));
+            }            
             await LookUpCategoriesAsync();
             await LookUpGigsAsync();
-            if (Id != Guid.Empty)
-            {
-                Product  =ObjectMapper.Map<ProductDto,CreateUpdateProductDto>( await ProductAppService.GetAsync((Guid)Id));
-            }            
             await base.OnInitializedAsync();
         }
 
@@ -56,16 +45,16 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         {
             CategoryList = (await ProductAppService.GetLookUpCategoriesAsync()).Items;
 
-            if (Product.Id != Guid.Empty)
-                SelectedCategory = CategoryList.First(s => s.Id == Product.CategoryId);
+            if (Id != null)
+                SelectedCategory = CategoryList.First(s => s.Id == model.CategoryId);
         }
 
         private async Task LookUpGigsAsync()
         {
             GigList = (await ProductAppService.GetGigLookUpAsync()).Items;
 
-            if (Product.Id != Guid.Empty)
-                SelectedGig = GigList.First(s => s.Id == Product.GigId);
+            if (Id != null)
+                SelectedGig = GigList.First(s => s.Id == model.GigId);
         }
         
         private void SelectedGigChangedHandler(Guid id)
@@ -78,26 +67,50 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             if (id == Guid.Empty) return;
             SelectedCategory = CategoryList.First(x => x.Id == id);
         }
+        private async Task OnInputFileChange(InputFileChangeEventArgs e)
+        {
+            var image = e.GetMultipleFiles(1).FirstOrDefault();
+            if (image == null) return;
+            var byteArray = new byte[image.Size];
+            await image.OpenReadStream().ReadAsync(byteArray);
+            model.Cover = new SaveFileDto {Content = byteArray, FileName = image.Name};
+            await Preview(image);
+        }
+
+        private async Task Preview(IBrowserFile file)
+        {
+            var format = "image/png";
+            var imageFile = file;
+            var resizedImageFile = await imageFile.RequestImageFileAsync(format, 800, 400);
+            var buffer = new byte[resizedImageFile.Size];
+            await resizedImageFile.OpenReadStream().ReadAsync(buffer);
+            PreviewImage = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+        }
+        private void OnValidSubmit(EditContext context)
+        {
+            Task.Run(CreateUpdateProductAsync);
+            StateHasChanged();
+        }
         private async Task CreateUpdateProductAsync()
         {
-            if (!CreateValidationsRef.ValidateAll())
-            {
-                return;
-            }
+            model.CategoryId = SelectedCategory.Id;
+            model.GigId = SelectedGig.Id;
 
-            Product.CategoryId = SelectedCategory.Id;
-            Product.GigId = SelectedGig.Id;
-
-            if (Id == Guid.Empty)
+            if (Id == null)
             {
-                await ProductAppService.CreateAsync(Product);
+                await ProductAppService.CreateAsync(model);
             }
             else
             {
-                await ProductAppService.UpdateAsync(Product.Id,Product);
+                await ProductAppService.UpdateAsync((Guid)Id,model);
             }
 
             NavigationManager.NavigateTo("/manage/products");
         }
+
+        private Func<CategoryDto, string> ConvertCategory = p => p?.Name;
+        private Func<GigLookUpDto, string> ConvertGig = p => p?.Title;
+        
+
     }
 }

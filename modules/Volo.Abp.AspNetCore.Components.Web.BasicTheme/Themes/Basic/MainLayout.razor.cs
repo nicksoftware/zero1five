@@ -31,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
             IsCollapseShown = false;
             
             IsFluid = NavigationManager.Uri == "";
-            if (NavigationManager.Uri.Contains("editor"))
+            if (NavigationManager.Uri.Contains("/editor/",StringComparison.InvariantCultureIgnoreCase))
             {
                 IsFluid = false;
             }

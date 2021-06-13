@@ -47,7 +47,7 @@ namespace Zero1Five.Products
         public Task<Product> ChangeCoverImageAsync(Product product, string coverImage)
         {
             product.SetCover(coverImage);
-           return _productRepository.UpdateAsync(product);
+            return Task.FromResult(product);
         }
     }
 }

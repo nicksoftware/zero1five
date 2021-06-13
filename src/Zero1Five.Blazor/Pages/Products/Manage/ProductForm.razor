@@ -1,66 +1,65 @@
-@page "/manage/products/{Id:guid?}"
-@using Blazorise.Components
-@using Volo.Abp.Application.Dtos
-@using Zero1Five.Blazor
-@using Zero1Five.Categories
-@using Zero1Five.Localization
-@attribute [Authorize(Zero1FivePermissions.Products.Default)]
-@using Zero1Five.Products
-@using Zero1Five.Gigs
-@using Volo.Abp.AspNetCore.Components.Web
+@page "/manage/products/editor/{Id:guid?}"
 @inherits Zero1FiveComponentBase
-@using Blazorise
-@using Zero1Five.Permissions
-@inject AbpBlazorMessageLocalizerHelper<Zero1FiveResource> LH
-<MudContainer Class="p-2">
-    <MudText Typo="Typo.h5" Class="mx-3">@L["NewProduct"]</MudText>
-    <Form>
-        <Validations @ref="@CreateValidationsRef" Model="@Product" ValidateOnLoad="false">
-            <Validation MessageLocalizer="@LH.Localize">
-                <Field>
-                    <FieldLabel>@L["Name"]</FieldLabel>
-                    <TextEdit @bind-Text="@Product.Title">
-                        <Feedback>
-                            <ValidationError/>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </Validation>
-            <FieldLabel>@L["Category"]</FieldLabel>
-            <SelectList TItem="CategoryDto" TValue="Guid" Data="@CategoryList" TextField="@((item) => item.Name)"
-                        ValueField="@((item) => item.Id)" SelectedValue="@SelectedCategory.Id"
-                        SelectedValueChanged="SelectedCategoryChangedHandler"/>
-            <FieldLabel>@L["Gig"]</FieldLabel>
-            <SelectList TItem="GigLookUpDto" TValue="Guid" Data="@GigList" TextField="@((item) => item.Title)"
-                        ValueField="@((item) => item.Id)" SelectedValue="@SelectedGig.Id"
-                        SelectedValueChanged="SelectedGigChangedHandler"/>
-            <Validation MessageLocalizer="@LH.Localize">
-                <Field>
-                    <FieldLabel>@L["CoverImage"]</FieldLabel>
-                    @* <TextEdit Rows="5" @bind-Text="@Product.Cover"> *@
-                    @*     <Feedback> *@
-                    @*         <ValidationError/> *@
-                    @*     </Feedback> *@
-                    @* </TextEdit> *@
-                </Field>
-            </Validation>
-            <Validation MessageLocalizer="@LH.Localize">
-                <Field>
-                    <FieldLabel>@L["Description"]</FieldLabel>
-                    <MemoEdit Rows="5" @bind-Text="@Product.Description">
-                        <Feedback>
-                            <ValidationError/>
-                        </Feedback>
-                    </MemoEdit>
-                </Field>
-            </Validation>
-        </Validations>
-        <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" PreventDefaultOnSubmit="true"
-                   OnClick="((e) => CreateUpdateProductAsync())">
-            @L["Save"]
-        </MudButton>
-    </Form>
+@using Zero1Five.Categories
+@using Zero1Five.Gigs
+
+<MudContainer Class="pt-8 px-0 container-fluid">
+    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
+        <div class="bfeditor">
+            <div class="bfeditor-header">
+                <img class="bfeditor-cover" src="@PreviewImage" alt="@L["cover"]" id="postCover">
+                <div class="bfeditor-actions">
+                    <div class="container d-flex">
+                        <MudButton
+                            ButtonType="ButtonType.Submit"
+                            Variant="Variant.Filled"
+                            Color="Color.Primary"
+                            Class="ml-auto">
+                            @L["Save"]
+                        </MudButton>
+                    </div>
+                </div>
+                <div class="bfeditor-header-inner">
+                    <MudContainer>
+                        <InputFile id="fileInput" OnChange="@OnInputFileChange" hidden/>
+                        <textarea class="bfeditor-header-textarea bfeditor-header-title autosize" @bind="model.Title" name="title" placeholder="@L["post-title"]" rows="1" autofocus></textarea>
+                        <textarea class="bfeditor-header-textarea bfeditor-header-desc autosize" @bind="model.Description" name="description" placeholder="@L["description"]..." rows="1"></textarea>
+                        <div class="bfeditor-meta d-flex">
+
+                            <MudFab
+                                HtmlTag="label" Class="mx-2 mxt-4" Size="Size.Small"
+                                Color="Color.Secondary" IconSize="Size.Small"
+                                Icon="@Icons.Filled.Image"
+                                Label="Load picture"
+                                for="fileInput" On/>
+                            <MudPaper Elevation="1">
+                                <MudSelect Class="mx-2" T="CategoryDto" @bind-Value="@SelectedCategory"
+                                           Label="Select a Category" Variant="Variant.Text"
+                                           ToStringFunc="ConvertCategory" OffsetY="true">
+                                    @foreach (var cat in CategoryList)
+                                    {
+                                        <MudSelectItem Value="cat"/>
+                                    }
+                                </MudSelect>
+                            </MudPaper>
+                            <MudPaper Elevation="1">
+                                <MudSelect Class="mx-2" T="GigLookUpDto" @bind-Value="@SelectedGig"
+                                           Label="Select a Gig" Variant="Variant.Text"
+                                           ToStringFunc="@ConvertGig"
+                                           OffsetY="true">
+                                    @foreach (var cat in GigList)
+                                    {
+                                        <MudSelectItem Value="@cat">
+                                            @cat.Title
+                                        </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudPaper>
+                        </div>
+                    </MudContainer>
+                </div>
+            </div>
+        </div>
+    </EditForm>
 </MudContainer>
-@code {
-    
-}

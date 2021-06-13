@@ -68,8 +68,6 @@ namespace Zero1Five.Products
 
             return await MapToGetOutputDtoAsync(product);
         }
-
-
         public override async Task<ProductDto> GetAsync(Guid id)
         {
             await TryGetProductAsync(id);
@@ -93,7 +91,6 @@ namespace Zero1Five.Products
 
             return dto;
         }
-
         public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedProductRequestDto input)
         {
             var filter = input.Filter;
@@ -137,6 +134,22 @@ namespace Zero1Five.Products
             };
         }
 
+        public override async Task<ProductDto> UpdateAsync(Guid id, CreateUpdateProductDto input)
+        {
+            var product =await TryGetProductAsync(id);
+            if (input.Cover != null)
+            {
+                var imageFilename =await _productPictureManager.UpdateAsync(
+                    product.CoverImage,
+                    input.Cover.FileName,
+                    input.Cover.Content);
+               await _productManager.ChangeCoverImageAsync(product, imageFilename);
+            }
+            product.Title = input.Title;
+            product.Description = input.Description;
+
+          return  await MapToGetOutputDtoAsync( await Repository.UpdateAsync(product));
+        }
 
         [Authorize(Zero1FivePermissions.Products.Edit)]
         public async Task<ProductDto> ChangeCoverASync(Guid productId, ChangeProductCoverDto input)
@@ -169,7 +182,6 @@ namespace Zero1Five.Products
                 Items = gigsDtoList,
             };
         }
-
         public async Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync()
         {
             var categories = await _categoryRepository.GetListAsync();
