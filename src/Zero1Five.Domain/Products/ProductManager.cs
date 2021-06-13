@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.EventBus.Local;
 
 namespace Zero1Five.Products
 {
@@ -21,7 +22,7 @@ namespace Zero1Five.Products
                 gigId: gigId,
                 categoryId: categoryId,
                 title, cover);
-            
+
             product.Description = description;
             return _productRepository.InsertAsync(product, true);
         }
@@ -30,8 +31,7 @@ namespace Zero1Five.Products
         {
             if (product.IsPublished)
                 throw new ProductAlreadyPublishedException(product.Title);
-            product.IsPublished = true;
-
+            product.Publish();
             return (await _productRepository.UpdateAsync(product)).Id;
         }
 
@@ -40,7 +40,7 @@ namespace Zero1Five.Products
             if (!product.IsPublished)
                 throw new ProductAlreadyUnpublishedException(product.Title);
 
-            product.IsPublished = false;
+            product.Unpublish();
             return (await _productRepository.UpdateAsync(product)).Id;
         }
 
