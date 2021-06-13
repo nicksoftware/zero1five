@@ -51,9 +51,9 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
                 .IsGrantedAsync(Zero1FivePermissions.Gigs.Delete);
         }
 
-        private void HandleProductSubmitted(CreateUpdateProductDto product)
+        private async Task HandleProductSubmittedAsync(CreateUpdateProductDto product)
         {
-            GetProductsAsync();
+           await GetProductsAsync();
         }
         private async Task GetProductsAsync()
         {
@@ -97,7 +97,7 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
 
         private void OpenGigForm(GigDto gig )
         {
-            NavigationManager.NavigateTo("/manage/gigs/"+gig.Id);
+            NavigationManager.NavigateTo("/manage/gigs/editor/"+gig.Id);
         }
         private async Task DeleteProductAsync(GigDto gig)
         {
@@ -111,7 +111,7 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
 
         private void OpenCreateGigPage()
         {
-           NavigationManager.NavigateTo("/manage/gigs/create");
+           NavigationManager.NavigateTo("/manage/gigs/editor/");
         }
     }
 }

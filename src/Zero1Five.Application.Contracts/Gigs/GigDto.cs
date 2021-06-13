@@ -23,7 +23,7 @@ namespace Zero1Five.Gigs
 
         public string CategoryName
         {
-            get => _categoryName;
+            get =>""+ _categoryName;
             set => _categoryName = value;
         }
 

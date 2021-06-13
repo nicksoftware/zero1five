@@ -18,6 +18,7 @@ using Volo.Abp.BlobStoring.Azure;
 using Zero1Five.AzureStorage;
 using Volo.Abp.BlobStoring;
 using Zero1Five.AzureStorage.Gig;
+using Zero1Five.AzureStorage.Products;
 
 namespace Zero1Five
 {
@@ -49,8 +50,7 @@ namespace Zero1Five
 // #endif
         }
 
-        private void ConfigureAzureStorageAccountOptions(ServiceConfigurationContext context,
-            IConfiguration configuration)
+        private void ConfigureAzureStorageAccountOptions(ServiceConfigurationContext context,IConfiguration configuration)
         {
             Configure<AzureStorageAccountOptions>(options =>
             {
@@ -67,7 +67,16 @@ namespace Zero1Five
             Configure<AbpBlobStoringOptions>(options =>
             {
                 var azureStorageConnectionString = configuration["AzureStorageAccountSettings:ConnectionString"];
+               
                 options.Containers.Configure<GigPictureContainer>(container =>
+                {
+                    container.UseAzure(azure =>
+                    {
+                        azure.ConnectionString = azureStorageConnectionString;
+                        azure.CreateContainerIfNotExists = true;
+                    });
+                });
+                options.Containers.Configure<ProductContainer>(container =>
                 {
                     container.UseAzure(azure =>
                     {

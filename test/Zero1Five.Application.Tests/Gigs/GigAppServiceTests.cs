@@ -26,11 +26,11 @@ namespace Zero1Five.Gigs
             [Fact(Skip = "Blob services causing tests to fail")]
             public async Task CreateAsync_Should_CreateGig()
             {
-                var input = new CreateGigDto()
+                var input = new CreateUpdateGigDto()
                 {
                     Title = "Coolest Gig",
                     Description = "This is a cool new gig",
-                    CoverImage =  new SaveFileDto()
+                    Cover =  new SaveFileDto()
                     {
                         FileName = "coolgImage.jpg",
                         Content =  new Byte[]{12,34,45,45}
@@ -66,7 +66,7 @@ namespace Zero1Five.Gigs
             {
                 var gig =await WithUnitOfWorkAsync<Gig>(() => _gigRepository.FirstOrDefaultAsync());
                 
-                var input = new UpdateGigDto()
+                var input = new CreateUpdateGigDto()
                 {
                     Title = "newUpdated",
                     Description = "this is Some new Description here buddy"

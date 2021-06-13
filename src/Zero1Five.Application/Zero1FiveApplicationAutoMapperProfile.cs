@@ -20,7 +20,7 @@ namespace Zero1Five
             CreateMap<CreateUpdateProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
             CreateMap<Gig, GigDto>();
-            CreateMap<CreateGigDto, Gig>();
+            CreateMap<CreateUpdateGigDto, Gig>();
             CreateMap<UpdateGigDto, Gig>();
         }
     }

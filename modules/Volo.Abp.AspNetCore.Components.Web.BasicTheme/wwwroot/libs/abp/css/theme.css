@@ -2,7 +2,9 @@
     text-decoration: none;
     color: rgb(29, 29, 29);
 }
-
+.navbar{
+    z-index:100
+}
 .navbar .dropdown-submenu {
     position: relative;
 }

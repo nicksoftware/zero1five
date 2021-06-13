@@ -8,6 +8,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
 
+        private bool IsFluid { get; set; }
         private bool IsCollapseShown { get; set; }
 
         protected override void OnInitialized()
@@ -28,6 +29,12 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
         {
             IsCollapseShown = false;
+            
+            IsFluid = NavigationManager.Uri == "";
+            if (NavigationManager.Uri.Contains("editor"))
+            {
+                IsFluid = false;
+            }
             InvokeAsync(StateHasChanged);
         }
     }

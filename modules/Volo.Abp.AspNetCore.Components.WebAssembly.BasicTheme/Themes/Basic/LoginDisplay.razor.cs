@@ -28,19 +28,21 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
             Menu = await MenuManager.GetAsync(StandardMenus.User);
 
             Navigation.LocationChanged += OnLocationChanged;
-
-
+            LazyGetRequiredService(ref AuthenticationStateProvider);
+            LazyGetRequiredService(ref SignOutManager);
             // LazyGetService(ref AuthenticationStateProvider);
             // LazyGetService(ref SignOutManager);
 
             if (AuthenticationStateProvider != null)
             {
-                AuthenticationStateProvider.AuthenticationStateChanged += async (task) =>
-                {
-                    Menu = await MenuManager.GetAsync(StandardMenus.User);
-                    await InvokeAsync(StateHasChanged);
-                };
+                AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateProviderOnAuthenticationStateChanged;
             }
+        }
+
+        private async void OnAuthenticationStateProviderOnAuthenticationStateChanged(Task<AuthenticationState> task)
+        {
+            Menu = await MenuManager.GetAsync(StandardMenus.User);
+            await InvokeAsync(StateHasChanged);
         }
 
         protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
@@ -51,6 +53,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
         public void Dispose()
         {
             Navigation.LocationChanged -= OnLocationChanged;
+            AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateProviderOnAuthenticationStateChanged;
         }
 
         private async Task NavigateToAsync(string uri, string target = null)

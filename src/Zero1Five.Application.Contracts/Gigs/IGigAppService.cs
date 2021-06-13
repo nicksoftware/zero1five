@@ -11,8 +11,8 @@ namespace Zero1Five.Gigs
             GigDto,
             Guid,
             PagedAndSortedResultRequestDto,
-            CreateGigDto,
-            UpdateGigDto>
+            CreateUpdateGigDto,
+            CreateUpdateGigDto>
     {
         Task<GigDto> PublishAsync(Guid id);
         Task<GigDto> UnpublishAsync(Guid id);

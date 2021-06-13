@@ -8,18 +8,16 @@
     <base href="/" />
     <link rel="icon" type="image/png" href="./logo-dark.png" sizes="16x16">
     <!--ABP:Styles-->
-    <link href="global.css?_v=637588126582192706" rel="stylesheet"/>
+    <link href="global.css?_v=637591669830945590" rel="stylesheet"/>
     <link href="main.css" rel="stylesheet"/>
     <!--/ABP:Styles-->
     
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
+    <link href="admin/css/app.css" rel="stylesheet" />
     <link href="Zero1Five.Blazor.styles.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-    <link href="owl/assets/owl.carousel.min.css"/>
-    <link href="owl/assets/owl.theme.default.min.css"/>
-    <!--linear icon css-->
+
     <link rel="stylesheet" href="assets/css/linearicons.css">
 
     <!--animate.css-->
@@ -112,11 +110,19 @@
     </div>
 </div>
     </div>
+    <script src="admin/js/frameworks/easymde.min.js"></script>
+    <script src="admin/js/frameworks/highlight.js"></script>
+    <script src="admin/js/frameworks/autosize.min.js"></script>
+    <script src="admin/js/frameworks/Chart.min.js"></script>
 
+    <script src="admin/js/components.js"></script>
+    <script src="admin/js/editor.js"></script>
+    <script src="admin/js/dataService.js"></script>
+    <script src="admin/js/fileManager.js"></script>
     <!--ABP:Scripts-->
-    <script src="global.js?_v=637588126588192706"></script>
+    <script src="global.js?_v=637591669835345590"></script>
     <!--/ABP:Scripts-->
-    <script src="assets/js/jquery.js"></script>
+<!--    <script src="assets/js/jquery.js"></script>-->
 
     <!--modernizr.min.js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
@@ -124,41 +130,16 @@
     <script  src="assets/js/feather.min.js"></script>
 
     <!-- counter js -->
-    <script src="assets/js/jquery.counterup.min.js"></script>
-    <script src="assets/js/waypoints.min.js"></script>
+<!--    <script src="assets/js/jquery.counterup.min.js"></script>-->
+<!--    <script src="assets/js/waypoints.min.js"></script>-->
 
     <!--slick.min.js-->
-    <script src="assets/js/slick.min.js"></script>
+<!--    <script src="assets/js/slick.min.js"></script>-->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>-->
+
 
     <!--Custom JS-->
-    <script src="assets/js/custom.js"></script>
-<script>
-    window.startCarousel =()=>{
-        var carousel = document.getElementById("owl-carousel");
-        console.log("starting ");
-        carousel.owlCarousel({
-            loop:true,
-            margin:10,
-            responsiveClass:true,
-            responsive:{
-                0:{
-                    items:1,
-                    nav:true
-                },
-                600:{
-                    items:3,
-                    nav:false
-                },
-                1000:{
-                    items:5,
-                    nav:true,
-                    loop:false
-                }
-            }
-        })
-    }
-</script>
+<!--    <script src="assets/js/custom.js"></script>-->
 </body>
 </html>

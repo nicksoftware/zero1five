@@ -50,9 +50,9 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
                 .IsGrantedAsync(Zero1FivePermissions.Products.Delete);
         }
 
-        private void HandleProductSubmitted(CreateUpdateProductDto product)
+        private async Task HandleProductSubmitted(CreateUpdateProductDto product)
         {
-            GetProductsAsync();
+           await GetProductsAsync();
         }
         private async Task GetProductsAsync()
         {

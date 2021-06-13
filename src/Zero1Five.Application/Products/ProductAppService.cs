@@ -27,17 +27,19 @@ namespace Zero1Five.Products
         private readonly ICategoryRepository _categoryRepository;
         private readonly IGigRepository _gigRepository;
         private readonly IProductManager _productManager;
+        private readonly ProductPictureManager _productPictureManager;
 
         public ProductAppService(
             IProductRepository repository,
             ICategoryRepository categoryRepository,
             IGigRepository gigRepository,
-            IProductManager productManager) : base(repository)
+            IProductManager productManager, ProductPictureManager productPictureManager) : base(repository)
         {
             _repository = repository;
             _categoryRepository = categoryRepository;
             _gigRepository = gigRepository;
             _productManager = productManager;
+            _productPictureManager = productPictureManager;
 
             CreatePolicyName = Zero1FivePermissions.Products.Create;
             UpdatePolicyName = Zero1FivePermissions.Products.Edit;
@@ -47,13 +49,17 @@ namespace Zero1Five.Products
         [Authorize(Zero1FivePermissions.Products.Create)]
         public override async Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
         {
+            var cover = input.Cover;
+
+            var pictureStorageName = await _productPictureManager.SaveAsync(cover.FileName, cover.Content, true);
+
             var product = await _productManager
                 .CreateAsync(
-                    input.Title,
-                    input.GigId,
-                    input.CategoryId,
-                    input.CoverImage,
-                    input.Description);
+                    title: input.Title,
+                    gigId: input.GigId,
+                    categoryId: input.CategoryId,
+                    cover: pictureStorageName,
+                    description: input.Description);
 
             if (input.IsPublished)
             {
@@ -63,27 +69,12 @@ namespace Zero1Five.Products
             return await MapToGetOutputDtoAsync(product);
         }
 
-        public async Task<ListResultDto<GigLookUpDto>> GetGigLookUpAsync()
-        {
-            var gigs = _gigRepository.Where(x => x.CreatorId == CurrentUser.Id).ToList();
-            var gigsDtoList = gigs.Select(g => new GigLookUpDto
-            {
-                Id = g.Id,
-                Title = g.Title,
-            }).ToList();
-
-            await Task.Yield();
-
-            return new ListResultDto<GigLookUpDto>
-            {
-                Items = gigsDtoList,
-            };
-        }
 
         public override async Task<ProductDto> GetAsync(Guid id)
         {
-            var queryable = await Repository.GetQueryableAsync();
+            await TryGetProductAsync(id);
 
+            var queryable = await Repository.GetQueryableAsync();
             var query =
                 from product in queryable
                 join category in _categoryRepository on product.CategoryId equals category.Id
@@ -107,26 +98,26 @@ namespace Zero1Five.Products
         {
             var filter = input.Filter;
             var canFilterByKeyword = !string.IsNullOrEmpty(filter);
-            
+
             var queryable = await Repository.GetQueryableAsync();
-            
+
             queryable = queryable.WhereIf(canFilterByKeyword,
-                x => x.Title.Contains(filter)|| x.Description.Contains(filter));
-           
+                x => x.Title.Contains(filter) || x.Description.Contains(filter));
+
             var query =
                 from product in queryable
                 join category in _categoryRepository on product.CategoryId equals category.Id
                 join gig in _gigRepository on product.GigId equals gig.Id
                 select new {product, category, gig};
-            
-           //if input CategoryIdFilter is not null also Filter by Category  
-           query = query.WhereIf(input.CategoryId != null , x => x.product.CategoryId == input.CategoryId);
-            
+
+            //if input CategoryIdFilter is not null also Filter by Category  
+            query = query.WhereIf(input.CategoryId != null, x => x.product.CategoryId == input.CategoryId);
+
             query = query
                 .OrderBy(NormalizeSorting(input.Sorting))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount);
-            
+
             var queryResult = await AsyncExecuter.ToListAsync(query);
 
             var productDtoList = queryResult.Select(x =>
@@ -146,34 +137,39 @@ namespace Zero1Five.Products
             };
         }
 
-        private static string NormalizeSorting(string sorting)
-        {
-            if (sorting.IsNullOrEmpty()) return $"product.{nameof(Product.Title)}";
-
-            if (sorting.Contains("categoryName", StringComparison.OrdinalIgnoreCase))
-            {
-                return sorting.Replace("categoryName", "category.Name", StringComparison.OrdinalIgnoreCase);
-            }
-
-            return $"product.{sorting}";
-        }
 
         [Authorize(Zero1FivePermissions.Products.Edit)]
         public async Task<ProductDto> ChangeCoverASync(Guid productId, ChangeProductCoverDto input)
         {
-            var product = await _repository.FindAsync(productId);
+            var product = await TryGetProductAsync(productId);
+            var imageFileName = await _productPictureManager
+                .UpdateAsync(
+                    product.CoverImage,
+                    input.CoverImage.FileName,
+                    input.CoverImage.Content);
 
-            if (product != null)
-            {
-                var result = await _productManager.ChangeCoverImageAsync(product, input.CoverImage);
+            var result = await _productManager.ChangeCoverImageAsync(product, imageFileName);
 
-                return await MapToGetOutputDtoAsync(result);
-            }
-
-            throw new EntityNotFoundException(typeof(Product), productId);
+            return await MapToGetOutputDtoAsync(result);
         }
 
-        [Authorize(Zero1FivePermissions.Products.Edit)]
+        public async Task<ListResultDto<GigLookUpDto>> GetGigLookUpAsync()
+        {
+            var gigs = _gigRepository.Where(x => x.CreatorId == CurrentUser.Id).ToList();
+            var gigsDtoList = gigs.Select(g => new GigLookUpDto
+            {
+                Id = g.Id,
+                Title = g.Title,
+            }).ToList();
+
+            await Task.Yield();
+
+            return new ListResultDto<GigLookUpDto>
+            {
+                Items = gigsDtoList,
+            };
+        }
+
         public async Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync()
         {
             var categories = await _categoryRepository.GetListAsync();
@@ -194,28 +190,41 @@ namespace Zero1Five.Products
         [Authorize(Zero1FivePermissions.Products.Publish)]
         public async Task<Guid> PublishAsync(Guid id)
         {
-            var product = await Repository.FindAsync(id);
-
-            if (product != null)
-            {
-                await _productManager.PublishAsync(product);
-                return product.Id;
-            }
-
-            throw new EntityNotFoundException(typeof(Product), id);
+            var product = await TryGetProductAsync(id);
+            await _productManager.PublishAsync(product);
+            return product.Id;
         }
 
         [Authorize(Zero1FivePermissions.Products.Publish)]
         public async Task<Guid> UnPublishAsync(Guid id)
         {
+            var product = await TryGetProductAsync(id);
+
+            await _productManager.UnPublishAsync(product);
+            return product.Id;
+        }
+
+        private async Task<Product> TryGetProductAsync(Guid id)
+        {
             var product = await Repository.FindAsync(id);
-            
             if (product != null)
             {
-                await _productManager.UnPublishAsync(product);
-                return product.Id;
+                return product;
             }
+
             throw new EntityNotFoundException(typeof(Product), id);
+        }
+
+        private static string NormalizeSorting(string sorting)
+        {
+            if (sorting.IsNullOrEmpty()) return $"product.{nameof(Product.Title)}";
+
+            if (sorting.Contains("categoryName", StringComparison.OrdinalIgnoreCase))
+            {
+                return sorting.Replace("categoryName", "category.Name", StringComparison.OrdinalIgnoreCase);
+            }
+
+            return $"product.{sorting}";
         }
     }
 }

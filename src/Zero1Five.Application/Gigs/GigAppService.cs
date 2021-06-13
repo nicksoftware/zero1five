@@ -15,8 +15,8 @@ namespace Zero1Five.Gigs
         CrudAppService<
             Gig, GigDto, Guid,
             PagedAndSortedResultRequestDto,
-            CreateGigDto,
-            UpdateGigDto>,
+            CreateUpdateGigDto,
+            CreateUpdateGigDto>,
         IGigAppService
     {
         private readonly IGigManager _gigManager;
@@ -34,14 +34,14 @@ namespace Zero1Five.Gigs
             DeletePolicyName = Zero1FivePermissions.Gigs.Delete;
         }
 
-        public override async Task<GigDto> CreateAsync(CreateGigDto input)
+        public override async Task<GigDto> CreateAsync(CreateUpdateGigDto input)
         {
-            var storageFileName = await _gigPictureContainerManager.SaveAsync(input.CoverImage.FileName, input.CoverImage.Content);
+            var storageFileName = await _gigPictureContainerManager.SaveAsync(input.Cover.FileName, input.Cover.Content);
             var createdGIg = await _gigManager.CreateAsync(input.Title, storageFileName, input.Description);
             return await MapToGetOutputDtoAsync(createdGIg);
         }
 
-        public override async Task<GigDto> UpdateAsync(Guid id, UpdateGigDto input)
+        public override async Task<GigDto> UpdateAsync(Guid id, CreateUpdateGigDto input)
         {
             var gig = await GetGigAsync(id);
 
@@ -66,7 +66,11 @@ namespace Zero1Five.Gigs
 
         private async Task<Gig> GetGigAsync(Guid id)
         {
-            var gig = await GetGigAsync(id);
+            var gig =await Repository.FindAsync(id);
+            if (gig == null)
+            {
+                throw new EntityNotFoundException(typeof(Gig), id);
+            }
             return gig;
         }
         public async Task<GigDto> PublishAsync(Guid id)

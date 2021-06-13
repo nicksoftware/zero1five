@@ -100,7 +100,11 @@ namespace Zero1Five.Products
             {
                 Title = "New Product",
                 Description = "New Product Description",
-                CoverImage = "demo.jpg",
+                Cover = new SaveFileDto()
+                {
+                    FileName = "demo.jpg",
+                    Content =  new byte[]{1,2,34,4,5}
+                },
                 GigId = Guid.Parse(Zero1FiveTestData.GigId),
                 IsPublished = false
             };
@@ -117,7 +121,7 @@ namespace Zero1Five.Products
             result.CategoryId.ShouldNotBe(Guid.Empty);
             result.Title.ShouldBe(input.Title);
             result.Description.ShouldBe(input.Description);
-            result.CoverImage.ShouldBe(input.CoverImage);
+            result.CoverImage.ShouldContain(input.Cover.FileName);
             result.IsPublished.ShouldBe(false);
         }
 
@@ -148,7 +152,11 @@ namespace Zero1Five.Products
                 CategoryId  = product.CategoryId,
                 GigId =  product.GigId,
                 Title =  "newTitle",
-                CoverImage = "someImage.jph",
+                Cover = new SaveFileDto()
+                {
+                    FileName = "demo.jpg",
+                    Content =  new byte[]{1,2,34,4,5}
+                },
                 Description = "new product Description ",
                 IsPublished = true
             };
@@ -156,6 +164,7 @@ namespace Zero1Five.Products
             
             result.Id.ShouldBe(productId);
             result.Title.ShouldBe(input.Title);
+            result.CoverImage.ShouldContain(input.Cover.FileName);
             result.Description.ShouldBe(input.Description);
             result.CategoryId.ShouldBe(input.CategoryId);
             result.GigId.ShouldBe(input.GigId);
@@ -213,15 +222,17 @@ namespace Zero1Five.Products
             var product = (await _productRepository.GetListAsync()).First();
             var input = new ChangeProductCoverDto
             {
-                CoverImage = "changeProductImage.jpg"
+                CoverImage = new SaveFileDto()
+                {
+                    FileName = "changeProductImage.jpg",
+                    Content =  new byte[]{1,2,34,4,5,53,25}
+                }
             };
 
             var result =await _productAppService.ChangeCoverASync(product.Id, input);
             
             result.ShouldNotBeNull();
-            
-            result.CoverImage.ShouldBe(input.CoverImage);
-
+            result.CoverImage.ShouldContain(input.CoverImage.FileName);
         }
     }
 }
