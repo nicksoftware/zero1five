@@ -1,20 +1,17 @@
 <div class="search-box">
 	<MudGrid Justify="Justify.Center">
 		<MudItem sm="6" xs="12">
-			<MudPaper >
+			<MudPaper Class="px-2" >
 				<MudTextField T="string" AdornmentIcon="@Icons.Filled.List"
-				              AdornmentText="Keyword"
-				              AdornmentColor="Color.Transparent"
 				              Variant="Variant.Text"
 				              Placeholder="Ex: place,food"
 				              Adornment="Adornment.Start"></MudTextField>
 			</MudPaper>
 		</MudItem>
 		<MudItem sm="6" xs="12">
-			<MudPaper>
+			<MudPaper Class="px-2">
 				<MudTextField T="string" AdornmentIcon="@Icons.Filled.LocationPin"
 				              Class="text-light"
-				              AdornmentColor="Color.Transparent"
 				              Variant="Variant.Text"
 				              Placeholder="Ex: palce,  automobile"
 				              Adornment="Adornment.End">
@@ -22,11 +19,6 @@
 			</MudPaper>
 		</MudItem>
 	</MudGrid>
-	@* <div class="searchbox-form"> *@
-	@* 	<IconInput Label="keyword" Placeholder="Ex: palce, resturent, food, automobile" Icon="flaticon-list-with-dots"/> *@
-	@* 	<IconInput Label="location" Placeholder="Ex: Johannesburg, Limpopo, Soweto" Icon="flaticon-gps-fixed-indicator"/> *@
-	@* </div> *@
-
 	<div class="welcome-hero-serch">
 		<MudButton Class="mt-3 ml-4" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large">search
 		</MudButton>

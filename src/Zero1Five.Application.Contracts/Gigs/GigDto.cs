@@ -23,7 +23,7 @@ namespace Zero1Five.Gigs
 
         public string CategoryName
         {
-            get =>""+ _categoryName;
+            get =>  _categoryName;
             set => _categoryName = value;
         }
 
@@ -56,5 +56,7 @@ namespace Zero1Five.Gigs
             get => _isPublished;
             set => _isPublished = value;
         }
+        
+        public string  LoadCover()  => StorageConsts.GigContainer +_coverImage; 
     }
 }
