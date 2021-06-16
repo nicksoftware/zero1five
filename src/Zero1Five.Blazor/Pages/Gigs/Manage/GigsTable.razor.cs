@@ -58,7 +58,7 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
         private async Task GetProductsAsync()
         {
             var result = await GigAppService.GetListAsync(
-                new GetProductListDto
+                new GetPagedGigsRequest()
                 {
                     MaxResultCount = PageSize,
                     SkipCount = CurrentPage * PageSize,

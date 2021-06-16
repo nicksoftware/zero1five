@@ -2,6 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Zero1Five.Categories;
 using Zero1Five.Products;
 
 namespace Zero1Five.Gigs
@@ -13,7 +14,7 @@ namespace Zero1Five.Gigs
             builder.ToTable(Zero1FiveConsts.DbTablePrefix + "Gigs" + Zero1FiveConsts.DbSchema);
 
             builder.ConfigureByConvention();
-
+        
             builder.Property(x => x.Title).IsRequired().HasMaxLength(GigConsts.TitleMaxLength);
 
             builder.Property(x => x.Description).IsRequired().HasMaxLength(GigConsts.DescriptionMaxLength);

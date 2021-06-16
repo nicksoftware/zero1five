@@ -19,18 +19,24 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
         [Parameter] public Guid? Id { get; set; }
         [Inject] private IGigAppService GigAppService { get; set; }
         private string PreviewImage { get; set; } = Constants.DefaultCover;
-
+        private CategoryDto Category { get; set; } 
+        private IReadOnlyList<CategoryDto> CategoryList { get; set; } = new List<CategoryDto>();
         private CreateUpdateGigDto model { get; set; } = new();
         [Inject] private NavigationManager NavigationManager { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+            var result = await GigAppService.GetLookUpCategories();
+            CategoryList = result.Items;
+            Category = CategoryList[0];
             if (Id != null)
             {
                 var gig = await GigAppService.GetAsync((Guid) Id);
                 model = ObjectMapper.Map<GigDto, CreateUpdateGigDto>(gig);
-                PreviewImage = gig.CoverImage;
+                PreviewImage = gig.LoadCover();
+                Category = CategoryList.FirstOrDefault(x => x.Id == gig.CategoryId);
             }
+            //load categories
         }
 
         private async Task OnInputFileChange(InputFileChangeEventArgs e)
@@ -60,15 +66,13 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
 
         private async Task CreateOrUpdateGigAsync()
         {
+            model.CategoryId = Category.Id;
+            
             if (Id == null)
-            {
                 await GigAppService.CreateAsync(model);
-            }
             else
-            {
                 await GigAppService.UpdateAsync((Guid)Id, model);
-            }
-
+            
             NavigationManager.NavigateTo("/manage/gigs");
         }
     }

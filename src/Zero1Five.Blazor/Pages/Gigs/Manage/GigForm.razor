@@ -1,7 +1,9 @@
 @page "/manage/gigs/editor/{id:guid?}"
+@using Zero1Five.Categories
 @inherits Zero1FiveComponentBase
 
 @using System.ComponentModel.DataAnnotations
+@using NUglify.Helpers
 <MudContainer Class="pt-8 px-0 container-fluid" >
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator/>
@@ -30,6 +32,15 @@
                                 Icon="@Icons.Filled.Image"
                                 Label="Load picture"
                                 for="fileInput" On/>
+                        <MudSelect  T="CategoryDto"  
+                                    Label="Select Category"
+                                    @bind-Value="@Category" 
+                                    ToStringFunc="dto =>dto.Name "> 
+                            @foreach (var cat in CategoryList)
+                            {
+                                <MudSelectItem Value="@cat"/>
+                            }
+                        </MudSelect>
                     </div>
                 </MudContainer>
             </div>

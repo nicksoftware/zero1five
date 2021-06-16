@@ -57,7 +57,7 @@ namespace Zero1Five.Gigs
             [Fact(Skip = "Blob services causing tests to fail")]
             public async Task GetListAsync_ShouldGetGigList()
             {
-                var result = await _gigAppService.GetListAsync(new PagedSortableAndFilterableRequestDto());
+                var result = await _gigAppService.GetListAsync(new GetPagedGigsRequest());
                 
                 result.Items.Count.ShouldBeGreaterThanOrEqualTo(0);
             }
@@ -83,10 +83,10 @@ namespace Zero1Five.Gigs
             public async Task DeleteAsync_Should_DeleteGig_Async()
             {
                 //Given
-                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items[0];
+                var gig = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items[0];
                 //When
                 await _gigAppService.DeleteAsync(gig.Id);
-                var results = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items;
+                var results = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items;
                 //Then
                 results.ShouldNotContain(gig);
             }
@@ -95,7 +95,7 @@ namespace Zero1Five.Gigs
             public async Task PublishAsync_SHouldPublishGig()
             {
                 //given 
-                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items.First();
+                var gig = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items.First();
                 //when publish
                var result =  await _gigAppService.PublishAsync(gig.Id);
                
@@ -107,7 +107,7 @@ namespace Zero1Five.Gigs
             public async Task UnpublishAsync_SHouldUnpublishGig()
             {
                 //given 
-                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items.First();
+                var gig = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items.First();
                 //when Unpublish requested
                 var result =  await _gigAppService.UnpublishAsync(gig.Id);
                //then

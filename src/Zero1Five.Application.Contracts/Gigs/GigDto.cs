@@ -7,56 +7,21 @@ namespace Zero1Five.Gigs
 {
     public class GigDto : FullAuditedEntityDto<Guid>
     {
-        private string _title;
-        private string _categoryName;
-        private string _coverImage;
-        private string _description;
-        private float _rating;
-        private ICollection<ProductDto> _products;
-        private bool _isPublished;
+        public Guid CategoryId { get; set; }
+        public string Title { get; set; }
 
-        public string Title
-        {
-            get => _title;
-            set => _title = value;
-        }
+        public string CategoryName { get; set; }
 
-        public string CategoryName
-        {
-            get =>  _categoryName;
-            set => _categoryName = value;
-        }
+        public string CoverImage { get; set; }
 
-        public string CoverImage
-        {
-            get =>  _coverImage;
-            set => _coverImage = value;
-        }
+        public string Description { get; set; }
 
-        public string Description
-        {
-            get => _description;
-            set => _description = value;
-        }
+        public float Rating { get; set; }
 
-        public float Rating
-        {
-            get => _rating;
-            set => _rating = value;
-        }
+        public ICollection<ProductDto> Products { get; set; }
 
-        public ICollection<ProductDto> Products
-        {
-            get => _products;
-            set => _products = value;
-        }
+        public bool IsPublished { get; set; }
 
-        public bool IsPublished
-        {
-            get => _isPublished;
-            set => _isPublished = value;
-        }
-        
-        public string  LoadCover()  => StorageConsts.GigContainer +_coverImage; 
+        public string  LoadCover()  => StorageConsts.GigContainer +CoverImage; 
     }
 }

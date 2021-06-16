@@ -57,17 +57,28 @@
                                 </MudText>
                             </MudPaper>
                             <MudPaper Elevation="1" Class="mx-5">
-                                <BlazoredTypeahead SearchMethod="SearchGigs"
-                                                   T="GigLookUpDto"
-                                                   placeholder="Search by first name..."
-                                                   @bind-Value="@SelectedGig">
-                                    <SelectedTemplate Context="gig">
-                                        @gig.Title
-                                    </SelectedTemplate>
-                                    <ResultTemplate Context="gig">
-                                        @gig.Title
-                                    </ResultTemplate>
-                                </BlazoredTypeahead>
+                                @* <BlazoredTypeahead SearchMethod="SearchGigs" *@
+                                @*                    T="GigLookUpDto" *@
+                                @*                    placeholder="Search by first name..." *@
+                                @*                    @bind-Value="@SelectedGig"> *@
+                                @*     <SelectedTemplate Context="gig"> *@
+                                @*         @gig.Title *@
+                                @*     </SelectedTemplate> *@
+                                @*     <ResultTemplate Context="gig"> *@
+                                @*         @gig.Title *@
+                                @*     </ResultTemplate> *@
+                                @* </BlazoredTypeahead> *@
+                                <MudSelect T="GigLookUpDto" @bind-Value="@SelectedGig"
+                                           Label="Select a Category" Variant="Variant.Text"
+                                           ToStringFunc="dto=>dto.Title" OffsetY="true">
+                                    @foreach (var cat in CategoryList)
+                                    {
+                                        <MudSelectItem key="@cat" Value="cat"/>
+                                    }
+                                </MudSelect>
+                                <MudText>
+                                    @SelectedCategory
+                                </MudText>
                                 <ValidationMessage For="@(() => SelectedGig)"/>
                             </MudPaper>
                         </div>

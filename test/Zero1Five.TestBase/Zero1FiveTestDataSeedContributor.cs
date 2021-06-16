@@ -55,7 +55,13 @@ namespace Zero1Five
                 var cover = $"cover{i}.jpg";
                 var description = $"Gig {i} Description";
                 if (i == 2) id = Guid.Parse(Zero1FiveTestData.GigId);
-                var gig = Gig.Create(id, title, cover, description);
+                var gig = Gig
+                    .Create(id, 
+                    categoryId:Guid.Parse(Zero1FiveTestData.CategoryId),
+                    title,
+                    cover,
+                    description);
+                
                 gig.CreatorId = Guid.Parse(Zero1FiveTestData.UserId);
                 gig.CreationTime = DateTime.Now;
                 gigs.Add(gig);

@@ -26,7 +26,6 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         private string PreviewImage { get; set; } = Constants.DefaultCover;
         [Parameter]
         public  Guid? Id { get; set; }
-        [Inject] public ILogger<ProductForm> Logger { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
         private CategoryDto SelectedCategory { get; set; } = new(){Name = ""};
         private GigLookUpDto SelectedGig { get; set; } = new(){Title = ""};
