@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Users;
 using Zero1Five.Emailing;
 using Zero1Five.Emailing.BackgroundJobs;
@@ -19,9 +20,12 @@ namespace Zero1Five.Products
         }
         public Product Entity { get; set; }
     }
-    public  class  ProductPublicationChangedEventHandler:NotificationEventHandlerBase<Product,ProductPublicationChangedEventHandler>
+    public  class  ProductPublicationChangedEventHandler:NotificationEventHandlerBase<Product>,ITransientDependency
     {
-        public ProductPublicationChangedEventHandler(IExternalUserLookupServiceProvider userLookupServiceProvider, IBackgroundJobManager backgroundJobManager, IEmailService emailService, ILogger<ProductPublicationChangedEventHandler> logger) : base(userLookupServiceProvider, backgroundJobManager, emailService, logger)
+        public ProductPublicationChangedEventHandler(
+            IExternalUserLookupServiceProvider userLookupServiceProvider,
+            IBackgroundJobManager backgroundJobManager, 
+            IEmailService emailService) : base(userLookupServiceProvider, backgroundJobManager, emailService)
         {
         }
 
@@ -30,7 +34,11 @@ namespace Zero1Five.Products
         protected override async Task InitialProperties(IEventData<Product> eventData)
         {
             EventData = eventData;
-            ToUser =await UserLookupServiceProvider.FindByIdAsync((Guid) eventData.Entity.CreatorId);
+            
+            if (eventData.Entity.CreatorId != null)
+            {
+                ToUser = await UserLookupServiceProvider.FindByIdAsync((Guid) eventData.Entity.CreatorId);
+            }
         }
 
         protected override async Task SendEmailAsync()

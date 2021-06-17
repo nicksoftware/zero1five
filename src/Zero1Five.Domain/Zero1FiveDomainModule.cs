@@ -76,7 +76,7 @@ namespace Zero1Five
                         azure.CreateContainerIfNotExists = true;
                     });
                 });
-                options.Containers.Configure<ProductContainer>(container =>
+                options.Containers.Configure<ProductPictureContainer>(container =>
                 {
                     container.UseAzure(azure =>
                     {

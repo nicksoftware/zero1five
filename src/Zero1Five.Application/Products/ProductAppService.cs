@@ -27,13 +27,13 @@ namespace Zero1Five.Products
         private readonly ICategoryRepository _categoryRepository;
         private readonly IGigRepository _gigRepository;
         private readonly IProductManager _productManager;
-        private readonly ProductPictureManager _productPictureManager;
+        private readonly IProductPictureManager _productPictureManager;
 
         public ProductAppService(
             IProductRepository repository,
             ICategoryRepository categoryRepository,
             IGigRepository gigRepository,
-            IProductManager productManager, ProductPictureManager productPictureManager) : base(repository)
+            IProductManager productManager, IProductPictureManager productPictureManager) : base(repository)
         {
             _repository = repository;
             _categoryRepository = categoryRepository;

@@ -22,13 +22,13 @@ namespace Zero1Five.Gigs
     {
         private readonly IGigManager _gigManager;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly GigPictureContainerManager _gigPictureContainerManager;
+        private readonly IGigPictureContainerManager _gigPictureContainerManager;
 
         public GigAppService(
             IGigRepository repository,
             IGigManager gigManager,
             ICategoryRepository categoryRepository,
-            GigPictureContainerManager gigPictureContainerManager) : base(repository)
+            IGigPictureContainerManager gigPictureContainerManager) : base(repository)
         {
             _gigManager = gigManager;
             _categoryRepository = categoryRepository;

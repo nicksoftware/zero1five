@@ -3,12 +3,20 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Services;
 using Zero1Five.AzureStorage;
 using Zero1Five.AzureStorage.Gig;
+using Zero1Five.AzureStorage.Products;
 
 namespace Zero1Five.Products
 {
-    public class ProductPictureManager : CRUDContainerManager<GigPictureContainer>,IDomainService
+    public interface IProductPictureManager:ICrudContainerManager,IDomainService
     {
-        public ProductPictureManager(IBlobContainer<GigPictureContainer> gigPictureContainer, IOptions<AzureStorageAccountOptions> azureStorageAccountOptions) : base(gigPictureContainer, azureStorageAccountOptions)
+        
+    }
+    public class ProductPictureManager : CrudContainerManager<ProductPictureContainer>,IProductPictureManager
+    {
+        public ProductPictureManager(
+            IBlobContainer<ProductPictureContainer> productPictureContainer,
+            IOptions<AzureStorageAccountOptions> azureStorageAccountOptions) :
+            base(productPictureContainer, azureStorageAccountOptions)
         {
         }
     }
