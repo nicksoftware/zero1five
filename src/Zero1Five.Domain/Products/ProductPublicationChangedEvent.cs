@@ -20,12 +20,13 @@ namespace Zero1Five.Products
         }
         public Product Entity { get; set; }
     }
-    public  class  ProductPublicationChangedEventHandler:NotificationEventHandlerBase<Product>,ITransientDependency
+    public  class  ProductPublicationChangedEventHandler:NotificationEventHandlerBase<Product,ProductPublicationChangedEventHandler>,ITransientDependency
     {
         public ProductPublicationChangedEventHandler(
             IExternalUserLookupServiceProvider userLookupServiceProvider,
             IBackgroundJobManager backgroundJobManager, 
-            IEmailService emailService) : base(userLookupServiceProvider, backgroundJobManager, emailService)
+            IEmailService emailService,
+            ILogger<ProductPublicationChangedEventHandler> logger) : base(userLookupServiceProvider, backgroundJobManager, emailService,logger)
         {
         }
 
@@ -46,12 +47,16 @@ namespace Zero1Five.Products
             var publicationState = EventData.Entity.IsPublished ? "Published" : "Unpublished";
             var time = EventData.Entity.LastModificationTime.Humanize();
             var message = $"your product named {EventData.Entity.Title} was {publicationState} {time}";
-           await BackgroundJobManager.EnqueueAsync(new EmailSendingArgs()
+
+            if (ToUser != null)
             {
-                EmailAddress = ToUser.Email,
-                Subject = $"Product {publicationState}",
-                Body = message
-            });
+                await BackgroundJobManager.EnqueueAsync(new EmailSendingArgs()
+                {
+                    EmailAddress = ToUser.Email,
+                    Subject = $"Product {publicationState}",
+                    Body = message
+                });
+            }
         }
     }
 }
