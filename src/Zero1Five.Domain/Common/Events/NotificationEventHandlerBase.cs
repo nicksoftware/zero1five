@@ -11,7 +11,7 @@ using Zero1Five.Emailing;
 namespace Zero1Five.Products.Events
 {
     public abstract class
-        NotificationEventHandlerBase<TEntity,TEventHandler> : ILocalEventHandler<IEventData<TEntity>>
+        NotificationEventHandlerBase<TEntity, TEventHandler> : ILocalEventHandler<IEventData<TEntity>>
     {
         protected virtual IExternalUserLookupServiceProvider UserLookupServiceProvider { get; set; }
         protected virtual IBackgroundJobManager BackgroundJobManager { get; set; }
@@ -23,7 +23,7 @@ namespace Zero1Five.Products.Events
         protected NotificationEventHandlerBase(
             IExternalUserLookupServiceProvider userLookupServiceProvider,
             IBackgroundJobManager backgroundJobManager,
-            IEmailService emailService,ILogger<TEventHandler> logger)
+            IEmailService emailService, ILogger<TEventHandler> logger)
         {
             UserLookupServiceProvider = userLookupServiceProvider;
             BackgroundJobManager = backgroundJobManager;
@@ -40,7 +40,7 @@ namespace Zero1Five.Products.Events
             }
             catch (System.Exception ex)
             {
-                //Logger.LogException(ex, LogLevel.Error);
+                Logger.LogException(ex, LogLevel.Error);
                 throw;
             }
         }
@@ -49,13 +49,32 @@ namespace Zero1Five.Products.Events
 
         protected virtual async Task TrySendNotificationAsync()
         {
-            if ( ToUser != null && ToUser.EmailConfirmed)
+            if (IsUserIsNotEmpty()) return;
+            if (IsEmailConfirmed()) return;
+            Logger.LogInformation($" Send Email Job : Sending email to User {GetToUserFullNames()} ");
+            await SendAsync();
+        }
+
+        private bool IsEmailConfirmed()
+        {
+            if (!ToUser.EmailConfirmed)
             {
-                // Logger.LogInformation($" Send Email Job : Sending email to User {GetToUserFullNames()} ");
-                await SendAsync();
+                Logger.LogError($"Failed to send email to user : {GetToUserFullNames()} ,User has not Confirmed email");
+                return true;
             }
-            // else
-                // Logger.LogWarning($"Failed to send Email :To User {GetToUserFullNames()},User has not Confirmed Email");
+
+            return false;
+        }
+
+        private bool IsUserIsNotEmpty()
+        {
+            if (ToUser == null)
+            {
+                Logger.LogWarning($"Failed to send Email : Product has no Creator Id.");
+                return true;
+            }
+
+            return false;
         }
 
         protected virtual string GetToUserFullNames() => ToUser.Name + " " + ToUser.Surname;
