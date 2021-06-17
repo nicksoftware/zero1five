@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
 using Zero1Five.Common;
 
 namespace Zero1Five.Products
@@ -14,7 +15,6 @@ namespace Zero1Five.Products
         [Required]
         public Guid CategoryId { get; set; }
         public Guid GigId { get; set; }
-        [Required]
         public SaveFileDto Cover { get; set; }
         [Required]
         [MaxLength(ProductConsts.DescriptionMaxLength)]
