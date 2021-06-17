@@ -1,119 +1,55 @@
 @page "/products"
 @using Zero1Five.Categories
-<MudContainer>
-    <MudGrid Justify="Justify.Center">
-        <MudItem >
-            <MudGrid>
-                <MudItem sm="12" xs="12" md="2">
-                    <MudSelect T="CategoryDto" Label="Category">
-                        @foreach (var category in categories)
-                        {
-                            <MudSelectItem Value="@category">@category.Name</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudItem>
-                <MudItem md="2">
-                    <MudSelect T="CategoryDto" Label="SecondItem">
-                        @foreach (var category in categories)
-                        {
-                            <MudSelectItem Value="@category">@category.Name</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudItem>
-                <MudItem md="6">
-                    <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End"
-                                  AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
-
-                </MudItem>
-                <MudItem md="2">
-                    <MudSelect Class="ml-auto"  T="CategoryDto" Label="Filter By">
-                        @foreach (var category in categories)
-                        {
-                            <MudSelectItem Value="@category">@category.Name</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
-        
-        <MudItem>
-            <MudGrid Class="mt-8">
-                 <MudItem sm="12" xs="12" md="4">
-                    <MudCard>
-                        <MudCardMedia Image="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/belt.jpg" Height="200" />
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5">Old Paint</MudText>
-                            <MudText Class="my-2 text-muted" Typo="Typo.subtitle2">Software Development</MudText>
-                            <MudText Typo="Typo.body2">Old paint found on a stone house door.</MudText>
-                            <MudText Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
-                            <MudRating Size="Size.Small" SelectedValue="4" />
-                            <MudDivider Class="mt-3" DividerType="DividerType.FullWidth"/>
-                            </MudCardContent>
-                        <MudCardActions Class="m-0">
-                            <MudIconButton  Icon="@Icons.Material.Filled.Favorite" Color="Color.Secondary" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Share"  Color="Color.Success"></MudIconButton>
-                            <MudText Class="ml-auto" Typo="Typo.subtitle2" Align="Align.Right">  Posted : 45 min ago</MudText>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
+<div class="container">
+    <div class="section-header">
+        <h2>Products</h2>
+        <p>Explore New place, food, culture around the world and many more</p>
+    </div>
+    <div class="explore-content">
+        <MudGrid >
+            <MudItem sm="12">
+                <SearchBox @bind-Category="@Category" @bind-Keyword="@Keyword" OnSubmit="LoadAsync"/>
+            </MudItem>
+            @if (ProductList.Count == 0)
+            {
                 @for (int i = 0; i < 6; i++)
                 {
                     <MudItem sm="12" xs="12" md="4">
                         <Skeleton/>
                     </MudItem>
                 }
-            </MudGrid>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+            }
+            else
+            {
+                @foreach (var product in ProductList)
+                {
+                    <MudItem sm="6" xs="12" md="4">
+                        <MudCard>
+                            <MudCardMedia Image="@product.LoadImage()" Height="200"/>
+                            <MudCardContent>
+                                <MudText Typo="Typo.h5">@product.Title</MudText>
+                                <MudText Class="my-2 text-muted" Typo="Typo.subtitle2">@product.CategoryName</MudText>
+                                <MudText Typo="Typo.body2">@product.Description</MudText>
+                                <MudRating Size="Size.Small" SelectedValue="4"/>
+                                <MudDivider Class="mt-3" DividerType="DividerType.FullWidth"/>
+                            </MudCardContent>
+                            <MudCardActions Class="m-0">
+                                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Secondary"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Success"></MudIconButton>
+                                <MudText Class="ml-auto mx-3" Typo="Typo.subtitle2"
+                                         Align="Align.Right">
+                                    Posted : @product.CreationTime.Humanize()
+                                </MudText>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            }
+        </MudGrid>
+    </div>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-@* <MudContainer Class="mt-16">
-    <MudGrid Class="my-4" Justify="Justify.Center">
-    <MudItem xs="12" sm="6" md="4">
-    <MudSelect T="CategoryDto" Label="Category">
-    @foreach (var category in categories)
-    {
-    <MudSelectItem Value="@category">@category.Name</MudSelectItem>
-    }
-    </MudSelect>
-    </MudItem>
-    <MudItem sm="12" md="8">
-    <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End"
-    AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
-    </MudItem>
-    </MudGrid>
-    <MudGrid Class="mt-8">
-    @for (int i = 0; i < 6; i++)
-    {
-    <MudItem sm="12" xs="12" md="4">
-    <MudCard>
-    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
-    <MudCardContent>
-    <MudSkeleton Width="30%" Height="42px;" />
-    <MudSkeleton Width="80%" />
-    <MudSkeleton Width="100%" />
-    </MudCardContent>
-    <MudCardActions>
-    <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
-    <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
-    </MudCardActions>
-    </MudCard>
-    </MudItem>
-    }
-    </MudGrid>
-    </MudContainer> *@
 
 @code {
-    
+
 }
