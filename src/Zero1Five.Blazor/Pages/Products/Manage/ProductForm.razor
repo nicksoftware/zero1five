@@ -2,12 +2,11 @@
 @inherits Zero1FiveComponentBase
 @using Zero1Five.Categories
 @using Zero1Five.Gigs
-@using Volo.Abp.Guids
 
 <MudContainer Class="pt-8 px-0 container-fluid">
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator/>
-        <ValidationSummary></ValidationSummary>
+
         <div class="bfeditor">
             <div class="bfeditor-header">
                 <img class="bfeditor-cover"
@@ -46,39 +45,22 @@
                             <MudPaper Elevation="1" Class="mx-5">
                                 <MudSelect T="CategoryDto" @bind-Value="@SelectedCategory"
                                            Label="Select a Category" Variant="Variant.Text"
-                                           ToStringFunc="ConvertCategory" OffsetY="true">
+                                           ToStringFunc="dto => dto.Name" OffsetY="true">
                                     @foreach (var cat in CategoryList)
                                     {
-                                        <MudSelectItem key="@cat.Id" Value="cat"/>
+                                        <MudSelectItem Value="cat"/>
                                     }
                                 </MudSelect>
-                                <MudText>
-                                    @SelectedCategory
-                                </MudText>
                             </MudPaper>
                             <MudPaper Elevation="1" Class="mx-5">
-                                @* <BlazoredTypeahead SearchMethod="SearchGigs" *@
-                                @*                    T="GigLookUpDto" *@
-                                @*                    placeholder="Search by first name..." *@
-                                @*                    @bind-Value="@SelectedGig"> *@
-                                @*     <SelectedTemplate Context="gig"> *@
-                                @*         @gig.Title *@
-                                @*     </SelectedTemplate> *@
-                                @*     <ResultTemplate Context="gig"> *@
-                                @*         @gig.Title *@
-                                @*     </ResultTemplate> *@
-                                @* </BlazoredTypeahead> *@
                                 <MudSelect T="GigLookUpDto" @bind-Value="@SelectedGig"
                                            Label="Select a Category" Variant="Variant.Text"
-                                           ToStringFunc="dto=>dto.Title" OffsetY="true">
-                                    @foreach (var cat in CategoryList)
+                                           ToStringFunc="dto => dto.Title" OffsetY="true">
+                                    @foreach (var gig in GigList)
                                     {
-                                        <MudSelectItem key="@cat" Value="cat"/>
+                                        <MudSelectItem Value="gig"/>
                                     }
                                 </MudSelect>
-                                <MudText>
-                                    @SelectedCategory
-                                </MudText>
                                 <ValidationMessage For="@(() => SelectedGig)"/>
                             </MudPaper>
                         </div>
@@ -86,5 +68,6 @@
                 </div>
             </div>
         </div>
+        <ValidationSummary></ValidationSummary>
     </EditForm>
 </MudContainer>

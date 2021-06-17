@@ -19,16 +19,14 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
 {
     public partial class ProductForm
     {
-        [Inject]
-        private IProductAppService ProductAppService { get; set; }
+        [Inject] private IProductAppService ProductAppService { get; set; }
 
         private CreateUpdateProductDto model { get; set; } = new();
         private string PreviewImage { get; set; } = Constants.DefaultCover;
-        [Parameter]
-        public  Guid? Id { get; set; }
+        [Parameter] public Guid? Id { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
-        private CategoryDto SelectedCategory { get; set; } = new(){Name = ""};
-        private GigLookUpDto SelectedGig { get; set; } = new(){Title = ""};
+        private CategoryDto SelectedCategory { get; set; } = new() {Name = ""};
+        private GigLookUpDto SelectedGig { get; set; } = new() {Title = ""};
         private IReadOnlyList<CategoryDto> CategoryList { get; set; } = new List<CategoryDto>();
         private IReadOnlyList<GigLookUpDto> GigList { get; set; } = new List<GigLookUpDto>();
 
@@ -37,9 +35,10 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             if (Id != null)
             {
                 var productDto = await ProductAppService.GetAsync((Guid) Id);
-                model  =ObjectMapper.Map<ProductDto,CreateUpdateProductDto>( productDto);
-                PreviewImage = productDto.CoverImage;
-            }            
+                model = ObjectMapper.Map<ProductDto, CreateUpdateProductDto>(productDto);
+                PreviewImage = productDto.LoadImage();
+            }
+
             await LookUpCategoriesAsync();
             await LookUpGigsAsync();
             await base.OnInitializedAsync();
@@ -48,7 +47,6 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         private async Task LookUpCategoriesAsync()
         {
             CategoryList = (await ProductAppService.GetLookUpCategoriesAsync()).Items;
-
             if (Id != null && model.Id != Guid.Empty)
                 SelectedCategory = CategoryList.First(s => s.Id == model.CategoryId);
         }
@@ -59,20 +57,9 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
 
             if (Id != null && model.Id != Guid.Empty)
                 SelectedGig = GigList.First(s => s.Id == model.GigId);
-            
             StateHasChanged();
         }
-        
-        // private void SelectedGigChangedHandler(Guid id)
-        // {
-        //     if (id == Guid.Empty) return;
-        //     SelectedGig = GigList.First(x => x.Id == id);
-        // }
-        // private void SelectedCategoryChangedHandler(Guid id)
-        // {
-        //     if (id == Guid.Empty) return;
-        //     SelectedCategory = CategoryList.First(x => x.Id == id);
-        // }
+
         private async Task OnInputFileChange(InputFileChangeEventArgs e)
         {
             var image = e.GetMultipleFiles(1).FirstOrDefault();
@@ -92,35 +79,28 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
             await resizedImageFile.OpenReadStream().ReadAsync(buffer);
             PreviewImage = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
         }
+
         private void OnValidSubmit(EditContext context)
         {
             Task.Run(CreateUpdateProductAsync);
             StateHasChanged();
         }
+
         private async Task CreateUpdateProductAsync()
         {
             model.CategoryId = SelectedCategory.Id;
             model.GigId = SelectedGig.Id;
+            Console.WriteLine(model.CategoryId);
+            Console.WriteLine(model.GigId);
 
             if (Id != null)
             {
-                await ProductAppService.UpdateAsync((Guid)Id,model);
+                await ProductAppService.UpdateAsync((Guid) Id, model);
             }
             else
-            {
                 await ProductAppService.CreateAsync(model);
-            }
 
             NavigationManager.NavigateTo("/manage/products");
-        }
-
-        private Func<CategoryDto, string> ConvertCategory = p => p?.Name;
-        private Func<GigLookUpDto, string> ConvertGig = p => p?.Title;
-
-
-        private void GigSelectionChanged(GigLookUpDto gig)
-        {
-            SelectedGig = gig;
         }
 
         private async Task<IEnumerable<GigLookUpDto>> SearchGigs(string arg)
