@@ -16,6 +16,7 @@ namespace Zero1Five.Blazor.Pages.Gigs
         private long TotalCount { get; set; }
         [Parameter]
         public string Keyword { get; set; }
+        [Inject] public NavigationManager NavigationManager { get; set; }
         [Parameter]
         [CanBeNull] public CategoryDto Category { get; set; }
 
@@ -45,6 +46,10 @@ namespace Zero1Five.Blazor.Pages.Gigs
             await LoadAsync();
         }
 
+        private void HandleGigClicked(GigDto gig)
+        {
+            NavigationManager.NavigateTo("/gigs/detail/"+gig.Id);   
+        }
         private async Task KeywordChanged(string keyword)
         {
             Keyword = keyword;

@@ -1,4 +1,5 @@
 @page "/gigs"
+@inherits Zero1FiveComponentBase
 @using Zero1Five.Categories
 <div class="container">
     <div class="section-header">
@@ -24,8 +25,8 @@
                 @foreach (var gig in GigList)
                 {
                     <MudItem sm="6" xs="12" md="4">
-                        <GigCard Gig="gig">
-                        </GigCard>
+                        <GigCard Gig="gig" OnClicked="HandleGigClicked">
+                        </GigCard >
                     </MudItem>
                 }
             }
