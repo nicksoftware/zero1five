@@ -4,8 +4,10 @@
         <div class="single-explore-img">
             <img src="@Gig.LoadCover()" alt="explore image">
             <div class="single-explore-img-info">
-                <MudButton Color="Color.Primary" 
-                           Variant="Variant.Filled">@Gig.CategoryName</MudButton>
+                <MudButton Color="Color.Primary" OnClick="e => Clicked(Gig)"
+                           Variant="Variant.Filled">
+                    @Gig.CategoryName
+                </MudButton>
             </div>
         </div>
         <div class="single-explore-txt bg-theme-2">
@@ -58,5 +60,13 @@
 
     [Parameter]
     public GigDto Gig { get; set; }
+
+    [Parameter]
+    public EventCallback<GigDto> OnClicked { get; set; }
+
+    private void Clicked(GigDto gig)
+    {
+        OnClicked.InvokeAsync(gig);
+    }
 
 }
