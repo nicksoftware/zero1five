@@ -17,13 +17,17 @@ namespace Zero1Five.Products
 
         public Task<Product> CreateAsync(string title, Guid gigId, Guid categoryId, string cover, string description)
         {
-            var product = Product.Create(
-                GuidGenerator.Create(),
-                gigId: gigId,
-                categoryId: categoryId,
-                title, cover);
 
-            product.Description = description;
+            var id = GuidGenerator.Create();
+            
+            var product = new ProductBuilder(id)
+            .WithGigId(gigId)
+            .WithCategoryId(categoryId)
+            .WithCoverImage(cover)
+            .WithTitle(title)
+            .WithDescription(description)
+            .Build();
+
             return _productRepository.InsertAsync(product, true);
         }
 
