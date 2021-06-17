@@ -45,9 +45,9 @@ namespace Zero1Five
             var configuration = context.Services.GetConfiguration();
             ConfigureAzureStorageAccountOptions(context, configuration);
             ConfigureAbpBlobStoringOptions(configuration);
-// #if DEBUG
+#if DEBUG
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
-// #endif
+#endif
         }
 
         private void ConfigureAzureStorageAccountOptions(ServiceConfigurationContext context,IConfiguration configuration)
@@ -76,7 +76,7 @@ namespace Zero1Five
                         azure.CreateContainerIfNotExists = true;
                     });
                 });
-                options.Containers.Configure<ProductContainer>(container =>
+                options.Containers.Configure<ProductPictureContainer>(container =>
                 {
                     container.UseAzure(azure =>
                     {

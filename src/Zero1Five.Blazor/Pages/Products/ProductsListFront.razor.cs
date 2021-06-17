@@ -1,28 +1,40 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Castle.DynamicProxy.Generators.Emitters;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Volo.Abp.Application.Dtos;
 using Zero1Five.Categories;
 using Zero1Five.Permissions;
 using Zero1Five.Gigs;
+using Zero1Five.Products;
+
 namespace Zero1Five.Blazor.Pages.Products
 {
     public partial class ProductsListFront
     {
-        private IJSRuntime JsRuntime { get; set; }
-        IReadOnlyList<CategoryDto> categories = new List<CategoryDto>() { new CategoryDto { Id = Guid.Empty, Name = "Choose Category" } };
-        private string Search { get; set; }
-        [Inject]
-        public ICategoryAppService CategoryAppService { get; set; }
+        [CanBeNull] private CategoryDto Category { get; set; }
+        private string Keyword { get; set; }
+        private IReadOnlyList<ProductDto> ProductList { get; set; } = new List<ProductDto>();
+
+        [Inject] public IProductAppService ProductAppService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            categories = (await CategoryAppService.GetListAsync(new PagedAndSortedResultRequestDto() { MaxResultCount = 1000 })).Items;
-            await JsRuntime.InvokeVoidAsync("startCarousel");            
-            await base.OnInitializedAsync();
+            await LoadAsync();
+        }
 
-        }  
+        private async Task LoadAsync()
+        {
+            var input = new PagedProductRequestDto()
+            {
+                Filter = Keyword,
+                CategoryId = Category?.Id
+            };
+            var result = await ProductAppService.GetListAsync(input);
+            ProductList = result.Items;
+        }
     }
 }

@@ -1,6 +1,39 @@
 @page "/gigs"
-<h3>GigsList</h3>
+@inherits Zero1FiveComponentBase
+@using Zero1Five.Categories
+<div class="container">
+    <div class="section-header">
+        <h2>Gigs</h2>
+        <p>Explore New place, food, culture around the world and many more</p>
+    </div>
+    <div class="explore-content">
+        <MudGrid >
+            <MudItem sm="12">
+                <SearchBox @bind-Category="@Category" @bind-Keyword="@Keyword" OnSubmit="LoadAsync" />
+            </MudItem>
+            @if (GigList.Count == 0)
+            {
+                @for (int i = 0; i < 6; i++)
+                {
+                    <MudItem sm="12" xs="12" md="4">
+                        <Skeleton/>
+                    </MudItem>
+                }
+            }
+            else
+            {
+                @foreach (var gig in GigList)
+                {
+                    <MudItem sm="6" xs="12" md="4">
+                        <GigCard Gig="gig" OnClicked="HandleGigClicked">
+                        </GigCard >
+                    </MudItem>
+                }
+            }
+        </MudGrid>
+    </div>
+</div>
 
 @code {
-    
+
 }

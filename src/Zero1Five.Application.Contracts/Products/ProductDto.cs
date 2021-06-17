@@ -14,5 +14,10 @@ namespace Zero1Five.Products
         public string CoverImage { get; set; }
         public string Description { get; set; }
         public bool IsPublished { get; set; }
+
+        public string LoadImage()
+        {
+            return StorageConsts.ProductContainer + CoverImage;
+        }
     }
 }

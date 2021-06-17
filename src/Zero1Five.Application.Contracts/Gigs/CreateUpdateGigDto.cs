@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using Zero1Five.Common;
 
@@ -9,6 +10,9 @@ namespace Zero1Five.Gigs
         [Required]
         [MaxLength(GigConsts.TitleMaxLength)]
         public string Title { get; set; }
+        
+        [Required] 
+        public Guid CategoryId { get; set; }
 
         public SaveFileDto Cover { get; set; } 
         

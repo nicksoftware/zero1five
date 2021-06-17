@@ -23,13 +23,14 @@ namespace Zero1Five.Gigs
                 _gigAppService = GetRequiredService<IGigAppService>();
             }
 
-            [Fact(Skip = "Blob services causing tests to fail")]
+            [Fact]
             public async Task CreateAsync_Should_CreateGig()
             {
                 var input = new CreateUpdateGigDto()
                 {
                     Title = "Coolest Gig",
                     Description = "This is a cool new gig",
+                    CategoryId =  Guid.Parse(Zero1FiveTestData.CategoryId),
                     Cover =  new SaveFileDto()
                     {
                         FileName = "coolgImage.jpg",
@@ -44,7 +45,7 @@ namespace Zero1Five.Gigs
                 result.Description.ShouldBe(input.Description);
             }
 
-            [Fact(Skip = "Blob services causing tests to fail")]
+            [Fact]
             public async Task GetAsync_Should_GetGigOfGivenId()
             {
                 var gigId = Guid.Parse(Zero1FiveTestData.GigId);
@@ -54,14 +55,14 @@ namespace Zero1Five.Gigs
                 result.Id.ShouldBe(gigId);
             }
 
-            [Fact(Skip = "Blob services causing tests to fail")]
+            [Fact]
             public async Task GetListAsync_ShouldGetGigList()
             {
-                var result = await _gigAppService.GetListAsync(new PagedSortableAndFilterableRequestDto());
+                var result = await _gigAppService.GetListAsync(new GetPagedGigsRequest());
                 
                 result.Items.Count.ShouldBeGreaterThanOrEqualTo(0);
             }
-            [Fact(Skip = "Blob services causing tests to fail")]
+            [Fact]
             public async Task UpdateAsync_ShouldUpdateGig()
             {
                 var gig =await WithUnitOfWorkAsync<Gig>(() => _gigRepository.FirstOrDefaultAsync());
@@ -79,23 +80,23 @@ namespace Zero1Five.Gigs
                 result.Title.ShouldBe(input.Title);
                 result.Description.ShouldBe(input.Description);
             }
-            [Fact(Skip = "Blob services causing tests to fail")]
+            [Fact]
             public async Task DeleteAsync_Should_DeleteGig_Async()
             {
                 //Given
-                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items[0];
+                var gig = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items[0];
                 //When
                 await _gigAppService.DeleteAsync(gig.Id);
-                var results = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items;
+                var results = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items;
                 //Then
                 results.ShouldNotContain(gig);
             }
 
-            [Fact(Skip = "Blob services causing tests to fail")]
+            [Fact]
             public async Task PublishAsync_SHouldPublishGig()
             {
                 //given 
-                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items.First();
+                var gig = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items.First();
                 //when publish
                var result =  await _gigAppService.PublishAsync(gig.Id);
                
@@ -103,11 +104,11 @@ namespace Zero1Five.Gigs
                result.IsPublished.ShouldBe(true);
             }
             
-            [Fact(Skip = "Blob services causing tests to fail")]
+            [Fact]
             public async Task UnpublishAsync_SHouldUnpublishGig()
             {
                 //given 
-                var gig = (await _gigAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items.First();
+                var gig = (await _gigAppService.GetListAsync(new GetPagedGigsRequest())).Items.First();
                 //when Unpublish requested
                 var result =  await _gigAppService.UnpublishAsync(gig.Id);
                //then

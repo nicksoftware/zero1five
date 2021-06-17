@@ -2,13 +2,18 @@
 @inherits Zero1FiveComponentBase
 @using Zero1Five.Categories
 @using Zero1Five.Gigs
+@using Volo.Abp.Guids
 
 <MudContainer Class="pt-8 px-0 container-fluid">
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator/>
+        <ValidationSummary></ValidationSummary>
         <div class="bfeditor">
             <div class="bfeditor-header">
-                <img class="bfeditor-cover" src="@PreviewImage" alt="@L["cover"]" id="postCover">
+                <img class="bfeditor-cover"
+                     src="@PreviewImage"
+                     alt="@L["cover"]"
+                     id="postCover">
                 <div class="bfeditor-actions">
                     <div class="container d-flex">
                         <MudButton
@@ -23,8 +28,13 @@
                 <div class="bfeditor-header-inner">
                     <MudContainer>
                         <InputFile id="fileInput" OnChange="@OnInputFileChange" hidden/>
-                        <textarea class="bfeditor-header-textarea bfeditor-header-title autosize" @bind="model.Title" name="title" placeholder="@L["post-title"]" rows="1" autofocus></textarea>
-                        <textarea class="bfeditor-header-textarea bfeditor-header-desc autosize" @bind="model.Description" name="description" placeholder="@L["description"]..." rows="1"></textarea>
+                        <textarea class="bfeditor-header-textarea bfeditor-header-title autosize" 
+                            @bind="model.Title"
+                            name="title" 
+                            placeholder="@L["post-title"]"
+                            rows="1" autofocus></textarea>
+                        <textarea class="bfeditor-header-textarea bfeditor-header-desc autosize"
+                            @bind="model.Description" name="description" placeholder="@L["description"]..." rows="1"></textarea>
                         <div class="bfeditor-meta d-flex">
 
                             <MudFab
@@ -33,28 +43,43 @@
                                 Icon="@Icons.Filled.Image"
                                 Label="Load picture"
                                 for="fileInput" On/>
-                            <MudPaper Elevation="1">
-                                <MudSelect Class="mx-2" T="CategoryDto" @bind-Value="@SelectedCategory"
+                            <MudPaper Elevation="1" Class="mx-5">
+                                <MudSelect T="CategoryDto" @bind-Value="@SelectedCategory"
                                            Label="Select a Category" Variant="Variant.Text"
                                            ToStringFunc="ConvertCategory" OffsetY="true">
                                     @foreach (var cat in CategoryList)
                                     {
-                                        <MudSelectItem Value="cat"/>
+                                        <MudSelectItem key="@cat.Id" Value="cat"/>
                                     }
                                 </MudSelect>
+                                <MudText>
+                                    @SelectedCategory
+                                </MudText>
                             </MudPaper>
-                            <MudPaper Elevation="1">
-                                <MudSelect Class="mx-2" T="GigLookUpDto" @bind-Value="@SelectedGig"
-                                           Label="Select a Gig" Variant="Variant.Text"
-                                           ToStringFunc="@ConvertGig"
-                                           OffsetY="true">
-                                    @foreach (var cat in GigList)
+                            <MudPaper Elevation="1" Class="mx-5">
+                                @* <BlazoredTypeahead SearchMethod="SearchGigs" *@
+                                @*                    T="GigLookUpDto" *@
+                                @*                    placeholder="Search by first name..." *@
+                                @*                    @bind-Value="@SelectedGig"> *@
+                                @*     <SelectedTemplate Context="gig"> *@
+                                @*         @gig.Title *@
+                                @*     </SelectedTemplate> *@
+                                @*     <ResultTemplate Context="gig"> *@
+                                @*         @gig.Title *@
+                                @*     </ResultTemplate> *@
+                                @* </BlazoredTypeahead> *@
+                                <MudSelect T="GigLookUpDto" @bind-Value="@SelectedGig"
+                                           Label="Select a Category" Variant="Variant.Text"
+                                           ToStringFunc="dto=>dto.Title" OffsetY="true">
+                                    @foreach (var cat in CategoryList)
                                     {
-                                        <MudSelectItem Value="@cat">
-                                            @cat.Title
-                                        </MudSelectItem>
+                                        <MudSelectItem key="@cat" Value="cat"/>
                                     }
                                 </MudSelect>
+                                <MudText>
+                                    @SelectedCategory
+                                </MudText>
+                                <ValidationMessage For="@(() => SelectedGig)"/>
                             </MudPaper>
                         </div>
                     </MudContainer>

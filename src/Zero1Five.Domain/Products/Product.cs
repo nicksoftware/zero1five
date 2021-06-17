@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -36,6 +37,18 @@ namespace Zero1Five.Products
             if (categoryId == Guid.Empty) throw new InvalidCategoryIdException(categoryId);
 
             CategoryId = categoryId;
+        }
+
+        public void Publish()
+        {
+            IsPublished = true;
+            AddLocalEvent(new ProductPublicationChangedEvent(this));
+        }
+
+        public void Unpublish()
+        {
+            IsPublished = false;
+            AddLocalEvent(new ProductPublicationChangedEvent(this));
         }
     }
 }
