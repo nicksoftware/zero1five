@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
@@ -10,23 +11,24 @@ using Zero1Five.Emailing;
 namespace Zero1Five.Products.Events
 {
     public abstract class
-        NotificationEventHandlerBase<TEntity> : ILocalEventHandler<IEventData<TEntity>>
+        NotificationEventHandlerBase<TEntity,TEventHandler> : ILocalEventHandler<IEventData<TEntity>>
     {
         protected virtual IExternalUserLookupServiceProvider UserLookupServiceProvider { get; set; }
         protected virtual IBackgroundJobManager BackgroundJobManager { get; set; }
         protected virtual IEmailService EmailService { get; set; }
-
+        public virtual ILogger<TEventHandler> Logger { get; set; }
         protected abstract IEventData<TEntity> EventData { get; set; }
         protected abstract IUserData ToUser { get; set; }
 
         protected NotificationEventHandlerBase(
             IExternalUserLookupServiceProvider userLookupServiceProvider,
             IBackgroundJobManager backgroundJobManager,
-            IEmailService emailService)
+            IEmailService emailService,ILogger<TEventHandler> logger)
         {
             UserLookupServiceProvider = userLookupServiceProvider;
             BackgroundJobManager = backgroundJobManager;
             EmailService = emailService;
+            Logger = logger;
         }
 
         public async Task HandleEventAsync(IEventData<TEntity> eventData)
@@ -47,7 +49,7 @@ namespace Zero1Five.Products.Events
 
         protected virtual async Task TrySendNotificationAsync()
         {
-            if (ToUser.EmailConfirmed)
+            if ( ToUser != null && ToUser.EmailConfirmed)
             {
                 // Logger.LogInformation($" Send Email Job : Sending email to User {GetToUserFullNames()} ");
                 await SendAsync();
