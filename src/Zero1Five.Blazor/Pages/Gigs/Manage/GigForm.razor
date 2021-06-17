@@ -5,7 +5,7 @@
 @using System.ComponentModel.DataAnnotations
 @using NUglify.Helpers
 <MudContainer Class="pt-8 px-0 container-fluid" >
-    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <EditForm Model="@GigModel" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator/>
     <div class="bfeditor">
         <div class="bfeditor-header">
@@ -24,8 +24,8 @@
             <div class="bfeditor-header-inner">
                 <MudContainer>
                     <InputFile id="fileInput" OnChange="@OnInputFileChange" hidden/>
-                    <textarea class="bfeditor-header-textarea bfeditor-header-title autosize" @bind="model.Title" name="title" placeholder="@L["post-title"]" rows="1" autofocus></textarea>
-                    <textarea class="bfeditor-header-textarea bfeditor-header-desc autosize" @bind="model.Description" name="description" placeholder="@L["description"]..." rows="1"></textarea>
+                    <textarea class="bfeditor-header-textarea bfeditor-header-title autosize" @bind="GigModel.Title" name="title" placeholder="@L["post-title"]" rows="1" autofocus></textarea>
+                    <textarea class="bfeditor-header-textarea bfeditor-header-desc autosize" @bind="GigModel.Description" name="description" placeholder="@L["description"]..." rows="1"></textarea>
                     <div class="bfeditor-meta d-flex">
                         <MudFab HtmlTag="label" Size="Size.Small"
                                 Color="Color.Secondary" IconSize="Size.Small"
