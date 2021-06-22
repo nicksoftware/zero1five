@@ -215,10 +215,10 @@ namespace Zero1Five
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
-            if (MultiTenancyConsts.IsEnabled)
-            {
-                app.UseMultiTenancy();
-            }
+            // if (MultiTenancyConsts.IsEnabled)
+            // {
+            //     app.UseMultiTenancy();
+            // }
 
             app.UseUnitOfWork();
             app.UseIdentityServer();

@@ -30,8 +30,6 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
         private bool CanEditGig { get; set; }
         private bool CanDeleteGig { get; set; }
         private bool CanPublish { get; set; }
-        private bool ShowModal { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
             await SetPermissionsAsync();

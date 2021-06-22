@@ -13,7 +13,6 @@ namespace Zero1Five.Blazor
             CreateMap<CategoryDto, CreateUpdateCategoryDto>().ReverseMap();
             CreateMap<ProductDto, CreateUpdateProductDto>();
             CreateMap<GigDto, CreateUpdateGigDto>();
-            CreateMap<GigDto, UpdateGigDto>();
         }
     }
 }

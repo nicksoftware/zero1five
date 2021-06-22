@@ -21,7 +21,7 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
         private string PreviewImage { get; set; } = Constants.DefaultCover;
         private CategoryDto Category { get; set; } 
         private IReadOnlyList<CategoryDto> CategoryList { get; set; } = new List<CategoryDto>();
-        private CreateUpdateGigDto model { get; set; } = new();
+        private CreateUpdateGigDto GigModel { get; set; } = new();
         [Inject] private NavigationManager NavigationManager { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -32,7 +32,7 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
             if (Id != null)
             {
                 var gig = await GigAppService.GetAsync((Guid) Id);
-                model = ObjectMapper.Map<GigDto, CreateUpdateGigDto>(gig);
+                GigModel = ObjectMapper.Map<GigDto, CreateUpdateGigDto>(gig);
                 PreviewImage = gig.LoadCover();
                 Category = CategoryList.FirstOrDefault(x => x.Id == gig.CategoryId);
             }
@@ -45,7 +45,7 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
             if (image == null) return;
             var byteArray = new byte[image.Size];
             await image.OpenReadStream().ReadAsync(byteArray);
-            model.Cover = new SaveFileDto {Content = byteArray, FileName = image.Name};
+            GigModel.Cover = new SaveFileDto {Content = byteArray, FileName = image.Name};
             await Preview(image);
         }
 
@@ -66,12 +66,12 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
 
         private async Task CreateOrUpdateGigAsync()
         {
-            model.CategoryId = Category.Id;
+            GigModel.CategoryId = Category.Id;
             
             if (Id == null)
-                await GigAppService.CreateAsync(model);
+                await GigAppService.CreateAsync(GigModel);
             else
-                await GigAppService.UpdateAsync((Guid)Id, model);
+                await GigAppService.UpdateAsync((Guid)Id, GigModel);
             
             NavigationManager.NavigateTo("/manage/gigs");
         }
