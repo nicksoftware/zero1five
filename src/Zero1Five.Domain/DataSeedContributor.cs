@@ -25,13 +25,12 @@ namespace Zero1Five
         {
             if (await categoryRepository.GetCountAsync() <= 0)
             {
-                var names = new[] { "Software Development", "Digital Marketing" };
-                var rollDice = new Random();
+                var names = new[] { "Software Development", "Digital Marketing","Design" ,"Food"};
                 List<Category> categories = new();
 
                 for (var x = 0; x < names.Length; x++)
                 {
-                    var name = names[rollDice.Next(0, names.Length)];
+                    var name = names[x];
                     categories.Add(Category.Create(Guid.NewGuid(), name, $"{name} description"));
                 }
                 await categoryRepository.InsertManyAsync(categories, true);
