@@ -90,9 +90,6 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         {
             model.CategoryId = SelectedCategory.Id;
             model.GigId = SelectedGig.Id;
-            Console.WriteLine(model.CategoryId);
-            Console.WriteLine(model.GigId);
-
             if (Id != null)
             {
                 await ProductAppService.UpdateAsync((Guid) Id, model);
