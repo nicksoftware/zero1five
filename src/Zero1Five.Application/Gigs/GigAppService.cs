@@ -33,6 +33,11 @@ namespace Zero1Five.Gigs
             _gigManager = gigManager;
             _categoryRepository = categoryRepository;
             _gigPictureContainerManager = gigPictureContainerManager;
+            SetPermissions();
+        }
+
+        private void SetPermissions()
+        {
             CreatePolicyName = Zero1FivePermissions.Gigs.Create;
             UpdatePolicyName = Zero1FivePermissions.Gigs.Edit;
             DeletePolicyName = Zero1FivePermissions.Gigs.Delete;
@@ -112,8 +117,8 @@ namespace Zero1Five.Gigs
         }
 
         public override async Task<GigDto> GetAsync(Guid id)
-        {
-            var dbGig = await GetGigIfExistsAsync(id);
+        { 
+            await GetGigIfExistsAsync(id);
             var queryable = await Repository.GetQueryableAsync();
             
             var query =
@@ -159,7 +164,7 @@ namespace Zero1Five.Gigs
         {
             var categories = await _categoryRepository.GetListAsync();
 
-            var categoryDtos = categories.Select(c => new CategoryDto
+            var categoryDtoList = categories.Select(c => new CategoryDto
             {
                 Id = c.Id,
                 Name = c.Name,
@@ -168,7 +173,7 @@ namespace Zero1Five.Gigs
 
             return new ListResultDto<CategoryDto>
             {
-                Items = categoryDtos
+                Items = categoryDtoList
             };
         }
 
@@ -185,7 +190,10 @@ namespace Zero1Five.Gigs
         
         private static string NormalizeSorting(string sorting)
         {
-            if (string.IsNullOrEmpty(sorting)) return $"gig.{nameof(Product.Title)}";
+            if (string.IsNullOrEmpty(sorting))
+            {
+                return $"gig.{nameof(Product.Title)}";
+            }
 
             if (sorting.Contains("categoryName", StringComparison.OrdinalIgnoreCase))
             {
