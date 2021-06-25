@@ -89,7 +89,7 @@ namespace Zero1Five.Products
         }
         public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedProductRequestDto input)
         {
-            var filter = input.Filter?.ToLower();
+            var filter = input.Filter?.ToLower().Trim();
             var canFilterByKeyword = !string.IsNullOrEmpty(filter);
 
             var queryable = await Repository.GetQueryableAsync();
