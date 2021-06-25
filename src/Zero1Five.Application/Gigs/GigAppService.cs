@@ -78,7 +78,8 @@ namespace Zero1Five.Gigs
 
         public override async Task<PagedResultDto<GigDto>> GetListAsync(GetPagedGigsRequest input)
         {
-            var filter = input.Filter;
+            var filter = input.Filter?.ToLower().Trim();
+            
             var canFilterByKeyword = !string.IsNullOrEmpty(filter);
             var queryable = await Repository.GetQueryableAsync();
     
@@ -92,8 +93,8 @@ namespace Zero1Five.Gigs
             
             //Filter by keyword
             query = query.WhereIf(canFilterByKeyword, x =>
-                x.gig.Title.Contains(filter) ||
-                x.gig.Description.Contains(filter));
+                x.gig.Title.ToLower().Contains(filter) ||
+                x.gig.Description.ToLower().Contains(filter));
             
             query = query
                 .OrderBy(NormalizeSorting(input.Sorting))
