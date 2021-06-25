@@ -7,26 +7,31 @@ using Zero1Five.Permissions;
 
 namespace Zero1Five.Categories
 {
-    public class CategoryAppService :
+    public  class CategoryAppService :
         CrudAppService<Category, CategoryDto, Guid, PagedAndSortedResultRequestDto,
         CreateUpdateCategoryDto, CreateUpdateCategoryDto>, ICategoryAppService
     {
-        private readonly ICategoryManager categoryManager;
+        private readonly ICategoryManager _categoryManager;
         public CategoryAppService(
             ICategoryRepository repository,
             ICategoryManager categoryManager) :
             base(repository)
         {
+            SetPermissions();
+            this._categoryManager = categoryManager;
+        }
+
+        private void SetPermissions()
+        {
             CreatePolicyName = Zero1FivePermissions.Categories.Create;
             UpdatePolicyName = Zero1FivePermissions.Categories.Edit;
             DeletePolicyName = Zero1FivePermissions.Categories.Delete;
-            this.categoryManager = categoryManager;
         }
 
         [Authorize(Zero1FivePermissions.Categories.Default)]
         public override async Task<CategoryDto> CreateAsync(CreateUpdateCategoryDto input)
         {
-            return await MapToGetOutputDtoAsync(await categoryManager.CreateAsync(input.Name, input.Description));
+            return await MapToGetOutputDtoAsync(await _categoryManager.CreateAsync(input.Name, input.Description));
         }
     }
 }
