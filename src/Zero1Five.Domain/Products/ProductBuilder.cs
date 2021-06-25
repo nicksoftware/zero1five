@@ -10,7 +10,6 @@ namespace Zero1Five.Products
         private string _title = "";
         private string _description = "";
         private string _coverImage = "";
-        private bool _isPublished = false;
 
         public ProductBuilder(Guid productId)
         {
@@ -27,8 +26,6 @@ namespace Zero1Five.Products
             _coverImage);
 
             product.Description = _description;
-            product.IsPublished = _isPublished;
-
             return product;
         }
 
@@ -60,12 +57,6 @@ namespace Zero1Five.Products
         public ProductBuilder WithCoverImage(string value)
         {
             _coverImage = value;
-            return this;
-        }
-
-        public ProductBuilder IsPublished(bool value = false)
-        {
-            _isPublished = value;
             return this;
         }
     }

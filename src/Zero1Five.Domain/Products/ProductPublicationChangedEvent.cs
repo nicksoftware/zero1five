@@ -41,7 +41,6 @@ namespace Zero1Five.Products
                 ToUser = await UserLookupServiceProvider.FindByIdAsync((Guid) eventData.Entity.CreatorId);
             }
         }
-
         protected override async Task SendEmailAsync()
         {
             var publicationState = EventData.Entity.IsPublished ? "Published" : "Unpublished";

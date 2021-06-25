@@ -6,16 +6,18 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.Users;
 using Zero1Five.Emailing;
+using Zero1Five.Products.Events;
 
 namespace Zero1Five.Gigs
 {
-    public class GigPublicationChangeEvent
+    
+    public class GigPublicationChangeEvent:IEventData<Gig>
     {
         public GigPublicationChangeEvent(Gig gig)
         {
-            Gig = gig;
+            Entity = gig;
         }
-        public Gig Gig { get; set; }
+        public Gig Entity { get; set; }
     }
 
     public class GigPublicationChangeEventHandler:ILocalEventHandler<GigPublicationChangeEvent>,ITransientDependency
@@ -37,7 +39,7 @@ namespace Zero1Five.Gigs
         {
             try
             {
-                await SendGigNotificationAsync(eventData.Gig);
+                await SendGigNotificationAsync(eventData.Entity);
             }
             catch(Exception exception)
             {
