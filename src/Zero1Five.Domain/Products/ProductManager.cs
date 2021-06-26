@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.EventBus.Local;
 
 namespace Zero1Five.Products
 {
@@ -38,7 +36,6 @@ namespace Zero1Five.Products
             product.Publish();
             return (await _productRepository.UpdateAsync(product)).Id;
         }
-
         public async Task<Guid> UnPublishAsync(Product product)
         {
             if (!product.IsPublished)
@@ -47,7 +44,6 @@ namespace Zero1Five.Products
             product.Unpublish();
             return (await _productRepository.UpdateAsync(product)).Id;
         }
-
         public Task<Product> ChangeCoverImageAsync(Product product, string coverImage)
         {
             product.SetCover(coverImage);

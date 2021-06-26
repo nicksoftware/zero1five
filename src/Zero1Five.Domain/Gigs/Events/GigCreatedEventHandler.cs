@@ -37,8 +37,7 @@ namespace Zero1Five.Gigs
 
         private async Task SendGigNotificationAsync(Gig gig)
         {
-            if (gig.CreatorId == null)
-                return;
+            if (gig.CreatorId == null) return;
 
             var toUser = await _userLookupServiceProvider.FindByIdAsync((Guid) gig.CreatorId);
             var modificationDate =gig.CreationTime;

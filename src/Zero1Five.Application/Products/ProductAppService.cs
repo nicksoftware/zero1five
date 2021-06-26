@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -7,15 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 using Zero1Five.Categories;
-using Zero1Five.Common;
 using Zero1Five.Gigs;
 using Zero1Five.Permissions;
 
 namespace Zero1Five.Products
 {
-    public class ProductAppService :
+    public  class ProductAppService :
         CrudAppService<
             Product, ProductDto, Guid,
             PagedProductRequestDto,
@@ -23,7 +20,6 @@ namespace Zero1Five.Products
             CreateUpdateProductDto>,
         IProductAppService
     {
-        private readonly IProductRepository _repository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IGigRepository _gigRepository;
         private readonly IProductManager _productManager;
@@ -35,12 +31,15 @@ namespace Zero1Five.Products
             IGigRepository gigRepository,
             IProductManager productManager, IProductPictureManager productPictureManager) : base(repository)
         {
-            _repository = repository;
             _categoryRepository = categoryRepository;
             _gigRepository = gigRepository;
             _productManager = productManager;
             _productPictureManager = productPictureManager;
+            SetPermissions();
+        }
 
+        private void SetPermissions()
+        {
             CreatePolicyName = Zero1FivePermissions.Products.Create;
             UpdatePolicyName = Zero1FivePermissions.Products.Edit;
             DeletePolicyName = Zero1FivePermissions.Products.Delete;
@@ -82,10 +81,7 @@ namespace Zero1Five.Products
 
             var result = await AsyncExecuter.FirstOrDefaultAsync(query);
 
-            if (result == null) throw new EntityNotFoundException(typeof(Product), id);
-
             var dto = await MapToGetOutputDtoAsync(result.product);
-
             dto.CategoryName = result.category.Name;
             dto.GigName = result.gig.Title;
 
@@ -93,13 +89,16 @@ namespace Zero1Five.Products
         }
         public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedProductRequestDto input)
         {
-            var filter = input.Filter;
+            var filter = input.Filter?.ToLower().Trim();
             var canFilterByKeyword = !string.IsNullOrEmpty(filter);
 
             var queryable = await Repository.GetQueryableAsync();
 
-            queryable = queryable.WhereIf(canFilterByKeyword,
-                x => x.Title.Contains(filter) || x.Description.Contains(filter));
+            queryable = queryable
+                .WhereIf(canFilterByKeyword,
+                x => 
+                    x.Title.ToLower().Contains(filter)
+                    || x.Description.ToLower().Contains(filter));
 
             var query =
                 from product in queryable
@@ -186,7 +185,7 @@ namespace Zero1Five.Products
         {
             var categories = await _categoryRepository.GetListAsync();
 
-            var categoryDtos = categories.Select(c => new CategoryDto
+            var categoryDtoList = categories.Select(c => new CategoryDto
             {
                 Id = c.Id,
                 Name = c.Name,
@@ -195,7 +194,7 @@ namespace Zero1Five.Products
 
             return new ListResultDto<CategoryDto>
             {
-                Items = categoryDtos
+                Items = categoryDtoList
             };
         }
 
@@ -229,7 +228,10 @@ namespace Zero1Five.Products
 
         private static string NormalizeSorting(string sorting)
         {
-            if (sorting.IsNullOrEmpty()) return $"product.{nameof(Product.Title)}";
+            if (sorting.IsNullOrEmpty())
+            {
+                return $"product.{nameof(Product.Title)}";
+            }
 
             if (sorting.Contains("categoryName", StringComparison.OrdinalIgnoreCase))
             {
