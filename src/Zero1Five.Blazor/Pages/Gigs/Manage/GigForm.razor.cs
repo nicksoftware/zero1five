@@ -26,7 +26,7 @@ namespace Zero1Five.Blazor.Pages.Gigs.Manage
 
         protected override async Task OnInitializedAsync()
         {
-            var result = await GigAppService.GetLookUpCategories();
+            var result = await GigAppService.GetLookUpCategoriesAsync();
             CategoryList = result.Items;
             Category = CategoryList[0];
             if (Id != null)

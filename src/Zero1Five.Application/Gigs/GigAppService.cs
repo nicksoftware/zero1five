@@ -161,7 +161,7 @@ namespace Zero1Five.Gigs
             return await MapToGetOutputDtoAsync(publishedGig);
         }
 
-        public async Task<ListResultDto<CategoryDto>> GetLookUpCategories()
+        public async Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync()
         {
             var categories = await _categoryRepository.GetListAsync();
 
