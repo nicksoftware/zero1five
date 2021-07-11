@@ -229,7 +229,7 @@ namespace Zero1Five.Products
                 }
             };
 
-            var result =await _productAppService.ChangeCoverASync(product.Id, input);
+            var result =await _productAppService.ChangeCoverAsync(product.Id, input);
             
             result.ShouldNotBeNull();
             result.CoverImage.ShouldContain(input.CoverImage.FileName);

@@ -151,7 +151,7 @@ namespace Zero1Five.Products
         }
 
         [Authorize(Zero1FivePermissions.Products.Edit)]
-        public async Task<ProductDto> ChangeCoverASync(Guid productId, ChangeProductCoverDto input)
+        public async Task<ProductDto> ChangeCoverAsync(Guid productId, ChangeProductCoverDto input)
         {
             var product = await TryGetProductAsync(productId);
             var imageFileName = await _productPictureManager
