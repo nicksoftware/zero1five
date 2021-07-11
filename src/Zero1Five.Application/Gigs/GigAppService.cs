@@ -75,11 +75,9 @@ namespace Zero1Five.Gigs
 
             return await MapToGetOutputDtoAsync(await Repository.UpdateAsync(gig));
         }
-
         public override async Task<PagedResultDto<GigDto>> GetListAsync(GetPagedGigsRequest input)
         {
             var filter = input.Filter?.ToLower().Trim();
-            
             var canFilterByKeyword = !string.IsNullOrEmpty(filter);
             var queryable = await Repository.GetQueryableAsync();
     
@@ -116,7 +114,6 @@ namespace Zero1Five.Gigs
                 Items = gigListDto,
             };
         }
-
         public override async Task<GigDto> GetAsync(Guid id)
         { 
             await GetGigIfExistsAsync(id);
@@ -176,6 +173,20 @@ namespace Zero1Five.Gigs
             {
                 Items = categoryDtoList
             };
+        }
+
+        public async Task<GigDto> ChangeCoverAsync(Guid id, ChangeGigImageDto input)
+        {
+            var gig = await GetGigIfExistsAsync(id);
+            var imageFileName = await _gigPictureContainerManager.UpdateAsync(
+                gig.CoverImage,
+                input.CoverImage,
+                input.Content,
+                true);
+            
+            await _gigManager.ChangeCoverImageAsync(gig, imageFileName);
+            var result = await Repository.UpdateAsync(gig);
+            return await MapToGetOutputDtoAsync(result);
         }
 
         private async Task<Gig> GetGigIfExistsAsync(Guid id)
