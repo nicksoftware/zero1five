@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
-using Volo.Abp.TenantManagement;
 using Zero1Five.Categories;
-using Zero1Five.Common;
 using Zero1Five.Gigs;
 
 namespace Zero1Five.Blazor.Pages.Gigs
@@ -36,13 +33,12 @@ namespace Zero1Five.Blazor.Pages.Gigs
                 CategoryId =  Category?.Id
             };
             var results =await GigAppService.GetListAsync(input);
-            GigList = results.Items;
+            GigList = results.Items.Where(x=>x.IsPublished).ToList();
             TotalCount = results.TotalCount;
         }
         private async Task CategoryChanged(CategoryDto category)
         {
             Category = category;
-            Console.WriteLine(Category);
             await LoadAsync();
         }
 
