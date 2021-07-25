@@ -174,7 +174,7 @@ namespace Zero1Five.Gigs
                 Items = categoryDtoList
             };
         }
-
+        [Authorize(Zero1FivePermissions.Gigs.Edit)]
         public async Task<GigDto> ChangeCoverAsync(Guid id, ChangeGigImageDto input)
         {
             var gig = await GetGigIfExistsAsync(id);
