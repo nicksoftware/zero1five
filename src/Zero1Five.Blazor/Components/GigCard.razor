@@ -12,7 +12,7 @@
         </div>
         <div class="single-explore-txt bg-theme-2">
             <h2>
-                <a href="#">@Gig.Title</a>
+                <a OnClick="e => Clicked(Gig)">@Gig.Title</a>
             </h2>
             <p class="explore-rating-price">
                 <span class="explore-rating">@Gig.Rating</span>
@@ -37,18 +37,14 @@
                 </div>
             </div>
             <div class="explore-open-close-part">
-                <MudGrid >
-                    <MudItem sm="4">
+                <MudGrid Justify="Justify.Center">
+                    <MudItem sm="8">
                         <MudButton
                             Color="Color.Primary"
-                            Variant="Variant.Filled"
+                            Variant="Variant.Filled" OnClick="() => Clicked(Gig)"
                             class="close-btn open-btn">
                             open
                         </MudButton>
-                    </MudItem>
-                    <MudItem Class="align-self-end" sm="8">
-                        <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Favorite"/>
-                        <MudIconButton Color="Color.Info" Icon="@Icons.Material.Filled.Share"/>
                     </MudItem>
                 </MudGrid>
             </div>
