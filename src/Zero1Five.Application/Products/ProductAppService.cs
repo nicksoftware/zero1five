@@ -132,7 +132,7 @@ namespace Zero1Five.Products
                 Items = productDtoList,
             };
         }
-
+        [Authorize(Zero1FivePermissions.Products.Edit)]
         public override async Task<ProductDto> UpdateAsync(Guid id, CreateUpdateProductDto input)
         {
             var product =await TryGetProductAsync(id);
@@ -151,7 +151,7 @@ namespace Zero1Five.Products
         }
 
         [Authorize(Zero1FivePermissions.Products.Edit)]
-        public async Task<ProductDto> ChangeCoverASync(Guid productId, ChangeProductCoverDto input)
+        public async Task<ProductDto> ChangeCoverAsync(Guid productId, ChangeProductCoverDto input)
         {
             var product = await TryGetProductAsync(productId);
             var imageFileName = await _productPictureManager
@@ -160,22 +160,24 @@ namespace Zero1Five.Products
                     input.CoverImage.FileName,
                     input.CoverImage.Content);
 
-            var result = await _productManager.ChangeCoverImageAsync(product, imageFileName);
-
+            await _productManager.ChangeCoverImageAsync(product, imageFileName);
+            var result = await Repository.UpdateAsync(product);
+            
             return await MapToGetOutputDtoAsync(result);
         }
 
         public async Task<ListResultDto<GigLookUpDto>> GetGigLookUpAsync()
         {
             var gigs = _gigRepository.Where(x => x.CreatorId == CurrentUser.Id).ToList();
+            
             var gigsDtoList = gigs.Select(g => new GigLookUpDto
             {
                 Id = g.Id,
                 Title = g.Title,
             }).ToList();
-
+            
             await Task.Yield();
-
+            
             return new ListResultDto<GigLookUpDto>
             {
                 Items = gigsDtoList,
@@ -184,7 +186,6 @@ namespace Zero1Five.Products
         public async Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync()
         {
             var categories = await _categoryRepository.GetListAsync();
-
             var categoryDtoList = categories.Select(c => new CategoryDto
             {
                 Id = c.Id,
@@ -210,7 +211,6 @@ namespace Zero1Five.Products
         public async Task<Guid> UnPublishAsync(Guid id)
         {
             var product = await TryGetProductAsync(id);
-
             await _productManager.UnPublishAsync(product);
             return product.Id;
         }
@@ -226,7 +226,7 @@ namespace Zero1Five.Products
             throw new EntityNotFoundException(typeof(Product), id);
         }
 
-        private static string NormalizeSorting(string sorting)
+        private  string NormalizeSorting(string sorting)
         {
             if (sorting.IsNullOrEmpty())
             {

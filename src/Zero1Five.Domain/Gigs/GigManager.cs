@@ -17,5 +17,10 @@ namespace Zero1Five.Gigs
             var newGig = Gig.Create(GuidGenerator.Create(), categoryId,title, coverImage, description);
             return _gigRepository.InsertAsync(newGig, true);
         }
+        public Task<Gig> ChangeCoverImageAsync(Gig gig, string coverImage)
+        {
+            gig.SetCover(coverImage);
+            return Task.FromResult(gig);
+        }
     }
 }

@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Blazorise;
 using Blazorise.DataGrid;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Volo.Abp.Application.Dtos;
-using Zero1Five.Categories;
-using Zero1Five.Gigs;
 using Zero1Five.Permissions;
 using Zero1Five.Products;
 
@@ -20,7 +17,8 @@ namespace Zero1Five.Blazor.Pages.Products.Manage
         [Inject]
         public IProductAppService ProductAppService { get; set; }
         private IReadOnlyList<ProductDto> ProductList { get; set; }
-    [Inject] public NavigationManager NavigationManager { get; set; }
+        [Inject] 
+        public NavigationManager NavigationManager { get; set; }
         private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
         private int CurrentPage { get; set; }
         private string CurrentSorting { get; set; }

@@ -18,6 +18,7 @@ namespace Zero1Five.Gigs
     {
         Task<GigDto> PublishAsync(Guid id);
         Task<GigDto> UnpublishAsync(Guid id);
-        Task<ListResultDto<CategoryDto>> GetLookUpCategories();
+        Task<ListResultDto<CategoryDto>> GetLookUpCategoriesAsync();
+        Task<GigDto> ChangeCoverAsync(Guid id, ChangeGigImageDto input);
     }
 }

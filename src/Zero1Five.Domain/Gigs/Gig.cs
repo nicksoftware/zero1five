@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Volo.Abp.Domain.Entities.Auditing;
 using Zero1Five.Products;
 
@@ -42,6 +43,15 @@ namespace Zero1Five.Gigs
 
             IsPublished = false;
             AddLocalEvent(new GigPublicationChangeEvent(this));
+        }
+
+        public void SetCover(string coverImage)
+        {
+            if(CoverImage == coverImage)
+            {
+                return;
+            }
+            CoverImage = coverImage;
         }
     }
 }

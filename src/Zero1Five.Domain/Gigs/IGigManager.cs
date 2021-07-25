@@ -7,5 +7,6 @@ namespace Zero1Five.Gigs
     public interface IGigManager : IDomainService
     {
         Task<Gig> CreateAsync(string title,Guid categoryId, string coverImage,string description);
+        Task<Gig> ChangeCoverImageAsync(Gig gig, string imageFileName);
     }
 }
