@@ -40,5 +40,31 @@ namespace Zero1Five.Gigs
             gig.UnPublish();
             gig.IsPublished.ShouldBe(false);
         }
+        
+        [Fact]
+        public void Should_Change_Cover()
+        {
+            //Given
+            var title = "Title";
+            var cover = "image.jpg";
+            var description = "Some description";
+            var firstCategory = Guid.NewGuid();
+            
+            var gig = Gig.Create(
+                id: Guid.NewGuid(),
+                categoryId: firstCategory,
+                 title,
+                 cover,
+                description
+            );
+            //When
+            var newImage = "newImage.jpg";
+            gig.SetCover(newImage);
+            //Then
+            gig.CoverImage.ShouldNotBe(cover);   
+            gig.CoverImage.ShouldBe(newImage);
+            gig.Description.ShouldNotBe(cover);   
+
+        }
     }
 }
