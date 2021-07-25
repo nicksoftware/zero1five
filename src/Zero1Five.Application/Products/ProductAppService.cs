@@ -132,7 +132,7 @@ namespace Zero1Five.Products
                 Items = productDtoList,
             };
         }
-
+        [Authorize(Zero1FivePermissions.Products.Edit)]
         public override async Task<ProductDto> UpdateAsync(Guid id, CreateUpdateProductDto input)
         {
             var product =await TryGetProductAsync(id);
@@ -226,7 +226,7 @@ namespace Zero1Five.Products
             throw new EntityNotFoundException(typeof(Product), id);
         }
 
-        private static string NormalizeSorting(string sorting)
+        private  string NormalizeSorting(string sorting)
         {
             if (sorting.IsNullOrEmpty())
             {
