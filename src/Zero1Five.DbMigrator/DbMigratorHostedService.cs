@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Zero1Five.Data;
 using Serilog;
 using Volo.Abp;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Zero1Five.DbMigrator
 {
@@ -23,6 +25,8 @@ namespace Zero1Five.DbMigrator
             {
                 options.UseAutofac();
                 options.Services.AddLogging(c => c.AddSerilog());
+                options.Services.ReplaceConfiguration(BuildConfiguration());
+
             }))
             {
                 application.Initialize();
@@ -39,5 +43,20 @@ namespace Zero1Five.DbMigrator
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        private static IConfiguration BuildConfiguration()
+        {
+            var configurationBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+
+            // Extra code block to make it possible to read from appsettings.Staging.json
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                if (environmentName == "Staging")
+                {
+                configurationBuilder.AddJsonFile($"appsettings.{environmentName}.json", true);
+                }
+
+            return configurationBuilder
+                .AddEnvironmentVariables()
+                .Build();
+        }
     }
 }
